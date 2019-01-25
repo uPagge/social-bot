@@ -7,15 +7,17 @@ import org.sadtech.autoresponder.repository.impl.PersonRepositoryMap;
 import org.sadtech.autoresponder.service.UnitService;
 import org.sadtech.autoresponder.service.impl.PersonServiceImpl;
 import org.sadtech.autoresponder.service.impl.UnitServiceImpl;
-import org.sadtech.vkbot.core.repository.unit.TextAnswerRepository;
+import org.sadtech.vkbot.autoresponder.action.GeneralActionUnit;
+import org.sadtech.vkbot.autoresponder.action.TextAnswerAction;
+import org.sadtech.vkbot.autoresponder.repository.TextAnswerRepository;
 import org.sadtech.vkbot.core.VkConnect;
 import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.handlers.Handled;
 import org.sadtech.vkbot.core.handlers.ProcessableEvent;
 import org.sadtech.vkbot.core.handlers.impl.DispatcherHandlerVk;
 import org.sadtech.vkbot.core.handlers.impl.MailHandlerVk;
-import org.sadtech.vkbot.core.listener.EventListenable;
-import org.sadtech.vkbot.core.listener.impl.EventListenerVk;
+import org.sadtech.vkbot.core.listener.EventListener;
+import org.sadtech.vkbot.core.listener.EventListenerVk;
 import org.sadtech.vkbot.core.repository.impl.EventRepositoryQueue;
 import org.sadtech.vkbot.core.sender.MailSanderVk;
 import org.sadtech.vkbot.core.service.impl.EventServiceImpl;
@@ -26,69 +28,67 @@ import java.util.List;
 
 public class AutoresponderVk {
 
-    private VkConnect vkConnect;
     private Autoresponder autoresponder;
     private Handled handled;
-    private EventListenable eventListenable;
+    private EventListener eventListener;
     private ProcessableEvent mailHandler;
-    private MailSanderVk mailSanderVk;
-    private ActionUnit actionUnit;
+    private UnitService unitService;
+    private VkConnect vkConnect;
 
     public UnitService getUnitService() {
         return unitService;
     }
 
-    private UnitService unitService;
-
     public AutoresponderVk(VkConnect vkConnect) {
         this.vkConnect = vkConnect;
-        mailSanderVk = new MailSanderVk(vkConnect);
         ArrayList<UnitRepository> unitRepositories = new ArrayList<>();
         unitRepositories.add(new TextAnswerRepository());
         unitService = new UnitServiceImpl(unitRepositories);
         autoresponder = new Autoresponder(unitService, new PersonServiceImpl(new PersonRepositoryMap()));
         handled = new DispatcherHandlerVk(new EventServiceImpl(new EventRepositoryQueue()));
         mailHandler = new MailHandlerVk(handled);
-        eventListenable = new EventListenerVk(vkConnect, handled.getResponsibleService().getEventRepository());
+        eventListener = new EventListenerVk(vkConnect, handled.getResponsibleService().getEventRepository());
     }
 
     public void start() {
         init();
-        Long oldData = new Date().getTime() / 1000;
-        Long data;
-        List<Mail> mailList;
-        actionUnit = new ActionUnit(mailSanderVk);
-        while (true) {
-            data = new Date().getTime() / 1000;
-            mailList = mailHandler.getServiceEventData().getFirstMailByTime(new Integer(String.valueOf(oldData)), new Integer(String.valueOf(data)));
-            if (mailList.size() > 0) {
-                for (Mail mail : mailList) {
-                    mailSanderVk.setPerson(mail.getPerson());
-                    Unit unitAnswer = autoresponder.answer(mail.getPerson().getId(), mail.getBody());
-                    if (unitAnswer != null) {
-                        actionUnit.setUnit(unitAnswer);
-                        actionUnit.action();
-                    } else {
-                        mailSanderVk.sendText("К сожалению, я еще не знаю что вам ответить");
-                    }
-                }
-            }
-            oldData = Long.valueOf(data.toString());
-            sleep(7000);
-        }
-
+        checkNewMessages();
     }
 
-    private void sleep(Integer sleepTime) {
-        try {
-            Thread.sleep(sleepTime);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    private void checkNewMessages() {
+        Long oldData = new Date().getTime() / 1000;
+        Long newData;
+        while (true) {
+            newData = new Date().getTime() / 1000;
+            if (oldData < newData) {
+                List<Mail> mailList = mailHandler.getServiceEventData().getFirstMailByTime(Integer.parseInt(oldData.toString()), Integer.parseInt(newData.toString()));
+                if (mailList.size()>0) {
+                    sendReply(mailList);
+                }
+            }
+            oldData = new Long(newData.toString());
+        }
+    }
+
+    private void sendReply(List<Mail> mailList) {
+        MailSanderVk mailSanderVk = new MailSanderVk(vkConnect);
+        GeneralActionUnit generalActionUnit = new GeneralActionUnit(mailSanderVk);
+        new TextAnswerAction(generalActionUnit);
+
+
+        for (Mail mail : mailList) {
+            mailSanderVk.setPerson(mail.getPerson());
+            Unit unitAnswer = autoresponder.answer(mail.getPerson().getId(), mail.getBody());
+            if (unitAnswer != null) {
+                generalActionUnit.action(unitAnswer);
+            } else {
+                mailSanderVk.send("К сожалению, я еще не знаю что вам ответить");
+            }
         }
     }
 
     private void init() {
-        new Thread(eventListenable).start();
+        new Thread(eventListener).start();
         new Thread(handled).start();
     }
 
