@@ -30,21 +30,28 @@
     </developers>
 
     <properties>
-        <vkbot.ver>0.3-SNAPSHOT</vkbot.ver>
+        <vkbot.core.ver>0.3-SNAPSHOT</vkbot.core.ver>
         <junit.ver>4.12</junit.ver>
+        <autoresponder.ver>1.2.0-RELEASE</autoresponder.ver>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.sadtech.vkbot</groupId>
             <artifactId>core</artifactId>
-            <version>${vkbot.ver}</version>
+            <version>${vkbot.core.ver}</version>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.ver}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.sadtech.autoresponder</groupId>
+            <artifactId>autoresponder</artifactId>
+            <version>${autoresponder.ver}</version>
         </dependency>
     </dependencies>
 

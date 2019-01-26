@@ -9,6 +9,7 @@ import org.sadtech.autoresponder.service.impl.PersonServiceImpl;
 import org.sadtech.autoresponder.service.impl.UnitServiceImpl;
 import org.sadtech.vkbot.autoresponder.action.GeneralActionUnit;
 import org.sadtech.vkbot.autoresponder.action.TextAnswerAction;
+import org.sadtech.vkbot.autoresponder.action.TextAnswerAndSaveAction;
 import org.sadtech.vkbot.autoresponder.repository.TextAnswerRepository;
 import org.sadtech.vkbot.core.VkConnect;
 import org.sadtech.vkbot.core.entity.Mail;
@@ -74,13 +75,12 @@ public class AutoresponderVk {
         MailSanderVk mailSanderVk = new MailSanderVk(vkConnect);
         GeneralActionUnit generalActionUnit = new GeneralActionUnit(mailSanderVk);
         new TextAnswerAction(generalActionUnit);
-
-
+        new TextAnswerAndSaveAction(generalActionUnit);
         for (Mail mail : mailList) {
             mailSanderVk.setPerson(mail.getPerson());
             Unit unitAnswer = autoresponder.answer(mail.getPerson().getId(), mail.getBody());
             if (unitAnswer != null) {
-                generalActionUnit.action(unitAnswer);
+                generalActionUnit.action(unitAnswer, mail);
             } else {
                 mailSanderVk.send("К сожалению, я еще не знаю что вам ответить");
             }

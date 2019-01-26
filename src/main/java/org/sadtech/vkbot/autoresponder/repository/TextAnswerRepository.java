@@ -8,15 +8,7 @@ import java.util.List;
 
 public class TextAnswerRepository implements UnitRepository<TextAnswer> {
 
-    private List<TextAnswer> textAnswers;
-
-    public TextAnswerRepository() {
-        textAnswers = new ArrayList<>();
-    }
-
-    public TextAnswerRepository(List<TextAnswer> textAnswers) {
-        this.textAnswers = textAnswers;
-    }
+    private List<TextAnswer> textAnswers = new ArrayList<>();
 
     @Override
     public void addUnit(TextAnswer unit) {
