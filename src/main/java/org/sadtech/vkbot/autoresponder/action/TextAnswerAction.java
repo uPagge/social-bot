@@ -21,14 +21,8 @@ public class TextAnswerAction implements ActionUnit {
     @Override
     public void action(Unit unit, Mail mail) {
         TextAnswer textAnswer = (TextAnswer) unit;
-        MailSend mailSend = new MailSend();
+        MailSend mailSend = textAnswer.getMailSend();
         mailSend.setIdRecipient(mail.getPerson().getId());
-        if (textAnswer.getKeyBoard()!=null) {
-            mailSend.setKeyboard(textAnswer.getKeyBoard().getKeyboard().toString());
-        }
-        if(textAnswer.getAnswer()!=null) {
-            mailSend.setMessage(textAnswer.getAnswer());
-        }
         mailSandler.send(mailSend);
     }
 }

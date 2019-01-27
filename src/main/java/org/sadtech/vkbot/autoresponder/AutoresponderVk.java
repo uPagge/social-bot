@@ -52,6 +52,12 @@ public class AutoresponderVk {
         eventListener = new EventListenerVk(vkConnect, handled.getResponsibleService().getEventRepository());
     }
 
+    public AutoresponderVk(EventListener eventListener, ProcessableEvent mailHandler, VkConnect vkConnect) {
+        this.eventListener = eventListener;
+        this.mailHandler = mailHandler;
+        this.vkConnect = vkConnect;
+    }
+
     public void start() {
         init();
         checkNewMessages();

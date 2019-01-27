@@ -1,29 +1,29 @@
 package org.sadtech.vkbot.autoresponder.entity;
 
 import org.sadtech.autoresponder.entity.Unit;
-import org.sadtech.vkbot.core.keyboard.KeyBoard;
+import org.sadtech.vkbot.core.sender.MailSend;
 
 import java.util.List;
 import java.util.Set;
 
-public class TextAnswer extends KeyBoardAnswer {
+public class TextAnswer extends Unit {
 
-    private String answer;
+    private MailSend mailSend;
 
     public TextAnswer() {
-
+        mailSend = new MailSend();
     }
 
-    public TextAnswer(Set<String> keyWords, Integer matchThreshold, Integer priority, Boolean level, List<Unit> nextUnits, KeyBoard keyBoard, String answer) {
-        super(keyWords, matchThreshold, priority, level, nextUnits, keyBoard);
-        this.answer = answer;
+    public TextAnswer(Set<String> keyWords, Integer matchThreshold, Integer priority, Boolean level, List<Unit> nextUnits, MailSend mailSend) {
+        super(keyWords, matchThreshold, priority, level, nextUnits);
+        this.mailSend = mailSend;
     }
 
-    public String getAnswer() {
-        return answer;
+    public MailSend getMailSend() {
+        return mailSend;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setMailSend(MailSend mailSend) {
+        this.mailSend = mailSend;
     }
 }

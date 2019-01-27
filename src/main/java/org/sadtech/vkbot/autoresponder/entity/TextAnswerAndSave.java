@@ -9,9 +9,8 @@ public class TextAnswerAndSave extends TextAnswer {
     private String key;
 
     public TextAnswerAndSave() {
-
+        super();
     }
-
 
     public TextAnswerAndSave getPrevUnit() {
         return prevUnit;

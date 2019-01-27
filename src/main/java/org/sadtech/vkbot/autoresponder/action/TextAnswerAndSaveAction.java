@@ -30,15 +30,8 @@ public class TextAnswerAndSaveAction implements ActionUnit {
             textAnswerAndSave.getSaver().push();
         }
 
-        MailSend mailSend = new MailSend();
+        MailSend mailSend = textAnswerAndSave.getMailSend();
         mailSend.setIdRecipient(mail.getPerson().getId());
-
-        if (textAnswerAndSave.getKeyBoard() != null) {
-            mailSend.setKeyboard(textAnswerAndSave.getKeyBoard().getKeyboard().toString());
-        }
-        if (textAnswerAndSave.getAnswer() != null) {
-            mailSend.setMessage(textAnswerAndSave.getAnswer());
-        }
         mailSandler.send(mailSend);
     }
 
