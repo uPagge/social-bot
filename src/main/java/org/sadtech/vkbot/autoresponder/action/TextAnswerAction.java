@@ -5,6 +5,7 @@ import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.vkbot.autoresponder.entity.TextAnswer;
 import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.sender.MailSandler;
+import org.sadtech.vkbot.core.sender.MailSend;
 
 public class TextAnswerAction implements ActionUnit {
 
@@ -20,11 +21,14 @@ public class TextAnswerAction implements ActionUnit {
     @Override
     public void action(Unit unit, Mail mail) {
         TextAnswer textAnswer = (TextAnswer) unit;
+        MailSend mailSend = new MailSend();
+        mailSend.setIdRecipient(mail.getPerson().getId());
         if (textAnswer.getKeyBoard()!=null) {
-            log.info(textAnswer.getKeyBoard().getKeyboard().toString());
-            mailSandler.send(textAnswer.getAnswer(), textAnswer.getKeyBoard().getKeyboard().toString());
-        } else {
-            mailSandler.send(textAnswer.getAnswer());
+            mailSend.setKeyboard(textAnswer.getKeyBoard().getKeyboard().toString());
         }
+        if(textAnswer.getAnswer()!=null) {
+            mailSend.setMessage(textAnswer.getAnswer());
+        }
+        mailSandler.send(mailSend);
     }
 }

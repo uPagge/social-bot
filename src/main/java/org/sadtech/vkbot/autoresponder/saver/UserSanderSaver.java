@@ -2,6 +2,7 @@ package org.sadtech.vkbot.autoresponder.saver;
 
 import org.sadtech.vkbot.core.VkConnect;
 import org.sadtech.vkbot.core.sender.MailSanderVk;
+import org.sadtech.vkbot.core.sender.MailSend;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +34,9 @@ public class UserSanderSaver implements Saver {
     @Override
     public void push() {
         MailSanderVk mailSandler = new MailSanderVk(vkConnect);
-        mailSandler.setIdRecipient(idUser);
+        MailSend mailSend = new MailSend();
+        mailSend.setIdRecipient(idUser);
+
         StringBuilder stringBuilder = new StringBuilder();
         for (String s : map.keySet()) {
             stringBuilder.append(s);
@@ -41,6 +44,7 @@ public class UserSanderSaver implements Saver {
             stringBuilder.append(map.get(s));
             stringBuilder.append("\n");
         }
-        mailSandler.send(stringBuilder.toString());
+        mailSend.setMessage(stringBuilder.toString());
+        mailSandler.send(mailSend);
     }
 }

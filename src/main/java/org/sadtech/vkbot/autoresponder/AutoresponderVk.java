@@ -21,6 +21,7 @@ import org.sadtech.vkbot.core.listener.EventListener;
 import org.sadtech.vkbot.core.listener.EventListenerVk;
 import org.sadtech.vkbot.core.repository.impl.EventRepositoryQueue;
 import org.sadtech.vkbot.core.sender.MailSanderVk;
+import org.sadtech.vkbot.core.sender.MailSend;
 import org.sadtech.vkbot.core.service.impl.EventServiceImpl;
 
 import java.util.ArrayList;
@@ -57,10 +58,10 @@ public class AutoresponderVk {
     }
 
     private void checkNewMessages() {
-        Long oldData = new Date().getTime() / 1000;
+        Long oldData = new Date().getTime() / 1000 - 1;
         Long newData;
         while (true) {
-            newData = new Date().getTime() / 1000;
+            newData = new Date().getTime() / 1000 - 1;
             if (oldData < newData) {
                 List<Mail> mailList = mailHandler.getServiceEventData().getFirstMailByTime(Integer.parseInt(oldData.toString()), Integer.parseInt(newData.toString()));
                 if (mailList.size()>0) {
@@ -77,12 +78,14 @@ public class AutoresponderVk {
         new TextAnswerAction(generalActionUnit);
         new TextAnswerAndSaveAction(generalActionUnit);
         for (Mail mail : mailList) {
-            mailSanderVk.setPerson(mail.getPerson());
             Unit unitAnswer = autoresponder.answer(mail.getPerson().getId(), mail.getBody());
             if (unitAnswer != null) {
                 generalActionUnit.action(unitAnswer, mail);
             } else {
-                mailSanderVk.send("К сожалению, я еще не знаю что вам ответить");
+                MailSend mailSend = new MailSend();
+                mailSend.setIdRecipient(mail.getPerson().getId());
+                mailSend.setMessage("К сожалению, я еще не знаю что вам ответить");
+                mailSanderVk.send(mailSend);
             }
         }
     }

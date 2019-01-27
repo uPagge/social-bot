@@ -4,6 +4,7 @@ import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.vkbot.autoresponder.entity.TextAnswerAndSave;
 import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.sender.MailSandler;
+import org.sadtech.vkbot.core.sender.MailSend;
 
 public class TextAnswerAndSaveAction implements ActionUnit {
 
@@ -19,7 +20,7 @@ public class TextAnswerAndSaveAction implements ActionUnit {
     public void action(Unit unit, Mail mail) {
         TextAnswerAndSave textAnswerAndSave = (TextAnswerAndSave) unit;
 
-        if (textAnswerAndSave.getPrevUnit()==null) {
+        if (textAnswerAndSave.getPrevUnit() == null) {
             textAnswerAndSave.getSaver().init();
         }
 
@@ -29,11 +30,16 @@ public class TextAnswerAndSaveAction implements ActionUnit {
             textAnswerAndSave.getSaver().push();
         }
 
-        if (textAnswerAndSave.getKeyBoard()!=null) {
-            mailSandler.send(textAnswerAndSave.getAnswer(), textAnswerAndSave.getKeyBoard().getKeyboard().toString());
-        } else {
-            mailSandler.send(textAnswerAndSave.getAnswer());
+        MailSend mailSend = new MailSend();
+        mailSend.setIdRecipient(mail.getPerson().getId());
+
+        if (textAnswerAndSave.getKeyBoard() != null) {
+            mailSend.setKeyboard(textAnswerAndSave.getKeyBoard().getKeyboard().toString());
         }
+        if (textAnswerAndSave.getAnswer() != null) {
+            mailSend.setMessage(textAnswerAndSave.getAnswer());
+        }
+        mailSandler.send(mailSend);
     }
 
     private boolean checkNextSaveUnit(TextAnswerAndSave unit) {
