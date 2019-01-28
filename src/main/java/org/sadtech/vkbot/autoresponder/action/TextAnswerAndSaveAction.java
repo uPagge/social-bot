@@ -21,18 +21,19 @@ public class TextAnswerAndSaveAction implements ActionUnit {
         TextAnswerAndSave textAnswerAndSave = (TextAnswerAndSave) unit;
 
         if (textAnswerAndSave.getPrevUnit() == null) {
-            textAnswerAndSave.getSaver().init();
-        }
-
-        textAnswerAndSave.getSaver().save(textAnswerAndSave.getKey(), mail.getBody());
-
-        if (!checkNextSaveUnit(textAnswerAndSave)) {
-            textAnswerAndSave.getSaver().push();
+            textAnswerAndSave.getSaver().init(mail.getPerson().getId());
+        } else {
+            textAnswerAndSave.getSaver().save(mail.getPerson().getId(), textAnswerAndSave.getKey(), mail.getBody());
         }
 
         MailSend mailSend = textAnswerAndSave.getMailSend();
         mailSend.setIdRecipient(mail.getPerson().getId());
         mailSandler.send(mailSend);
+
+        if (!checkNextSaveUnit(textAnswerAndSave)) {
+            textAnswerAndSave.getSaver().push(mail.getPerson().getId());
+        }
+
     }
 
     private boolean checkNextSaveUnit(TextAnswerAndSave unit) {

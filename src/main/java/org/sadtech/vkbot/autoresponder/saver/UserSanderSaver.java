@@ -11,7 +11,8 @@ public class UserSanderSaver implements Saver {
 
     private Integer idUser;
     private VkConnect vkConnect;
-    private Map<String, String> map;
+    private String nameForm;
+    private Map<Integer, Map<String, String>> map = new HashMap<>();
 
     public UserSanderSaver(VkConnect vkConnect) {
         this.vkConnect = vkConnect;
@@ -22,29 +23,36 @@ public class UserSanderSaver implements Saver {
     }
 
     @Override
-    public void init() {
-        map = new HashMap<>();
+    public void init(Integer userId) {
+        map.put(userId, new HashMap<>());
     }
 
     @Override
-    public void save(String key, String value) {
-        map.put(key, value);
+    public void save(Integer userId, String key, String value) {
+        map.get(userId).put(key, value);
     }
 
     @Override
-    public void push() {
+    public void push(Integer userId) {
         MailSanderVk mailSandler = new MailSanderVk(vkConnect);
         MailSend mailSend = new MailSend();
         mailSend.setIdRecipient(idUser);
 
         StringBuilder stringBuilder = new StringBuilder();
-        for (String s : map.keySet()) {
-            stringBuilder.append(s);
-            stringBuilder.append(": ");
-            stringBuilder.append(map.get(s));
-            stringBuilder.append("\n");
+        stringBuilder.append("Название формы: ").append(nameForm).append("\nОтправитель: https://vk.com/id").append(userId).append("\n");
+        for (String s : map.get(userId).keySet()) {
+            stringBuilder.append(s).append(": ").append(map.get(userId).get(s)).append("\n");
         }
+        map.remove(userId);
         mailSend.setMessage(stringBuilder.toString());
         mailSandler.send(mailSend);
+    }
+
+    public String getNameForm() {
+        return nameForm;
+    }
+
+    public void setNameForm(String nameForm) {
+        this.nameForm = nameForm;
     }
 }
