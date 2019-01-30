@@ -7,7 +7,7 @@ import org.sadtech.vkbot.autoresponder.entity.TextAnswer;
 import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.insert.InsertWords;
 import org.sadtech.vkbot.core.sender.MailSandler;
-import org.sadtech.vkbot.core.sender.MailSend;
+import org.sadtech.vkbot.core.entity.MailSend;
 
 public class TextAnswerAction implements ActionUnit {
 
@@ -15,7 +15,7 @@ public class TextAnswerAction implements ActionUnit {
 
     private MailSandler mailSandler;
 
-    public TextAnswerAction(GeneralActionUnit generalActionUnit) {
+    public TextAnswerAction(Action generalActionUnit) {
         generalActionUnit.registerActionUnit(TextAnswer.class, this);
         this.mailSandler = generalActionUnit.getMailSandler();
     }

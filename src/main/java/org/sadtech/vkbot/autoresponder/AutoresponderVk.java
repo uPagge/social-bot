@@ -6,14 +6,12 @@ import org.sadtech.autoresponder.repository.impl.PersonRepositoryMap;
 import org.sadtech.autoresponder.service.UnitService;
 import org.sadtech.autoresponder.service.impl.PersonServiceImpl;
 import org.sadtech.autoresponder.service.impl.UnitServiceImpl;
-import org.sadtech.vkbot.autoresponder.action.GeneralActionUnit;
-import org.sadtech.vkbot.autoresponder.action.TextAnswerAction;
-import org.sadtech.vkbot.autoresponder.action.TextAnswerAndSaveAction;
+import org.sadtech.vkbot.autoresponder.action.Action;
 import org.sadtech.vkbot.autoresponder.repository.UnitMenuRepository;
 import org.sadtech.vkbot.core.VkConnect;
 import org.sadtech.vkbot.core.entity.Mail;
+import org.sadtech.vkbot.core.entity.MailSend;
 import org.sadtech.vkbot.core.sender.MailSanderVk;
-import org.sadtech.vkbot.core.sender.MailSend;
 import org.sadtech.vkbot.core.service.handlers.MailService;
 
 import java.util.Date;
@@ -21,10 +19,11 @@ import java.util.List;
 
 public class AutoresponderVk {
 
+    private VkConnect vkConnect;
     private Autoresponder autoresponder;
     private UnitService unitService;
-    private VkConnect vkConnect;
     private MailService mailService;
+    private Action generalAction;
 
     public AutoresponderVk(VkConnect vkConnect) {
         this.vkConnect = vkConnect;
@@ -32,10 +31,19 @@ public class AutoresponderVk {
         autoresponder = new Autoresponder(unitService, new PersonServiceImpl(new PersonRepositoryMap()));
     }
 
-    public AutoresponderVk(VkConnect vkConnect, MailService mailService) {
+    public AutoresponderVk(VkConnect vkConnect, UnitService unitService, MailService mailService, Action generalAction) {
+        this.unitService = unitService;
+        this.vkConnect = vkConnect;
+        this.mailService = mailService;
+        this.generalAction = generalAction;
+        autoresponder = new Autoresponder(this.unitService, new PersonServiceImpl(new PersonRepositoryMap()));
+    }
+
+    public AutoresponderVk(VkConnect vkConnect, MailService mailService, Action generalAction) {
         this.vkConnect = vkConnect;
         unitService = new UnitServiceImpl(new UnitMenuRepository());
         autoresponder = new Autoresponder(unitService, new PersonServiceImpl(new PersonRepositoryMap()));
+        this.generalAction = generalAction;
         this.mailService = mailService;
     }
 
@@ -49,6 +57,14 @@ public class AutoresponderVk {
 
     public UnitService getUnitService() {
         return unitService;
+    }
+
+    public Action getGeneralAction() {
+        return generalAction;
+    }
+
+    public void setGeneralAction(Action generalAction) {
+        this.generalAction = generalAction;
     }
 
     public void start() {
@@ -72,13 +88,10 @@ public class AutoresponderVk {
 
     private void sendReply(List<Mail> mailList) {
         MailSanderVk mailSanderVk = new MailSanderVk(vkConnect);
-        GeneralActionUnit generalActionUnit = new GeneralActionUnit(mailSanderVk);
-        new TextAnswerAction(generalActionUnit);
-        new TextAnswerAndSaveAction(generalActionUnit);
         for (Mail mail : mailList) {
             Unit unitAnswer = autoresponder.answer(mail.getPerson().getId(), mail.getBody());
             if (unitAnswer != null) {
-                generalActionUnit.action(unitAnswer, mail);
+                generalAction.action(unitAnswer, mail);
             } else {
                 MailSend mailSend = new MailSend();
                 mailSend.setIdRecipient(mail.getPerson().getId());

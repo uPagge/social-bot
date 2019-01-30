@@ -2,7 +2,7 @@ package org.sadtech.vkbot.autoresponder.saver;
 
 import org.sadtech.vkbot.core.VkConnect;
 import org.sadtech.vkbot.core.sender.MailSanderVk;
-import org.sadtech.vkbot.core.sender.MailSend;
+import org.sadtech.vkbot.core.entity.MailSend;
 
 import java.util.HashMap;
 import java.util.Map;

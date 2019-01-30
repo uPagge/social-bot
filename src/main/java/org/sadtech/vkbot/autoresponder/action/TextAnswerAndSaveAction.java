@@ -6,13 +6,13 @@ import org.sadtech.vkbot.autoresponder.entity.TextAnswerAndSave;
 import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.insert.InsertWords;
 import org.sadtech.vkbot.core.sender.MailSandler;
-import org.sadtech.vkbot.core.sender.MailSend;
+import org.sadtech.vkbot.core.entity.MailSend;
 
 public class TextAnswerAndSaveAction implements ActionUnit {
 
     private MailSandler mailSandler;
 
-    public TextAnswerAndSaveAction(GeneralActionUnit generalActionUnit) {
+    public TextAnswerAndSaveAction(Action generalActionUnit) {
         generalActionUnit.registerActionUnit(TextAnswerAndSave.class, this);
         this.mailSandler = generalActionUnit.getMailSandler();
     }

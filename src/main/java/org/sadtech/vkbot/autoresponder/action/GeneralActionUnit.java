@@ -7,7 +7,7 @@ import org.sadtech.vkbot.core.sender.MailSandler;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GeneralActionUnit {
+public class GeneralActionUnit implements Action {
 
     private MailSandler mailSandler;
     private Map<Class, ActionUnit> actionUnitHashMap;
