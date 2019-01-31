@@ -1,12 +1,17 @@
-package org.sadtech.vkbot.autoresponder.action;
+package org.sadtech.vkbot.autoresponder.action.impl;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.sadtech.autoresponder.entity.Unit;
+import org.sadtech.vkbot.autoresponder.action.Action;
+import org.sadtech.vkbot.autoresponder.action.ActionUnit;
 import org.sadtech.vkbot.autoresponder.entity.BoxAnswer;
 import org.sadtech.vkbot.autoresponder.entity.TextAnswerAndSave;
 import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.insert.InsertWords;
 import org.sadtech.vkbot.core.sender.MailSandler;
 import org.sadtech.vkbot.core.entity.MailSend;
+
+import java.util.List;
 
 public class TextAnswerAndSaveAction implements ActionUnit {
 
@@ -23,9 +28,12 @@ public class TextAnswerAndSaveAction implements ActionUnit {
         TextAnswerAndSave textAnswerAndSave = (TextAnswerAndSave) unit;
         textAnswerAndSave.getBoxAnswer().setIdRecipient(mail.getPerson().getId());
         if (textAnswerAndSave.getInsert() != null) {
-            textAnswerAndSave.getBoxAnswer().setInsertWords(textAnswerAndSave.getInsert().insert());
+            List list = textAnswerAndSave.getInsert().insert();
+            if (CollectionUtils.isNotEmpty(list)) {
+                textAnswerAndSave.getBoxAnswer().setInsertWords(list);
+            }
         }
-        if (textAnswerAndSave.getPrevUnit() == null) {
+        if (CollectionUtils.isEmpty(textAnswerAndSave.getPrevUnits())) {
             textAnswerAndSave.getSaver().init(mail.getPerson().getId());
         } else {
             textAnswerAndSave.getSaver().save(mail.getPerson().getId(), textAnswerAndSave.getKey(), mail.getBody());
@@ -37,7 +45,6 @@ public class TextAnswerAndSaveAction implements ActionUnit {
         if (!checkNextSaveUnit(textAnswerAndSave)) {
             textAnswerAndSave.getSaver().push(mail.getPerson().getId());
         }
-
     }
 
     private MailSend createMailSend(BoxAnswer boxAnswer) {

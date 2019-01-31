@@ -1,6 +1,8 @@
-package org.sadtech.vkbot.autoresponder.action;
+package org.sadtech.vkbot.autoresponder.action.impl;
 
 import org.sadtech.autoresponder.entity.Unit;
+import org.sadtech.vkbot.autoresponder.action.Action;
+import org.sadtech.vkbot.autoresponder.action.ActionUnit;
 import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.sender.MailSandler;
 

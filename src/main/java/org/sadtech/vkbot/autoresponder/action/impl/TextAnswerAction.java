@@ -1,13 +1,18 @@
-package org.sadtech.vkbot.autoresponder.action;
+package org.sadtech.vkbot.autoresponder.action.impl;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.sadtech.autoresponder.entity.Unit;
+import org.sadtech.vkbot.autoresponder.action.Action;
+import org.sadtech.vkbot.autoresponder.action.ActionUnit;
 import org.sadtech.vkbot.autoresponder.entity.BoxAnswer;
 import org.sadtech.vkbot.autoresponder.entity.TextAnswer;
 import org.sadtech.vkbot.core.entity.Mail;
+import org.sadtech.vkbot.core.entity.MailSend;
 import org.sadtech.vkbot.core.insert.InsertWords;
 import org.sadtech.vkbot.core.sender.MailSandler;
-import org.sadtech.vkbot.core.entity.MailSend;
+
+import java.util.List;
 
 public class TextAnswerAction implements ActionUnit {
 
@@ -25,7 +30,10 @@ public class TextAnswerAction implements ActionUnit {
         TextAnswer textAnswer = (TextAnswer) unit;
         textAnswer.getBoxAnswer().setIdRecipient(mail.getPerson().getId());
         if (textAnswer.getInsert() != null) {
-            textAnswer.getBoxAnswer().setInsertWords(textAnswer.getInsert().insert());
+            List<String> list = textAnswer.getInsert().insert();
+            if (CollectionUtils.isNotEmpty(list)) {
+                textAnswer.getBoxAnswer().setInsertWords(list);
+            }
         }
         MailSend mailSend = createMailSend(textAnswer.getBoxAnswer());
         mailSandler.send(mailSend);

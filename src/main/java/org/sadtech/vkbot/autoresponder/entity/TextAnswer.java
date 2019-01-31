@@ -1,7 +1,7 @@
 package org.sadtech.vkbot.autoresponder.entity;
 
 import org.sadtech.autoresponder.entity.Unit;
-import org.sadtech.vkbot.autoresponder.action.Insert;
+import org.sadtech.vkbot.autoresponder.entity.usercode.Insert;
 
 import java.util.List;
 import java.util.Set;

@@ -2,9 +2,12 @@ package org.sadtech.vkbot.autoresponder.entity;
 
 import org.sadtech.vkbot.autoresponder.saver.Saver;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TextAnswerAndSave extends TextAnswer {
 
-    private TextAnswerAndSave prevUnit;
+    private List<TextAnswerAndSave> prevUnits = new ArrayList<>();
     private Saver saver;
     private String key;
 
@@ -12,12 +15,16 @@ public class TextAnswerAndSave extends TextAnswer {
         super();
     }
 
-    public TextAnswerAndSave getPrevUnit() {
-        return prevUnit;
+    public void setPrevUnit(TextAnswerAndSave answerAndSave) {
+        this.prevUnits.add(answerAndSave);
     }
 
-    public void setPrevUnit(TextAnswerAndSave prevUnit) {
-        this.prevUnit = prevUnit;
+    public List<TextAnswerAndSave> getPrevUnits() {
+        return prevUnits;
+    }
+
+    public void setPrevUnits(List<TextAnswerAndSave> prevUnits) {
+        this.prevUnits = prevUnits;
     }
 
     public Saver getSaver() {
