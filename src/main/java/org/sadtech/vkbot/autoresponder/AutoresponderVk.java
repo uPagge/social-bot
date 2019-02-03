@@ -2,9 +2,8 @@ package org.sadtech.vkbot.autoresponder;
 
 import org.sadtech.autoresponder.Autoresponder;
 import org.sadtech.autoresponder.entity.Unit;
-import org.sadtech.autoresponder.repository.impl.PersonRepositoryMap;
+import org.sadtech.autoresponder.service.PersonService;
 import org.sadtech.autoresponder.service.UnitService;
-import org.sadtech.autoresponder.service.impl.PersonServiceImpl;
 import org.sadtech.autoresponder.service.impl.UnitServiceImpl;
 import org.sadtech.vkbot.autoresponder.action.Action;
 import org.sadtech.vkbot.autoresponder.repository.UnitMenuRepository;
@@ -25,26 +24,24 @@ public class AutoresponderVk {
     private MailService mailService;
     private Action generalAction;
 
-    public AutoresponderVk(VkConnect vkConnect) {
-        this.vkConnect = vkConnect;
-        unitService = new UnitServiceImpl(new UnitMenuRepository());
-        autoresponder = new Autoresponder(unitService, new PersonServiceImpl(new PersonRepositoryMap()));
-    }
-
-    public AutoresponderVk(VkConnect vkConnect, UnitService unitService, MailService mailService, Action generalAction) {
+    public AutoresponderVk(VkConnect vkConnect, UnitService unitService, MailService mailService, Action generalAction, PersonService personService) {
         this.unitService = unitService;
         this.vkConnect = vkConnect;
         this.mailService = mailService;
         this.generalAction = generalAction;
-        autoresponder = new Autoresponder(this.unitService, new PersonServiceImpl(new PersonRepositoryMap()));
+        autoresponder = new Autoresponder(this.unitService, personService);
     }
 
-    public AutoresponderVk(VkConnect vkConnect, MailService mailService, Action generalAction) {
+    public AutoresponderVk(VkConnect vkConnect, MailService mailService, Action generalAction, PersonService personService) {
         this.vkConnect = vkConnect;
         unitService = new UnitServiceImpl(new UnitMenuRepository());
-        autoresponder = new Autoresponder(unitService, new PersonServiceImpl(new PersonRepositoryMap()));
+        autoresponder = new Autoresponder(unitService, personService);
         this.generalAction = generalAction;
         this.mailService = mailService;
+    }
+
+    public Autoresponder getAutoresponder() {
+        return autoresponder;
     }
 
     public MailService getMailService() {
@@ -94,9 +91,8 @@ public class AutoresponderVk {
                 generalAction.action(unitAnswer, mail);
             } else {
                 MailSend mailSend = new MailSend();
-                mailSend.setIdRecipient(mail.getPerson().getId());
                 mailSend.setMessage("К сожалению, я еще не знаю что вам ответить");
-                mailSanderVk.send(mailSend);
+                mailSanderVk.send(mailSend, mail.getPerson().getId());
             }
         }
     }

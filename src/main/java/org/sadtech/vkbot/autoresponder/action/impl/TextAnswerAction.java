@@ -5,11 +5,9 @@ import org.apache.log4j.Logger;
 import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.vkbot.autoresponder.action.Action;
 import org.sadtech.vkbot.autoresponder.action.ActionUnit;
-import org.sadtech.vkbot.autoresponder.entity.BoxAnswer;
 import org.sadtech.vkbot.autoresponder.entity.TextAnswer;
 import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.entity.MailSend;
-import org.sadtech.vkbot.core.insert.InsertWords;
 import org.sadtech.vkbot.core.sender.MailSandler;
 
 import java.util.List;
@@ -28,32 +26,16 @@ public class TextAnswerAction implements ActionUnit {
     @Override
     public void action(Unit unit, Mail mail) {
         TextAnswer textAnswer = (TextAnswer) unit;
-        textAnswer.getBoxAnswer().setIdRecipient(mail.getPerson().getId());
+        List<String> wordsProg = null;
         if (textAnswer.getInsert() != null) {
-            List<String> list = textAnswer.getInsert().insert();
-            if (CollectionUtils.isNotEmpty(list)) {
-                textAnswer.getBoxAnswer().setInsertWords(list);
-            }
+            wordsProg = textAnswer.getInsert().insert();
         }
-        MailSend mailSend = createMailSend(textAnswer.getBoxAnswer());
-        mailSandler.send(mailSend);
-    }
+        MailSend mailSend = textAnswer.getMailSend();
 
-    private MailSend createMailSend(BoxAnswer boxAnswer) {
-        MailSend mailSend = new MailSend();
-        if (boxAnswer.getInsertWords()!=null) {
-            InsertWords insertWords = new InsertWords();
-            insertWords.setInText(boxAnswer.getMessage());
-            insertWords.insert(boxAnswer.getInsertWords());
-            mailSend.setMessage(insertWords.getOutText());
+        if (CollectionUtils.isNotEmpty(wordsProg)) {
+            mailSandler.send(mailSend, mail.getPerson().getId(), wordsProg);
         } else {
-            mailSend.setMessage(boxAnswer.getMessage());
+            mailSandler.send(mailSend, mail.getPerson().getId());
         }
-        mailSend.setIdRecipient(boxAnswer.getIdRecipient());
-        mailSend.setKeyboard(boxAnswer.getKeyboard());
-        mailSend.setStickerId(boxAnswer.getStickerId());
-        mailSend.setaLong(boxAnswer.getaLong());
-        mailSend.setLat(boxAnswer.getLat());
-        return mailSend;
     }
 }

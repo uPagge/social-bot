@@ -2,31 +2,23 @@ package org.sadtech.vkbot.autoresponder.entity;
 
 import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.vkbot.autoresponder.entity.usercode.Insert;
-
-import java.util.List;
-import java.util.Set;
+import org.sadtech.vkbot.core.entity.MailSend;
 
 public class TextAnswer extends Unit {
 
-    private BoxAnswer boxAnswer;
+    private MailSend mailSend;
     private Insert insert;
 
     public TextAnswer() {
-        boxAnswer = new BoxAnswer();
+        mailSend = new MailSend();
     }
 
-    public TextAnswer(Set<String> keyWords, Integer matchThreshold, Integer priority, Boolean level, List<Unit> nextUnits, BoxAnswer boxAnswer) {
-        super(keyWords, matchThreshold, priority, level, nextUnits);
-        this.boxAnswer = boxAnswer;
+    public MailSend getMailSend() {
+        return mailSend;
     }
 
-
-    public BoxAnswer getBoxAnswer() {
-        return boxAnswer;
-    }
-
-    public void setBoxAnswer(BoxAnswer boxAnswer) {
-        this.boxAnswer = boxAnswer;
+    public void setMailSend(MailSend mailSend) {
+        this.mailSend = mailSend;
     }
 
     public Insert getInsert() {

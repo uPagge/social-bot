@@ -1,34 +1,56 @@
 package org.sadtech.vkbot.autoresponder.action.impl;
 
 import org.sadtech.autoresponder.entity.Unit;
+import org.sadtech.autoresponder.service.PersonService;
 import org.sadtech.vkbot.autoresponder.action.Action;
 import org.sadtech.vkbot.autoresponder.action.ActionUnit;
+import org.sadtech.vkbot.autoresponder.service.ActionService;
 import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.sender.MailSandler;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class GeneralActionUnit implements Action {
 
     private MailSandler mailSandler;
-    private Map<Class, ActionUnit> actionUnitHashMap;
+    private PersonService personServiceAutoresponder;
+    private ActionService actionService;
 
-    public GeneralActionUnit(MailSandler mailSandler) {
+
+    public void setPersonServiceAutoresponder(PersonService personServiceAutoresponder) {
+        this.personServiceAutoresponder = personServiceAutoresponder;
+    }
+
+    public GeneralActionUnit(MailSandler mailSandler, PersonService personServiceAutoresponder, ActionService actionService) {
         this.mailSandler = mailSandler;
-        actionUnitHashMap = new HashMap<>();
+        this.personServiceAutoresponder = personServiceAutoresponder;
+        this.actionService = actionService;
+    }
+
+    public GeneralActionUnit(MailSandler mailSandler, ActionService actionService) {
+        this.mailSandler = mailSandler;
+        this.actionService = actionService;
     }
 
     public void action(Unit unit, Mail mail) {
-        ActionUnit actionUnit = actionUnitHashMap.get(unit.getClass());
+        ActionUnit actionUnit = actionService.get(unit.getClass());
         actionUnit.action(unit, mail);
     }
 
+    public ActionService getActionService() {
+        return actionService;
+    }
+
+
     public void registerActionUnit(Class clazz, ActionUnit actionUnit) {
-        actionUnitHashMap.put(clazz, actionUnit);
+        actionService.put(clazz, actionUnit);
     }
 
     public MailSandler getMailSandler() {
         return mailSandler;
     }
+
+    public PersonService getPersonServiceAutoresponder() {
+        return personServiceAutoresponder;
+    }
+
+
 }
