@@ -33,22 +33,27 @@ public class TimerAnswerAction implements ActionUnit {
         actionService = action.getActionService();
         TimerActionTask timerActionTask = new TimerActionTask(timerService);
         Timer timer = new Timer(true);
-        timer.schedule(timerActionTask, 0, 1000*verificationPeriodSec);
+        timer.schedule(timerActionTask, 0, 1000 * verificationPeriodSec);
     }
 
     @Override
     public void action(Unit unit, Mail mail) {
         TimerAnswer timerAnswer = (TimerAnswer) unit;
         TimerAction timerAction = new TimerAction();
-        if (timerAnswer.getIdUser()!=null) {
+        if (timerAnswer.getIdUser() != null) {
             timerAction.setIdPerson(timerAnswer.getIdUser());
         } else {
             timerAction.setIdPerson(mail.getPeerId());
         }
         timerAction.setUnit(timerAnswer.getUnit());
-        timerAction.setTimeActive(new Date().getTime() + timerAnswer.getTimeDelaySec()*1000);
+        timerAction.setTimeActive(new Date().getTime() + timerAnswer.getTimeDelaySec() * 1000);
         timerAction.setActionUnit(actionService.get(timerAnswer.getUnit().getClass()));
-        timerAction.setPeriod(timerAnswer.getTimeDelaySec()*1000);
+        timerAnswer.getNextUnits().forEach(nextUnit -> {
+            if (nextUnit.equals(timerAnswer)) {
+                timerAction.setRepeated(true);
+                timerAction.setPeriod(timerAnswer.getTimeDelaySec() * 1000);
+            }
+        });
         log.info("Таймер установлен: " + timerAction);
         timerService.add(timerAction);
     }

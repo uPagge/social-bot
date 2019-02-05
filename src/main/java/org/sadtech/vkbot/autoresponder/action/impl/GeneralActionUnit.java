@@ -4,6 +4,7 @@ import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.autoresponder.service.PersonService;
 import org.sadtech.vkbot.autoresponder.action.Action;
 import org.sadtech.vkbot.autoresponder.action.ActionUnit;
+import org.sadtech.vkbot.autoresponder.entity.TimerAnswer;
 import org.sadtech.vkbot.autoresponder.service.ActionService;
 import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.sender.MailSandler;
@@ -32,6 +33,15 @@ public class GeneralActionUnit implements Action {
     public void action(Unit unit, Mail mail) {
         ActionUnit actionUnit = actionService.get(unit.getClass());
         actionUnit.action(unit, mail);
+
+        if (unit.getNextUnits()!=null) {
+            for (Unit nextUnit : unit.getNextUnits()) {
+                if (nextUnit.getClass().equals(TimerAnswer.class) && !nextUnit.equals(unit)) {
+                    action(nextUnit, mail);
+                    personServiceAutoresponder.getPersonById(mail.getPerson().getId()).setUnit(nextUnit);
+                }
+            }
+        }
     }
 
     public ActionService getActionService() {
