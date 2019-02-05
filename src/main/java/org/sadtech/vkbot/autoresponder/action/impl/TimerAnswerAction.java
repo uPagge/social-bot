@@ -6,9 +6,12 @@ import org.sadtech.vkbot.autoresponder.action.Action;
 import org.sadtech.vkbot.autoresponder.action.ActionUnit;
 import org.sadtech.vkbot.autoresponder.entity.TimerAnswer;
 import org.sadtech.vkbot.autoresponder.service.ActionService;
-import org.sadtech.vkbot.autoresponder.timer.TimerVk;
+import org.sadtech.vkbot.autoresponder.timer.TimerActionService;
+import org.sadtech.vkbot.autoresponder.timer.TimerActionTask;
+import org.sadtech.vkbot.autoresponder.timer.impl.TimerAction;
 import org.sadtech.vkbot.core.entity.Mail;
 
+import java.util.Date;
 import java.util.Timer;
 
 public class TimerAnswerAction implements ActionUnit {
@@ -16,21 +19,45 @@ public class TimerAnswerAction implements ActionUnit {
     public static final Logger log = Logger.getLogger(TimerAnswerAction.class);
 
     private ActionService actionService;
+    private TimerActionService timerService;
     private Action action;
+    private Integer verificationPeriodSec = 10;
 
-    public TimerAnswerAction(Action action) {
+    public TimerAnswerAction() {
+
+    }
+
+    public TimerAnswerAction(Action action, TimerActionService timerService) {
         action.registerActionUnit(TimerAnswer.class, this);
+        this.timerService = timerService;
         actionService = action.getActionService();
+        TimerActionTask timerActionTask = new TimerActionTask(timerService);
+        Timer timer = new Timer(true);
+        timer.schedule(timerActionTask, 0, 1000*verificationPeriodSec);
     }
 
     @Override
     public void action(Unit unit, Mail mail) {
-        log.info("Установка таймера");
         TimerAnswer timerAnswer = (TimerAnswer) unit;
-        TimerVk timerVk = new TimerVk(actionService.get(timerAnswer.getUnit().getClass()));
-        timerVk.setIdPerson(mail.getPerson().getId());
-        timerVk.setUnit(timerAnswer.getUnit());
-        Timer timer = new Timer(true);
-        timer.schedule(timerVk, 10*1000);
+        TimerAction timerAction = new TimerAction();
+        if (timerAnswer.getIdUser()!=null) {
+            timerAction.setIdPerson(timerAnswer.getIdUser());
+        } else {
+            timerAction.setIdPerson(mail.getPeerId());
+        }
+        timerAction.setUnit(timerAnswer.getUnit());
+        timerAction.setTimeActive(new Date().getTime() + timerAnswer.getTimeDelaySec()*1000);
+        timerAction.setActionUnit(actionService.get(timerAnswer.getUnit().getClass()));
+        timerAction.setPeriod(timerAnswer.getTimeDelaySec()*1000);
+        log.info("Таймер установлен: " + timerAction);
+        timerService.add(timerAction);
+    }
+
+    public Integer getVerificationPeriodSec() {
+        return verificationPeriodSec;
+    }
+
+    public void setVerificationPeriodSec(Integer verificationPeriodSec) {
+        this.verificationPeriodSec = verificationPeriodSec;
     }
 }

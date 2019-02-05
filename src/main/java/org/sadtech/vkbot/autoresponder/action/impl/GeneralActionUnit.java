@@ -14,7 +14,6 @@ public class GeneralActionUnit implements Action {
     private PersonService personServiceAutoresponder;
     private ActionService actionService;
 
-
     public void setPersonServiceAutoresponder(PersonService personServiceAutoresponder) {
         this.personServiceAutoresponder = personServiceAutoresponder;
     }
@@ -38,7 +37,6 @@ public class GeneralActionUnit implements Action {
     public ActionService getActionService() {
         return actionService;
     }
-
 
     public void registerActionUnit(Class clazz, ActionUnit actionUnit) {
         actionService.put(clazz, actionUnit);

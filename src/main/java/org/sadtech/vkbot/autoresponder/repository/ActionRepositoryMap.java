@@ -10,7 +10,6 @@ public class ActionRepositoryMap implements ActionRepository {
 
     private Map<Class, ActionUnit> actionUnitHashMap = new HashMap<>();
 
-
     @Override
     public ActionUnit get(Class<? extends Unit> aClass) {
         return actionUnitHashMap.get(aClass);

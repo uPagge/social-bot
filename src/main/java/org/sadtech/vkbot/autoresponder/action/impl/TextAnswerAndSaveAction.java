@@ -5,11 +5,13 @@ import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.vkbot.autoresponder.action.Action;
 import org.sadtech.vkbot.autoresponder.action.ActionUnit;
 import org.sadtech.vkbot.autoresponder.entity.TextAnswerAndSave;
+import org.sadtech.vkbot.autoresponder.saver.SaveStatus;
 import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.entity.MailSend;
 import org.sadtech.vkbot.core.sender.MailSandler;
 
 import java.util.List;
+import java.util.Set;
 
 public class TextAnswerAndSaveAction implements ActionUnit {
 
@@ -28,33 +30,26 @@ public class TextAnswerAndSaveAction implements ActionUnit {
         if (textAnswerAndSave.getInsert() != null) {
             list = textAnswerAndSave.getInsert().insert();
         }
-        if (CollectionUtils.isEmpty(textAnswerAndSave.getPrevUnits())) {
-            textAnswerAndSave.getSaver().init(mail.getPerson().getId());
-        } else {
-            textAnswerAndSave.getSaver().save(mail.getPerson().getId(), textAnswerAndSave.getKey(), mail.getBody());
+
+        Set<SaveStatus> unitSaveStatus = textAnswerAndSave.getSaveStatuses();
+        if (unitSaveStatus.contains(SaveStatus.INIT)) {
+            textAnswerAndSave.getSavable().init(mail.getPerson().getId());
         }
+
+        if (unitSaveStatus.contains(SaveStatus.SAVE)) {
+            textAnswerAndSave.getSavable().save(mail.getPerson().getId(), textAnswerAndSave.getKey(), mail.getBody());
+        }
+
+        if (unitSaveStatus.contains(SaveStatus.FINISH)) {
+            textAnswerAndSave.getSavable().push(mail.getPerson().getId());
+        }
+
 
         MailSend mailSend = textAnswerAndSave.getMailSend();
         if (CollectionUtils.isNotEmpty(list)) {
-            mailSandler.send(mailSend, mail.getPerson().getId(), list);
+            mailSandler.send(mailSend, mail.getPeerId(), mail.getPerson().getId(), list);
         } else {
-            mailSandler.send(mailSend, mail.getPerson().getId());
+            mailSandler.send(mailSend, mail.getPeerId(), mail.getPerson().getId());
         }
-
-        if (!checkNextSaveUnit(textAnswerAndSave)) {
-            textAnswerAndSave.getSaver().push(mail.getPerson().getId());
-        }
-    }
-
-    private boolean checkNextSaveUnit(TextAnswerAndSave unit) {
-        if (unit.getNextUnits() == null) {
-            return false;
-        }
-        for (Unit nextUnit : unit.getNextUnits()) {
-            if (nextUnit.getClass().equals(TextAnswerAndSave.class)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

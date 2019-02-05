@@ -5,7 +5,8 @@ import org.sadtech.autoresponder.entity.Unit;
 public class TimerAnswer extends Unit {
 
     private Unit unit;
-    private Integer idPerson;
+    private Long timeDelaySec;
+    private Integer idUser;
 
     public Unit getUnit() {
         return unit;
@@ -15,11 +16,19 @@ public class TimerAnswer extends Unit {
         this.unit = unit;
     }
 
-    public Integer getIdPerson() {
-        return idPerson;
+    public Long getTimeDelaySec() {
+        return timeDelaySec;
     }
 
-    public void setIdPerson(Integer idPerson) {
-        this.idPerson = idPerson;
+    public void setTimeDelaySec(Long timeDelaySec) {
+        this.timeDelaySec = timeDelaySec;
+    }
+
+    public Integer getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(Integer idUser) {
+        this.idUser = idUser;
     }
 }

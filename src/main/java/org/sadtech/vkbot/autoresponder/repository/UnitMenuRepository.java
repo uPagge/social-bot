@@ -3,12 +3,13 @@ package org.sadtech.vkbot.autoresponder.repository;
 import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.autoresponder.repository.UnitRepository;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class UnitMenuRepository implements UnitRepository {
 
-    private List<Unit> units = new ArrayList<>();
+    private Set<Unit> units = new HashSet<>();
 
     @Override
     public void addUnit(Unit unit) {
@@ -21,7 +22,7 @@ public class UnitMenuRepository implements UnitRepository {
     }
 
     @Override
-    public List<Unit> menuUnits() {
+    public Set<Unit> menuUnits() {
         return units;
     }
 }

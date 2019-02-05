@@ -33,9 +33,9 @@ public class TextAnswerAction implements ActionUnit {
         MailSend mailSend = textAnswer.getMailSend();
 
         if (CollectionUtils.isNotEmpty(wordsProg)) {
-            mailSandler.send(mailSend, mail.getPerson().getId(), wordsProg);
+            mailSandler.send(mailSend, mail.getPeerId(), mail.getPerson().getId(), wordsProg);
         } else {
-            mailSandler.send(mailSend, mail.getPerson().getId());
+            mailSandler.send(mailSend, mail.getPeerId(), mail.getPerson().getId());
         }
     }
 }

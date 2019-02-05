@@ -6,6 +6,7 @@ import org.sadtech.autoresponder.service.PersonService;
 import org.sadtech.autoresponder.service.UnitService;
 import org.sadtech.autoresponder.service.impl.UnitServiceImpl;
 import org.sadtech.vkbot.autoresponder.action.Action;
+import org.sadtech.vkbot.autoresponder.entity.TimerAnswer;
 import org.sadtech.vkbot.autoresponder.repository.UnitMenuRepository;
 import org.sadtech.vkbot.core.VkConnect;
 import org.sadtech.vkbot.core.entity.Mail;
@@ -89,10 +90,18 @@ public class AutoresponderVk {
             Unit unitAnswer = autoresponder.answer(mail.getPerson().getId(), mail.getBody());
             if (unitAnswer != null) {
                 generalAction.action(unitAnswer, mail);
+                if (unitAnswer.getNextUnits()!=null) {
+                    for (Unit nextUnit : unitAnswer.getNextUnits()) {
+                        if (nextUnit.getClass().equals(TimerAnswer.class)) {
+                            generalAction.action(nextUnit, mail);
+                            autoresponder.getPersonService().getPersonById(mail.getPerson().getId()).setUnit(nextUnit);
+                        }
+                    }
+                }
             } else {
                 MailSend mailSend = new MailSend();
                 mailSend.setMessage("К сожалению, я еще не знаю что вам ответить");
-                mailSanderVk.send(mailSend, mail.getPerson().getId());
+                mailSanderVk.send(mailSend, mail.getPeerId());
             }
         }
     }

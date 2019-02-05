@@ -9,7 +9,7 @@ import org.sadtech.vkbot.core.entity.MailSend;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserSanderSaver implements Saver {
+public class UserSanderSavable implements Savable {
 
     private Integer idUser;
     private VkConnect vkConnect;
@@ -17,7 +17,7 @@ public class UserSanderSaver implements Saver {
     private Map<Integer, Map<String, String>> map = new HashMap<>();
     private VkApi vkApi;
 
-    public UserSanderSaver(VkConnect vkConnect) {
+    public UserSanderSavable(VkConnect vkConnect) {
         this.vkConnect = vkConnect;
         vkApi = new VkApi(vkConnect);
     }

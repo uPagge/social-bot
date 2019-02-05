@@ -1,15 +1,19 @@
 package org.sadtech.vkbot.autoresponder.entity;
 
-import org.sadtech.vkbot.autoresponder.saver.Saver;
+import org.sadtech.vkbot.autoresponder.saver.Savable;
+import org.sadtech.vkbot.autoresponder.saver.SaveStatus;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TextAnswerAndSave extends TextAnswer {
 
     private List<TextAnswerAndSave> prevUnits = new ArrayList<>();
-    private Saver saver;
+    private Savable savable;
     private String key;
+    private Set<SaveStatus> saveStatuses = new HashSet<>();
 
     public TextAnswerAndSave() {
         super();
@@ -27,12 +31,12 @@ public class TextAnswerAndSave extends TextAnswer {
         this.prevUnits = prevUnits;
     }
 
-    public Saver getSaver() {
-        return saver;
+    public Savable getSavable() {
+        return savable;
     }
 
-    public void setSaver(Saver saver) {
-        this.saver = saver;
+    public void setSavable(Savable savable) {
+        this.savable = savable;
     }
 
     public String getKey() {
@@ -42,4 +46,17 @@ public class TextAnswerAndSave extends TextAnswer {
     public void setKey(String key) {
         this.key = key;
     }
+
+    public Set<SaveStatus> getSaveStatuses() {
+        return saveStatuses;
+    }
+
+    public void setSaveStatuses(Set<SaveStatus> saveStatuses) {
+        this.saveStatuses = saveStatuses;
+    }
+
+    public void setSaveStatus(SaveStatus saveStatus) {
+        this.saveStatuses.add(saveStatus);
+    }
+
 }
