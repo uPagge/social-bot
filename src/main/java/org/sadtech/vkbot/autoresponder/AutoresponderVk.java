@@ -3,70 +3,54 @@ package org.sadtech.vkbot.autoresponder;
 import org.sadtech.autoresponder.Autoresponder;
 import org.sadtech.autoresponder.service.PersonService;
 import org.sadtech.autoresponder.service.UnitService;
+import org.sadtech.autoresponder.service.impl.PersonServiceImpl;
 import org.sadtech.autoresponder.service.impl.UnitServiceImpl;
 import org.sadtech.vkbot.autoresponder.action.Action;
-import org.sadtech.vkbot.autoresponder.entity.MainUnit;
 import org.sadtech.vkbot.autoresponder.repository.UnitMenuRepository;
-import org.sadtech.vkbot.core.VkConnect;
-import org.sadtech.vkbot.core.entity.Mail;
-import org.sadtech.vkbot.core.entity.MailSend;
-import org.sadtech.vkbot.core.sender.MailSenderVk;
-import org.sadtech.vkbot.core.service.distribution.MailService;
+import org.sadtech.vkbot.core.service.distribution.impl.EventService;
 
 import java.util.Date;
 import java.util.List;
 
-public class AutoresponderVk implements Runnable {
+public abstract class AutoresponderVk<T> implements Runnable {
 
-    private VkConnect vkConnect;
-    private Autoresponder autoresponder;
+    private EventService<T> eventService;
+    protected Action action;
     private UnitService unitService;
-    private MailService mailService;
-    private Action generalAction;
-    private PersonService personService;
+    protected Autoresponder autoresponder;
 
-    public AutoresponderVk(VkConnect vkConnect, UnitService unitService, MailService mailService, Action generalAction, PersonService personService) {
+    public AutoresponderVk(EventService<T> eventService, Action action, UnitService unitService) {
         this.unitService = unitService;
-        this.vkConnect = vkConnect;
-        this.mailService = mailService;
-        this.generalAction = generalAction;
-        this.personService = personService;
+        this.eventService = eventService;
+        this.action = action;
+        PersonService personService = new PersonServiceImpl();
         autoresponder = new Autoresponder(this.unitService, personService);
-        generalAction.setPersonService(personService);
+        action.setPersonService(personService);
     }
 
-    public AutoresponderVk(VkConnect vkConnect, MailService mailService, Action generalAction, PersonService personService) {
-        this.vkConnect = vkConnect;
-        unitService = new UnitServiceImpl(new UnitMenuRepository());
-        autoresponder = new Autoresponder(unitService, personService);
-        this.generalAction = generalAction;
-        this.mailService = mailService;
-        this.personService = personService;
-        generalAction.setPersonService(personService);
+    public AutoresponderVk(EventService<T> eventService, Action action) {
+        this.unitService = new UnitServiceImpl(new UnitMenuRepository());
+        this.eventService = eventService;
+        this.action = action;
+        PersonService personService = new PersonServiceImpl();
+        autoresponder = new Autoresponder(this.unitService, personService);
+        action.setPersonService(personService);
     }
 
     public Autoresponder getAutoresponder() {
         return autoresponder;
     }
 
-    public MailService getMailService() {
-        return mailService;
-    }
-
-    public void setMailService(MailService mailService) {
-        this.mailService = mailService;
-    }
-
     public UnitService getUnitService() {
         return unitService;
     }
 
-    public Action getGeneralAction() {
-        return generalAction;
+    public Action getAction() {
+        return action;
     }
 
-    public void setGeneralAction(Action generalAction) {
-        this.generalAction = generalAction;
+    public void setAction(Action action) {
+        this.action = action;
     }
 
     private void checkNewMessages() {
@@ -75,7 +59,7 @@ public class AutoresponderVk implements Runnable {
         while (true) {
             newData = new Date().getTime() / 1000 - 1;
             if (oldData < newData) {
-                List<Mail> mailList = mailService.getFirstMailByTime(Integer.parseInt(oldData.toString()), Integer.parseInt(newData.toString()));
+                List<T> mailList = eventService.getFirstMailByTime(Integer.parseInt(oldData.toString()), Integer.parseInt(newData.toString()));
                 if (mailList.size() > 0) {
                     sendReply(mailList);
                 }
@@ -84,27 +68,7 @@ public class AutoresponderVk implements Runnable {
         }
     }
 
-    private void sendReply(List<Mail> mailList) {
-        MailSenderVk mailSenderVk = new MailSenderVk(vkConnect);
-        for (Mail mail : mailList) {
-            MainUnit unitAnswer = (MainUnit) autoresponder.answer(mail.getPerson().getId(), mail.getBody());
-            if (unitAnswer != null) {
-                generalAction.action(unitAnswer, mail);
-            } else {
-                MailSend mailSend = new MailSend();
-                mailSend.setMessage("К сожалению, я еще не знаю что вам ответить");
-                mailSenderVk.send(mailSend, mail.getPeerId(), mail.getPerson().getId());
-            }
-            if (unitAnswer.getNextUnits() != null) {
-                unitAnswer.getNextUnits().stream().filter(Unit -> Unit instanceof MainUnit).map(unit -> (MainUnit) unit).forEach(nextUnit -> {
-                    if (nextUnit.getHiddenTrigger()) {
-                        generalAction.action(nextUnit, mail);
-                        personService.getPersonById(mail.getPerson().getId()).setUnit(nextUnit);
-                    }
-                });
-            }
-        }
-    }
+    protected abstract void sendReply(List<T> mailList);
 
     @Override
     public void run() {
