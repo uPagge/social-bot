@@ -11,7 +11,7 @@ import org.sadtech.vkbot.core.VkConnect;
 import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.entity.MailSend;
 import org.sadtech.vkbot.core.sender.MailSenderVk;
-import org.sadtech.vkbot.core.service.handlers.MailService;
+import org.sadtech.vkbot.core.service.distribution.MailService;
 
 import java.util.Date;
 import java.util.List;
@@ -96,9 +96,9 @@ public class AutoresponderVk implements Runnable {
                 mailSenderVk.send(mailSend, mail.getPeerId(), mail.getPerson().getId());
             }
             if (unitAnswer.getNextUnits() != null) {
-                unitAnswer.getNextUnits().forEach(nextUnit -> {
-                    if (((MainUnit) nextUnit).getHiddenTrigger()) {
-                        generalAction.action((MainUnit) nextUnit, mail);
+                unitAnswer.getNextUnits().stream().filter(Unit -> Unit instanceof MainUnit).map(unit -> (MainUnit) unit).forEach(nextUnit -> {
+                    if (nextUnit.getHiddenTrigger()) {
+                        generalAction.action(nextUnit, mail);
                         personService.getPersonById(mail.getPerson().getId()).setUnit(nextUnit);
                     }
                 });
