@@ -1,10 +1,9 @@
 package org.sadtech.vkbot.autoresponder.entity;
 
-import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.vkbot.autoresponder.entity.usercode.Insert;
 import org.sadtech.vkbot.core.entity.MailSend;
 
-public class TextAnswer extends Unit {
+public class TextAnswer extends MainUnit {
 
     private MailSend mailSend;
     private Insert insert;

@@ -5,10 +5,11 @@ import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.vkbot.autoresponder.action.Action;
 import org.sadtech.vkbot.autoresponder.action.ActionUnit;
 import org.sadtech.vkbot.autoresponder.entity.TimerAnswer;
-import org.sadtech.vkbot.autoresponder.service.ActionService;
 import org.sadtech.vkbot.autoresponder.timer.TimerActionService;
 import org.sadtech.vkbot.autoresponder.timer.TimerActionTask;
 import org.sadtech.vkbot.autoresponder.timer.impl.TimerAction;
+import org.sadtech.vkbot.autoresponder.timer.impl.TimerActionRepositoryList;
+import org.sadtech.vkbot.autoresponder.timer.impl.TimerActionServiceImpl;
 import org.sadtech.vkbot.core.entity.Mail;
 
 import java.util.Date;
@@ -18,20 +19,23 @@ public class TimerAnswerAction implements ActionUnit {
 
     public static final Logger log = Logger.getLogger(TimerAnswerAction.class);
 
-    private ActionService actionService;
     private TimerActionService timerService;
-    private Action action;
-    private Integer verificationPeriodSec = 10;
-
-    public TimerAnswerAction() {
-
-    }
+    private Integer verificationPeriodSec = 30;
 
     public TimerAnswerAction(Action action, TimerActionService timerService) {
         action.registerActionUnit(TimerAnswer.class, this);
         this.timerService = timerService;
-        actionService = action.getActionService();
-        TimerActionTask timerActionTask = new TimerActionTask(timerService);
+
+        TimerActionTask timerActionTask = new TimerActionTask(action, timerService);
+        Timer timer = new Timer(true);
+        timer.schedule(timerActionTask, 0, 1000 * verificationPeriodSec);
+    }
+
+    public TimerAnswerAction(Action action) {
+        action.registerActionUnit(TimerAnswer.class, this);
+        this.timerService = new TimerActionServiceImpl(new TimerActionRepositoryList());
+
+        TimerActionTask timerActionTask = new TimerActionTask(action, timerService);
         Timer timer = new Timer(true);
         timer.schedule(timerActionTask, 0, 1000 * verificationPeriodSec);
     }
@@ -45,15 +49,8 @@ public class TimerAnswerAction implements ActionUnit {
         } else {
             timerAction.setIdPerson(mail.getPeerId());
         }
-        timerAction.setUnit(timerAnswer.getUnit());
+        timerAction.setUnit(timerAnswer.getUnitAnswer());
         timerAction.setTimeActive(new Date().getTime() + timerAnswer.getTimeDelaySec() * 1000);
-        timerAction.setActionUnit(actionService.get(timerAnswer.getUnit().getClass()));
-        timerAnswer.getNextUnits().forEach(nextUnit -> {
-            if (nextUnit.equals(timerAnswer)) {
-                timerAction.setRepeated(true);
-                timerAction.setPeriod(timerAnswer.getTimeDelaySec() * 1000);
-            }
-        });
         log.info("Таймер установлен: " + timerAction);
         timerService.add(timerAction);
     }

@@ -1,13 +1,12 @@
 package org.sadtech.vkbot.autoresponder.entity;
 
-import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.vkbot.autoresponder.entity.usercode.CheckData;
 import org.sadtech.vkbot.autoresponder.entity.usercode.PushData;
 
-public class UnitAnswerCheck extends Unit {
+public class UnitAnswerCheck extends MainUnit {
 
-    private Unit unitTrue;
-    private Unit unitFalse;
+    private MainUnit unitTrue;
+    private MainUnit unitFalse;
     private PushData pushData;
     protected String userData;
     private CheckData check;
@@ -17,19 +16,19 @@ public class UnitAnswerCheck extends Unit {
 
     }
 
-    public Unit getUnitTrue() {
+    public MainUnit getUnitTrue() {
         return unitTrue;
     }
 
-    public void setUnitTrue(Unit unitTrue) {
+    public void setUnitTrue(MainUnit unitTrue) {
         this.unitTrue = unitTrue;
     }
 
-    public Unit getUnitFalse() {
+    public MainUnit getUnitFalse() {
         return unitFalse;
     }
 
-    public void setUnitFalse(Unit unitFalse) {
+    public void setUnitFalse(MainUnit unitFalse) {
         this.unitFalse = unitFalse;
     }
 

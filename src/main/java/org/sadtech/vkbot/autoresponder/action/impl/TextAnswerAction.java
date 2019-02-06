@@ -8,7 +8,7 @@ import org.sadtech.vkbot.autoresponder.action.ActionUnit;
 import org.sadtech.vkbot.autoresponder.entity.TextAnswer;
 import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.entity.MailSend;
-import org.sadtech.vkbot.core.sender.MailSandler;
+import org.sadtech.vkbot.core.sender.MailSent;
 
 import java.util.List;
 
@@ -16,11 +16,15 @@ public class TextAnswerAction implements ActionUnit {
 
     public static final Logger log = Logger.getLogger(TextAnswerAction.class);
 
-    private MailSandler mailSandler;
+    private MailSent mailSent;
 
-    public TextAnswerAction(Action generalActionUnit) {
+    public TextAnswerAction(Action generalActionUnit, MailSent mailSent) {
         generalActionUnit.registerActionUnit(TextAnswer.class, this);
-        this.mailSandler = generalActionUnit.getMailSandler();
+        this.mailSent = mailSent;
+    }
+
+    public TextAnswerAction(MailSent mailSend) {
+        this.mailSent = mailSend;
     }
 
     @Override
@@ -30,12 +34,12 @@ public class TextAnswerAction implements ActionUnit {
         if (textAnswer.getInsert() != null) {
             wordsProg = textAnswer.getInsert().insert();
         }
-        MailSend mailSend = textAnswer.getMailSend();
 
+        MailSend mailSend = textAnswer.getMailSend();
         if (CollectionUtils.isNotEmpty(wordsProg)) {
-            mailSandler.send(mailSend, mail.getPeerId(), mail.getPerson().getId(), wordsProg);
+            mailSent.send(mailSend, mail.getPeerId(), mail.getPerson().getId(), wordsProg);
         } else {
-            mailSandler.send(mailSend, mail.getPeerId(), mail.getPerson().getId());
+            mailSent.send(mailSend, mail.getPeerId(), mail.getPerson().getId());
         }
     }
 }

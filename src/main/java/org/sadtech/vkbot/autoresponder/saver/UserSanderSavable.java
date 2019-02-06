@@ -3,7 +3,7 @@ package org.sadtech.vkbot.autoresponder.saver;
 import com.vk.api.sdk.objects.users.UserMin;
 import org.sadtech.vkbot.core.VkApi;
 import org.sadtech.vkbot.core.VkConnect;
-import org.sadtech.vkbot.core.sender.MailSanderVk;
+import org.sadtech.vkbot.core.sender.MailSenderVk;
 import org.sadtech.vkbot.core.entity.MailSend;
 
 import java.util.HashMap;
@@ -38,7 +38,7 @@ public class UserSanderSavable implements Savable {
 
     @Override
     public void push(Integer userId) {
-        MailSanderVk mailSandler = new MailSanderVk(vkConnect);
+        MailSenderVk mailSandler = new MailSenderVk(vkConnect);
         MailSend mailSend = new MailSend();
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -50,7 +50,7 @@ public class UserSanderSavable implements Savable {
         stringBuilder.append("====================");
         map.remove(userId);
         mailSend.setMessage(stringBuilder.toString());
-        mailSandler.send(mailSend, idUser);
+        mailSandler.send(mailSend, idUser, idUser);
     }
 
     public String getNameForm() {

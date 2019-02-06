@@ -1,19 +1,17 @@
 package org.sadtech.vkbot.autoresponder.entity;
 
-import org.sadtech.autoresponder.entity.Unit;
+public class TimerAnswer extends MainUnit {
 
-public class TimerAnswer extends Unit {
-
-    private Unit unit;
+    private MainUnit unitAnswer;
     private Long timeDelaySec;
     private Integer idUser;
 
-    public Unit getUnit() {
-        return unit;
+    public MainUnit getUnitAnswer() {
+        return unitAnswer;
     }
 
-    public void setUnit(Unit unit) {
-        this.unit = unit;
+    public void setUnitAnswer(MainUnit unitAnswer) {
+        this.unitAnswer = unitAnswer;
     }
 
     public Long getTimeDelaySec() {

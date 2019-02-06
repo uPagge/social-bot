@@ -8,20 +8,23 @@ import org.sadtech.vkbot.autoresponder.entity.TextAnswerAndSave;
 import org.sadtech.vkbot.autoresponder.saver.SaveStatus;
 import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.entity.MailSend;
-import org.sadtech.vkbot.core.sender.MailSandler;
+import org.sadtech.vkbot.core.sender.MailSent;
 
 import java.util.List;
 import java.util.Set;
 
 public class TextAnswerAndSaveAction implements ActionUnit {
 
-    private MailSandler mailSandler;
+    private MailSent mailSent;
 
-    public TextAnswerAndSaveAction(Action generalActionUnit) {
+    public TextAnswerAndSaveAction(Action generalActionUnit, MailSent mailSent) {
         generalActionUnit.registerActionUnit(TextAnswerAndSave.class, this);
-        this.mailSandler = generalActionUnit.getMailSandler();
+        this.mailSent = mailSent;
     }
 
+    public TextAnswerAndSaveAction(MailSent mailSent) {
+        this.mailSent = mailSent;
+    }
 
     @Override
     public void action(Unit unit, Mail mail) {
@@ -44,12 +47,11 @@ public class TextAnswerAndSaveAction implements ActionUnit {
             textAnswerAndSave.getSavable().push(mail.getPerson().getId());
         }
 
-
         MailSend mailSend = textAnswerAndSave.getMailSend();
         if (CollectionUtils.isNotEmpty(list)) {
-            mailSandler.send(mailSend, mail.getPeerId(), mail.getPerson().getId(), list);
+            mailSent.send(mailSend, mail.getPeerId(), mail.getPerson().getId(), list);
         } else {
-            mailSandler.send(mailSend, mail.getPeerId(), mail.getPerson().getId());
+            mailSent.send(mailSend, mail.getPeerId(), mail.getPerson().getId());
         }
     }
 }
