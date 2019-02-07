@@ -6,6 +6,10 @@ public class TimerAnswer extends MainUnit {
     private Long timeDelaySec;
     private Integer idUser;
 
+    public TimerAnswer() {
+        unitActivStatus = UnitActivStatus.AFTER;
+    }
+
     public MainUnit getUnitAnswer() {
         return unitAnswer;
     }

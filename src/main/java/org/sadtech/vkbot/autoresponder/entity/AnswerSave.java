@@ -1,34 +1,20 @@
 package org.sadtech.vkbot.autoresponder.entity;
 
+import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.vkbot.autoresponder.saver.Savable;
 import org.sadtech.vkbot.autoresponder.saver.SaveStatus;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public class TextAnswerAndSave extends TextAnswer {
+public class AnswerSave extends MainUnit {
 
-    private List<TextAnswerAndSave> prevUnits = new ArrayList<>();
     private Savable savable;
     private String key;
     private Set<SaveStatus> saveStatuses = new HashSet<>();
 
-    public TextAnswerAndSave() {
-        super();
-    }
+    public AnswerSave() {
 
-    public void setPrevUnit(TextAnswerAndSave answerAndSave) {
-        this.prevUnits.add(answerAndSave);
-    }
-
-    public List<TextAnswerAndSave> getPrevUnits() {
-        return prevUnits;
-    }
-
-    public void setPrevUnits(List<TextAnswerAndSave> prevUnits) {
-        this.prevUnits = prevUnits;
     }
 
     public Savable getSavable() {
@@ -59,4 +45,9 @@ public class TextAnswerAndSave extends TextAnswer {
         this.saveStatuses.add(saveStatus);
     }
 
+    @Override
+    public void setNextUnit(Unit unit) {
+        super.setNextUnit(unit);
+        ((MainUnit) unit).setUnitActivStatus(UnitActivStatus.AFTER);
+    }
 }

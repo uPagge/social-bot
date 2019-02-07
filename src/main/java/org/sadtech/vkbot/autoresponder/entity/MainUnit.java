@@ -4,13 +4,13 @@ import org.sadtech.autoresponder.entity.Unit;
 
 public abstract class MainUnit extends Unit {
 
-    private Boolean hiddenTrigger = false;
+    protected UnitActivStatus unitActivStatus = UnitActivStatus.DEFAULT;
 
-    public Boolean getHiddenTrigger() {
-        return hiddenTrigger;
+    public UnitActivStatus getUnitActivStatus() {
+        return unitActivStatus;
     }
 
-    public void setHiddenTrigger(Boolean hiddenTrigger) {
-        this.hiddenTrigger = hiddenTrigger;
+    public void setUnitActivStatus(UnitActivStatus unitActivStatus) {
+        this.unitActivStatus = unitActivStatus;
     }
 }

@@ -12,14 +12,14 @@ import org.sadtech.vkbot.core.service.distribution.impl.EventService;
 import java.util.Date;
 import java.util.List;
 
-public abstract class AutoresponderVk<T> implements Runnable {
+public abstract class AutoresponderMain<T> implements Runnable {
 
     private EventService<T> eventService;
     protected Action action;
     private UnitService unitService;
     protected Autoresponder autoresponder;
 
-    public AutoresponderVk(EventService<T> eventService, Action action, UnitService unitService) {
+    public AutoresponderMain(EventService<T> eventService, Action action, UnitService unitService) {
         this.unitService = unitService;
         this.eventService = eventService;
         this.action = action;
@@ -28,12 +28,12 @@ public abstract class AutoresponderVk<T> implements Runnable {
         action.setPersonService(personService);
     }
 
-    public AutoresponderVk(EventService<T> eventService, Action action) {
+    public AutoresponderMain(EventService<T> eventService, Action action) {
         this.unitService = new UnitServiceImpl(new UnitMenuRepository());
         this.eventService = eventService;
         this.action = action;
         PersonService personService = new PersonServiceImpl();
-        autoresponder = new Autoresponder(this.unitService, personService);
+        autoresponder = new Autoresponder(unitService, personService);
         action.setPersonService(personService);
     }
 
