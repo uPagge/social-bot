@@ -74,4 +74,5 @@ public abstract class AutoresponderMain<T> implements Runnable {
     public void run() {
         checkNewMessages();
     }
+
 }

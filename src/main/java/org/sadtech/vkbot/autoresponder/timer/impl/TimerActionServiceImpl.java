@@ -25,7 +25,7 @@ public class TimerActionServiceImpl implements TimerActionService {
     public List<TimerAction> getTimerActive(Long time) {
         List<TimerAction> timerActions = new ArrayList<>();
         for (TimerAction timerAction : timerActionRepositoryList.getTimerActionList()) {
-            if (timerAction.getTimeActive()<= time) {
+            if (timerAction.getTimeActive() <= time) {
                 timerActions.add(timerAction);
             }
         }
@@ -39,4 +39,5 @@ public class TimerActionServiceImpl implements TimerActionService {
     public void remove(TimerAction timerAction) {
         timerActionRepositoryList.remove(timerAction);
     }
+
 }

@@ -33,14 +33,6 @@ public class MailAutoresponder extends AutoresponderMain<Mail> {
     protected void sendReply(List<Mail> mailList) {
         for (Mail mail : mailList) {
 
-//            if (autoresponder.getPersonService().getPersonById(mail.getPerson().getId()) !=null) {
-//                MainUnit beforeUnit = (MainUnit) autoresponder.getPersonService().getPersonById(mail.getPerson().getId()).getUnit();
-//                if (beforeUnit.getUnitActivStatus().equals(UnitActivStatus.BEFORE)) {
-//                    action.action(beforeUnit, mail);
-////                    autoresponder.getPersonService().getPersonById(mail.getPerson().getId()).setUnit(beforeUnit);
-//                }
-//            }
-
             MainUnit unitAnswer = (MainUnit) autoresponder.answer(mail.getPerson().getId(), mail.getBody());
 
             if (unitAnswer != null) {
@@ -64,4 +56,5 @@ public class MailAutoresponder extends AutoresponderMain<Mail> {
             }
         }
     }
+
 }

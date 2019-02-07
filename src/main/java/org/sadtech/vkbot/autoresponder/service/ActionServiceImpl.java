@@ -5,7 +5,7 @@ import org.sadtech.vkbot.autoresponder.action.ActionUnit;
 import org.sadtech.vkbot.autoresponder.repository.ActionRepository;
 import org.sadtech.vkbot.autoresponder.repository.ActionRepositoryMap;
 
-public class ActionServiceImpl implements ActionService{
+public class ActionServiceImpl implements ActionService {
 
     private ActionRepository actionRepository;
 
@@ -34,4 +34,5 @@ public class ActionServiceImpl implements ActionService{
     public void put(Class clazz, ActionUnit actionUnit) {
         actionRepository.put(clazz, actionUnit);
     }
+
 }

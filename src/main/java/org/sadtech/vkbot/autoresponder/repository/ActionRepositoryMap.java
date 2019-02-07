@@ -19,4 +19,5 @@ public class ActionRepositoryMap implements ActionRepository {
     public void put(Class clazz, ActionUnit actionUnit) {
         actionUnitHashMap.put(clazz, actionUnit);
     }
+
 }
