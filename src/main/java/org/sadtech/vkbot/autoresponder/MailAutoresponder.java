@@ -46,13 +46,15 @@ public class MailAutoresponder extends AutoresponderMain<Mail> {
             }
 
             //super.test(unitAnswer, mail.getPerson().getId());
-            if (unitAnswer.getNextUnits() != null) {
-                unitAnswer.getNextUnits().stream().filter(Unit -> Unit instanceof MainUnit).map(unit -> (MainUnit) unit).forEach(nextUnit -> {
-                    if (nextUnit.getUnitActivStatus().equals(UnitActivStatus.AFTER)) {
-                        action.action(nextUnit, mail);
-                        autoresponder.getPersonService().getPersonById(mail.getPerson().getId()).setUnit(nextUnit);
-                    }
-                });
+            if (unitAnswer!=null) {
+                if (unitAnswer.getNextUnits() != null) {
+                    unitAnswer.getNextUnits().stream().filter(Unit -> Unit instanceof MainUnit).map(unit -> (MainUnit) unit).forEach(nextUnit -> {
+                        if (nextUnit.getUnitActivStatus().equals(UnitActivStatus.AFTER)) {
+                            action.action(nextUnit, mail);
+                            autoresponder.getPersonService().getPersonById(mail.getPerson().getId()).setUnit(nextUnit);
+                        }
+                    });
+                }
             }
         }
     }

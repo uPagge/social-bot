@@ -14,6 +14,7 @@ public class GeneralActionUnit implements Action {
 
     public GeneralActionUnit(PersonService personServiceAutoresponder, ActionService actionService) {
         this.actionService = actionService;
+        this.personService = personServiceAutoresponder;
     }
 
     public GeneralActionUnit(ActionService actionService) {
