@@ -1,4 +1,4 @@
-package org.sadtech.vkbot.autoresponder.entity;
+package org.sadtech.vkbot.autoresponder.entity.unit;
 
 import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.vkbot.autoresponder.saver.Savable;
@@ -48,6 +48,6 @@ public class AnswerSave extends MainUnit {
     @Override
     public void setNextUnit(Unit unit) {
         super.setNextUnit(unit);
-        ((MainUnit) unit).setUnitActivStatus(UnitActivStatus.AFTER);
+        ((MainUnit) unit).setUnitActiveStatus(UnitActiveStatus.AFTER);
     }
 }

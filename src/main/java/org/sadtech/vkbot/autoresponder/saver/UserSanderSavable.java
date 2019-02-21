@@ -4,7 +4,6 @@ import com.vk.api.sdk.objects.users.UserMin;
 import org.sadtech.vkbot.core.VkApi;
 import org.sadtech.vkbot.core.VkConnect;
 import org.sadtech.vkbot.core.sender.MailSenderVk;
-import org.sadtech.vkbot.core.entity.MailSend;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +38,7 @@ public class UserSanderSavable implements Savable {
     @Override
     public void push(Integer userId) {
         MailSenderVk mailSandler = new MailSenderVk(vkConnect);
-        MailSend mailSend = new MailSend();
+
 
         StringBuilder stringBuilder = new StringBuilder();
         UserMin userMin = vkApi.getUserMini(userId);
@@ -49,8 +48,7 @@ public class UserSanderSavable implements Savable {
         }
         stringBuilder.append("====================");
         map.remove(userId);
-        mailSend.setMessage(stringBuilder.toString());
-        mailSandler.send(mailSend, idUser, idUser);
+        mailSandler.send(idUser, stringBuilder.toString());
     }
 
     public String getNameForm() {

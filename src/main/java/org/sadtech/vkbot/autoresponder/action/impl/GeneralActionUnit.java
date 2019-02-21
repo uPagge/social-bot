@@ -3,9 +3,8 @@ package org.sadtech.vkbot.autoresponder.action.impl;
 import org.sadtech.autoresponder.service.PersonService;
 import org.sadtech.vkbot.autoresponder.action.Action;
 import org.sadtech.vkbot.autoresponder.action.ActionUnit;
-import org.sadtech.vkbot.autoresponder.entity.MainUnit;
+import org.sadtech.vkbot.autoresponder.entity.unit.MainUnit;
 import org.sadtech.vkbot.autoresponder.service.ActionService;
-import org.sadtech.vkbot.core.entity.Mail;
 
 public class GeneralActionUnit implements Action {
 
@@ -21,16 +20,20 @@ public class GeneralActionUnit implements Action {
         this.actionService = actionService;
     }
 
-    public void action(MainUnit unit, Mail mail) {
+
+    @Override
+    public void action(MainUnit unit, String message, Integer idPerson) {
         ActionUnit actionUnit = actionService.get(unit.getClass());
-        actionUnit.action(unit, mail);
-        personService.getPersonById(mail.getPerson().getId()).setUnit(unit);
+        actionUnit.action(unit, message, idPerson);
+        personService.getPersonById(idPerson).setUnit(unit);
     }
 
+    @Override
     public void registerActionUnit(Class clazz, ActionUnit actionUnit) {
         actionService.put(clazz, actionUnit);
     }
 
+    @Override
     public void setPersonService(PersonService personService) {
         this.personService = personService;
     }

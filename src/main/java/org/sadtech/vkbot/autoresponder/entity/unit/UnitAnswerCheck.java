@@ -1,4 +1,4 @@
-package org.sadtech.vkbot.autoresponder.entity;
+package org.sadtech.vkbot.autoresponder.entity.unit;
 
 import org.sadtech.vkbot.autoresponder.entity.usercode.CheckData;
 

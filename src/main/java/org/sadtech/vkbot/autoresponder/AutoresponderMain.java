@@ -7,6 +7,7 @@ import org.sadtech.autoresponder.service.impl.PersonServiceImpl;
 import org.sadtech.autoresponder.service.impl.UnitServiceImpl;
 import org.sadtech.vkbot.autoresponder.action.Action;
 import org.sadtech.vkbot.autoresponder.repository.UnitMenuRepository;
+import org.sadtech.vkbot.core.sender.Sent;
 import org.sadtech.vkbot.core.service.distribution.impl.EventService;
 
 import java.util.Date;
@@ -18,20 +19,23 @@ public abstract class AutoresponderMain<T> implements Runnable {
     protected Action action;
     private UnitService unitService;
     protected Autoresponder autoresponder;
+    protected Sent sent;
 
-    public AutoresponderMain(EventService<T> eventService, Action action, UnitService unitService) {
+    public AutoresponderMain(Sent sent, EventService<T> eventService, Action action, UnitService unitService) {
         this.unitService = unitService;
         this.eventService = eventService;
         this.action = action;
+        this.sent = sent;
         PersonService personService = new PersonServiceImpl();
         autoresponder = new Autoresponder(this.unitService, personService);
         action.setPersonService(personService);
     }
 
-    public AutoresponderMain(EventService<T> eventService, Action action) {
+    public AutoresponderMain(Sent sent, EventService<T> eventService, Action action) {
         this.unitService = new UnitServiceImpl(new UnitMenuRepository());
         this.eventService = eventService;
         this.action = action;
+        this.sent = sent;
         PersonService personService = new PersonServiceImpl();
         autoresponder = new Autoresponder(unitService, personService);
         action.setPersonService(personService);

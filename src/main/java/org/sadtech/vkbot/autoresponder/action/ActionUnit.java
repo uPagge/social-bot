@@ -1,10 +1,9 @@
 package org.sadtech.vkbot.autoresponder.action;
 
-import org.sadtech.autoresponder.entity.Unit;
-import org.sadtech.vkbot.core.entity.Mail;
+import org.sadtech.vkbot.autoresponder.entity.unit.MainUnit;
 
 public interface ActionUnit {
 
-    void action(Unit unit, Mail mail);
+    void action(MainUnit unit, String message, Integer idPerson);
 
 }

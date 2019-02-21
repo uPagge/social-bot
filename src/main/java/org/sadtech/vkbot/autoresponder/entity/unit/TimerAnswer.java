@@ -1,4 +1,4 @@
-package org.sadtech.vkbot.autoresponder.entity;
+package org.sadtech.vkbot.autoresponder.entity.unit;
 
 public class TimerAnswer extends MainUnit {
 
@@ -7,7 +7,7 @@ public class TimerAnswer extends MainUnit {
     private Integer idUser;
 
     public TimerAnswer() {
-        unitActivStatus = UnitActivStatus.AFTER;
+        unitActiveStatus = UnitActiveStatus.AFTER;
     }
 
     public MainUnit getUnitAnswer() {

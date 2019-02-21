@@ -32,7 +32,7 @@ public class TimerActionTask extends TimerTask {
         for (TimerAction timerAction : timerService.getTimerActive(date)) {
             person.setId(timerAction.getIdPerson());
             mail.setPeerId(timerAction.getIdPerson());
-            action.action(timerAction.getUnit(), mail);
+            action.action(timerAction.getUnit(), mail.getBody(), mail.getPerson().getId());
             log.info("Таймер удален");
             timerService.remove(timerAction);
         }

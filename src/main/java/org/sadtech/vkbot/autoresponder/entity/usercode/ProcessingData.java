@@ -1,6 +1,6 @@
 package org.sadtech.vkbot.autoresponder.entity.usercode;
 
 @FunctionalInterface
-public interface PushData {
-    String push();
+public interface ProcessingData {
+    String processing(String mailUser);
 }

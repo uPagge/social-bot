@@ -32,7 +32,7 @@
     <properties>
         <vkbot.core.ver>0.4.3-SNAPSHOT</vkbot.core.ver>
         <junit.ver>4.12</junit.ver>
-        <autoresponder.ver>1.3.1-RELEASE</autoresponder.ver>
+        <autoresponder.ver>1.4.0-SNAPSHOT</autoresponder.ver>
     </properties>
 
     <dependencies>

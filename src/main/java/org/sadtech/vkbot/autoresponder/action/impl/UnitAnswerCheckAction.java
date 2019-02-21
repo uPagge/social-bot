@@ -4,8 +4,7 @@ import org.apache.log4j.Logger;
 import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.vkbot.autoresponder.action.Action;
 import org.sadtech.vkbot.autoresponder.action.ActionUnit;
-import org.sadtech.vkbot.autoresponder.entity.UnitAnswerCheck;
-import org.sadtech.vkbot.core.entity.Mail;
+import org.sadtech.vkbot.autoresponder.entity.unit.UnitAnswerCheck;
 
 public class UnitAnswerCheckAction implements ActionUnit {
 
@@ -19,16 +18,15 @@ public class UnitAnswerCheckAction implements ActionUnit {
     }
 
     @Override
-    public void action(Unit unit, Mail mail) {
+    public void action(Unit unit, String message, Integer idPerson) {
         UnitAnswerCheck unitAnswerCheck = (UnitAnswerCheck) unit;
-        unitAnswerCheck.setUserId(mail.getPerson().getId());
+        unitAnswerCheck.setUserId(idPerson);
         if (unitAnswerCheck.getCheck().checked()) {
             log.info("Проверка пройдена");
-            action.action(unitAnswerCheck.getUnitTrue(), mail);
+            action.action(unitAnswerCheck.getUnitTrue(), message, idPerson);
         } else {
             log.info("Проверка провалена");
-            action.action(unitAnswerCheck.getUnitFalse(), mail);
+            action.action(unitAnswerCheck.getUnitFalse(), message, idPerson);
         }
-
     }
 }

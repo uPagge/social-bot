@@ -5,10 +5,8 @@ import org.apache.log4j.Logger;
 import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.vkbot.autoresponder.action.Action;
 import org.sadtech.vkbot.autoresponder.action.ActionUnit;
-import org.sadtech.vkbot.autoresponder.entity.TextAnswer;
-import org.sadtech.vkbot.core.entity.Mail;
-import org.sadtech.vkbot.core.entity.MailSend;
-import org.sadtech.vkbot.core.sender.MailSent;
+import org.sadtech.vkbot.autoresponder.entity.unit.TextAnswer;
+import org.sadtech.vkbot.core.sender.Sent;
 
 import java.util.List;
 
@@ -16,30 +14,29 @@ public class TextAnswerAction implements ActionUnit {
 
     public static final Logger log = Logger.getLogger(TextAnswerAction.class);
 
-    private MailSent mailSent;
+    private Sent sent;
 
-    public TextAnswerAction(Action generalActionUnit, MailSent mailSent) {
+    public TextAnswerAction(Action generalActionUnit, Sent sent) {
         generalActionUnit.registerActionUnit(TextAnswer.class, this);
-        this.mailSent = mailSent;
+        this.sent = sent;
     }
 
-    public TextAnswerAction(MailSent mailSend) {
-        this.mailSent = mailSend;
+    public TextAnswerAction(Sent sent) {
+        this.sent = sent;
     }
 
     @Override
-    public void action(Unit unit, Mail mail) {
+    public void action(Unit unit, String message, Integer idPerson) {
         TextAnswer textAnswer = (TextAnswer) unit;
         List<String> wordsProg = null;
         if (textAnswer.getInsert() != null) {
             wordsProg = textAnswer.getInsert().insert();
         }
 
-        MailSend mailSend = textAnswer.getMailSend();
         if (CollectionUtils.isNotEmpty(wordsProg)) {
-            mailSent.send(mailSend, mail.getPeerId(), mail.getPerson().getId(), wordsProg);
+            sent.send(idPerson, textAnswer.getBoxAnswer());
         } else {
-            mailSent.send(mailSend, mail.getPeerId(), mail.getPerson().getId());
+            sent.send(idPerson, textAnswer.getBoxAnswer());
         }
     }
 }
