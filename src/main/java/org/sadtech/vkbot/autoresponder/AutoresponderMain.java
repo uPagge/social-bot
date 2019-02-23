@@ -5,40 +5,53 @@ import org.sadtech.autoresponder.service.PersonService;
 import org.sadtech.autoresponder.service.UnitService;
 import org.sadtech.autoresponder.service.impl.PersonServiceImpl;
 import org.sadtech.autoresponder.service.impl.UnitServiceImpl;
-import org.sadtech.vkbot.autoresponder.action.Action;
+import org.sadtech.vkbot.autoresponder.action.ActionUnit;
+import org.sadtech.vkbot.autoresponder.action.impl.*;
+import org.sadtech.vkbot.autoresponder.entity.unit.TypeUnit;
 import org.sadtech.vkbot.autoresponder.repository.UnitMenuRepository;
+import org.sadtech.vkbot.autoresponder.timer.impl.TimerActionRepositoryList;
+import org.sadtech.vkbot.autoresponder.timer.impl.TimerActionServiceImpl;
 import org.sadtech.vkbot.core.sender.Sent;
 import org.sadtech.vkbot.core.service.distribution.impl.EventService;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class AutoresponderMain<T> implements Runnable {
 
     private EventService<T> eventService;
-    protected Action action;
     private UnitService unitService;
     protected Autoresponder autoresponder;
     protected Sent sent;
+    protected Map<TypeUnit, ActionUnit> actionUnitMap;
 
-    public AutoresponderMain(Sent sent, EventService<T> eventService, Action action, UnitService unitService) {
+    public AutoresponderMain(Sent sent, EventService<T> eventService, UnitService unitService) {
         this.unitService = unitService;
         this.eventService = eventService;
-        this.action = action;
         this.sent = sent;
         PersonService personService = new PersonServiceImpl();
         autoresponder = new Autoresponder(this.unitService, personService);
-        action.setPersonService(personService);
+        init(sent);
     }
 
-    public AutoresponderMain(Sent sent, EventService<T> eventService, Action action) {
+    public AutoresponderMain(Sent sent, EventService<T> eventService) {
         this.unitService = new UnitServiceImpl(new UnitMenuRepository());
         this.eventService = eventService;
-        this.action = action;
         this.sent = sent;
         PersonService personService = new PersonServiceImpl();
         autoresponder = new Autoresponder(unitService, personService);
-        action.setPersonService(personService);
+        init(sent);
+    }
+
+    private void init(Sent sent) {
+        actionUnitMap = new HashMap<>();
+        actionUnitMap.put(TypeUnit.CHECK, new UnitAnswerCheckAction(actionUnitMap));
+        actionUnitMap.put(TypeUnit.PROCESSING, new AnswerProcessingAction(sent));
+        actionUnitMap.put(TypeUnit.SAVE, new AnswerSaveAction());
+        actionUnitMap.put(TypeUnit.TEXT, new TextAnswerAction(sent));
+        actionUnitMap.put(TypeUnit.TIMER, new TimerAnswerAction(new TimerActionServiceImpl(new TimerActionRepositoryList()), actionUnitMap));
     }
 
     public Autoresponder getAutoresponder() {
@@ -49,30 +62,22 @@ public abstract class AutoresponderMain<T> implements Runnable {
         return unitService;
     }
 
-    public Action getAction() {
-        return action;
-    }
-
-    public void setAction(Action action) {
-        this.action = action;
-    }
-
     private void checkNewMessages() {
         Long oldData = new Date().getTime() / 1000 - 1;
         Long newData;
         while (true) {
             newData = new Date().getTime() / 1000 - 1;
             if (oldData < newData) {
-                List<T> mailList = eventService.getFirstMailByTime(Integer.parseInt(oldData.toString()), Integer.parseInt(newData.toString()));
+                List<T> mailList = eventService.getFirstEventByTime(Integer.parseInt(oldData.toString()), Integer.parseInt(newData.toString()));
                 if (mailList.size() > 0) {
-                    sendReply(mailList);
+                    this.sendReply(mailList);
                 }
             }
             oldData = new Long(newData.toString());
         }
     }
 
-    protected abstract void sendReply(List<T> mailList);
+    abstract void sendReply(List<T> mailList);
 
     @Override
     public void run() {

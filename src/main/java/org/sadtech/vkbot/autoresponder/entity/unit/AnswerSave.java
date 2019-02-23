@@ -14,7 +14,7 @@ public class AnswerSave extends MainUnit {
     private Set<SaveStatus> saveStatuses = new HashSet<>();
 
     public AnswerSave() {
-
+        typeUnit = TypeUnit.SAVE;
     }
 
     public Savable getSavable() {

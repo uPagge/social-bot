@@ -8,6 +8,7 @@ public class TimerAnswer extends MainUnit {
 
     public TimerAnswer() {
         unitActiveStatus = UnitActiveStatus.AFTER;
+        typeUnit = TypeUnit.TIMER;
     }
 
     public MainUnit getUnitAnswer() {

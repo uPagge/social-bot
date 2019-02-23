@@ -7,7 +7,7 @@ public class AnswerProcessing extends MainUnit {
     private ProcessingData processingData;
 
     public AnswerProcessing() {
-
+        typeUnit = TypeUnit.PROCESSING;
     }
 
     public ProcessingData getProcessingData() {

@@ -10,6 +10,10 @@ public class TextAnswer extends MainUnit {
     private BoxAnswer boxAnswer = new BoxAnswer();
     private Insert insert;
 
+    public TextAnswer() {
+        typeUnit = TypeUnit.TEXT;
+    }
+
     public BoxAnswer getBoxAnswer() {
         return boxAnswer;
     }

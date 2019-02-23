@@ -1,12 +1,12 @@
 package org.sadtech.vkbot.autoresponder.timer;
 
 import org.apache.log4j.Logger;
-import org.sadtech.vkbot.autoresponder.action.Action;
+import org.sadtech.vkbot.autoresponder.action.ActionUnit;
+import org.sadtech.vkbot.autoresponder.entity.unit.TypeUnit;
 import org.sadtech.vkbot.autoresponder.timer.impl.TimerAction;
-import org.sadtech.vkbot.core.entity.Mail;
-import org.sadtech.vkbot.core.entity.Person;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.TimerTask;
 
 public class TimerActionTask extends TimerTask {
@@ -14,25 +14,20 @@ public class TimerActionTask extends TimerTask {
     public static final Logger log = Logger.getLogger(TimerActionTask.class);
 
     private TimerActionService timerService;
-    private Action action;
+    private Map<TypeUnit, ActionUnit> actionUnitMap;
 
-    public TimerActionTask(Action action, TimerActionService timerService) {
+    public TimerActionTask(TimerActionService timerService, Map<TypeUnit, ActionUnit> actionUnitMap) {
         log.info("Инициализация сервиса по активации таймеров");
         this.timerService = timerService;
-        this.action = action;
+        this.actionUnitMap = actionUnitMap;
     }
 
     @Override
     public void run() {
         Long date = new Date().getTime();
         log.info("Сервис таймеров сработал. Время: " + date);
-        Mail mail = new Mail();
-        Person person = new Person();
-        mail.setPerson(person);
         for (TimerAction timerAction : timerService.getTimerActive(date)) {
-            person.setId(timerAction.getIdPerson());
-            mail.setPeerId(timerAction.getIdPerson());
-            action.action(timerAction.getUnit(), mail.getBody(), mail.getPerson().getId());
+            actionUnitMap.get(timerAction.getUnit().getTypeUnit()).action(timerAction.getUnit(), null, timerAction.getIdPerson());
             log.info("Таймер удален");
             timerService.remove(timerAction);
         }

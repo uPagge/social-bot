@@ -10,7 +10,7 @@ public class UnitAnswerCheck extends MainUnit {
     private Integer userId;
 
     public UnitAnswerCheck() {
-
+        typeUnit = TypeUnit.CHECK;
     }
 
     public MainUnit getUnitTrue() {

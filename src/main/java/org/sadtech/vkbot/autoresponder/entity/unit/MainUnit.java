@@ -8,6 +8,12 @@ public abstract class MainUnit extends Unit {
 
     protected UnitActiveStatus unitActiveStatus = UnitActiveStatus.DEFAULT;
 
+    public TypeUnit getTypeUnit() {
+        return typeUnit;
+    }
+
+    protected TypeUnit typeUnit;
+
     public UnitActiveStatus getUnitActiveStatus() {
         return unitActiveStatus;
     }
@@ -22,11 +28,12 @@ public abstract class MainUnit extends Unit {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         MainUnit mainUnit = (MainUnit) o;
-        return unitActiveStatus == mainUnit.unitActiveStatus;
+        return unitActiveStatus == mainUnit.unitActiveStatus &&
+                typeUnit == mainUnit.typeUnit;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), unitActiveStatus);
+        return Objects.hash(super.hashCode(), unitActiveStatus, typeUnit);
     }
 }
