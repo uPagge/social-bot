@@ -1,69 +1,47 @@
 package org.sadtech.vkbot.autoresponder;
 
 import org.sadtech.autoresponder.Autoresponder;
+import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.autoresponder.service.PersonService;
-import org.sadtech.autoresponder.service.UnitService;
-import org.sadtech.autoresponder.service.impl.PersonServiceImpl;
-import org.sadtech.autoresponder.service.impl.UnitServiceImpl;
-import org.sadtech.vkbot.autoresponder.action.ActionUnit;
-import org.sadtech.vkbot.autoresponder.action.impl.*;
+import org.sadtech.autoresponder.service.PersonServiceImpl;
+import org.sadtech.vkbot.autoresponder.action.*;
 import org.sadtech.vkbot.autoresponder.entity.unit.MainUnit;
 import org.sadtech.vkbot.autoresponder.entity.unit.TypeUnit;
 import org.sadtech.vkbot.autoresponder.entity.unit.UnitActiveStatus;
-import org.sadtech.vkbot.autoresponder.repository.UnitMenuRepository;
 import org.sadtech.vkbot.autoresponder.timer.impl.TimerActionRepositoryList;
 import org.sadtech.vkbot.autoresponder.timer.impl.TimerActionServiceImpl;
 import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.sender.Sent;
 import org.sadtech.vkbot.core.service.distribution.impl.EventService;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class AutoresponderMain<T> implements Runnable {
 
     private EventService<T> eventService;
-    private UnitService unitService;
     protected Autoresponder autoresponder;
     protected Sent sent;
     protected Map<TypeUnit, ActionUnit> actionUnitMap;
 
-    public AutoresponderMain(Sent sent, EventService<T> eventService, UnitService unitService) {
-        this.unitService = unitService;
-        this.eventService = eventService;
-        this.sent = sent;
-        PersonService personService = new PersonServiceImpl();
-        autoresponder = new Autoresponder(this.unitService, personService);
-        init(sent);
-    }
-
     public AutoresponderMain(Sent sent, EventService<T> eventService) {
         this.eventService = eventService;
         this.sent = sent;
-
         PersonService personService = new PersonServiceImpl();
-        unitService = new UnitServiceImpl(new UnitMenuRepository());
-        autoresponder = new Autoresponder(unitService, personService);
+        autoresponder = new Autoresponder(personService);
         init(sent);
     }
 
     private void init(Sent sent) {
         actionUnitMap = new HashMap<>();
-        actionUnitMap.put(TypeUnit.CHECK, new UnitAnswerCheckAction(actionUnitMap));
+        actionUnitMap.put(TypeUnit.CHECK, new AnswerCheckAction(actionUnitMap));
         actionUnitMap.put(TypeUnit.PROCESSING, new AnswerProcessingAction(sent));
         actionUnitMap.put(TypeUnit.SAVE, new AnswerSaveAction());
-        actionUnitMap.put(TypeUnit.TEXT, new TextAnswerAction(sent));
-        actionUnitMap.put(TypeUnit.TIMER, new TimerAnswerAction(new TimerActionServiceImpl(new TimerActionRepositoryList()), actionUnitMap));
+        actionUnitMap.put(TypeUnit.TEXT, new AnswerTextAction(sent));
+        actionUnitMap.put(TypeUnit.TIMER, new AnswerTimerAction(new TimerActionServiceImpl(new TimerActionRepositoryList()), actionUnitMap));
     }
 
-    public Autoresponder getAutoresponder() {
-        return autoresponder;
-    }
-
-    public UnitService getUnitService() {
-        return unitService;
+    public void setMenuUnit(Set<Unit> menuUnit) {
+        this.autoresponder.setMenuUnits(menuUnit);
     }
 
     private void checkNewMessages() {

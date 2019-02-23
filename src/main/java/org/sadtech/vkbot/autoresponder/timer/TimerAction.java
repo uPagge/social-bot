@@ -1,4 +1,4 @@
-package org.sadtech.vkbot.autoresponder.timer.impl;
+package org.sadtech.vkbot.autoresponder.timer;
 
 import org.sadtech.vkbot.autoresponder.entity.unit.MainUnit;
 

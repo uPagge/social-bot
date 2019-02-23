@@ -1,12 +1,12 @@
 package org.sadtech.vkbot.autoresponder.entity.unit;
 
-public class TimerAnswer extends MainUnit {
+public class AnswerTimer extends MainUnit {
 
     private MainUnit unitAnswer;
     private Long timeDelaySec;
     private Integer idUser;
 
-    public TimerAnswer() {
+    public AnswerTimer() {
         unitActiveStatus = UnitActiveStatus.AFTER;
         typeUnit = TypeUnit.TIMER;
     }

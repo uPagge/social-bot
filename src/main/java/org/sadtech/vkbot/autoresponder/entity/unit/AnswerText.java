@@ -5,12 +5,12 @@ import org.sadtech.vkbot.autoresponder.entity.usercode.Insert;
 
 import java.util.Objects;
 
-public class TextAnswer extends MainUnit {
+public class AnswerText extends MainUnit {
 
     private BoxAnswer boxAnswer = new BoxAnswer();
     private Insert insert;
 
-    public TextAnswer() {
+    public AnswerText() {
         typeUnit = TypeUnit.TEXT;
     }
 
@@ -31,7 +31,7 @@ public class TextAnswer extends MainUnit {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        TextAnswer that = (TextAnswer) o;
+        AnswerText that = (AnswerText) o;
         return Objects.equals(boxAnswer, that.boxAnswer) &&
                 Objects.equals(insert, that.insert);
     }

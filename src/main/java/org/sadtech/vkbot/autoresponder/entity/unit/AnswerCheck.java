@@ -2,14 +2,14 @@ package org.sadtech.vkbot.autoresponder.entity.unit;
 
 import org.sadtech.vkbot.autoresponder.entity.usercode.CheckData;
 
-public class UnitAnswerCheck extends MainUnit {
+public class AnswerCheck extends MainUnit {
 
     private MainUnit unitTrue;
     private MainUnit unitFalse;
     private CheckData check;
     private Integer userId;
 
-    public UnitAnswerCheck() {
+    public AnswerCheck() {
         typeUnit = TypeUnit.CHECK;
     }
 

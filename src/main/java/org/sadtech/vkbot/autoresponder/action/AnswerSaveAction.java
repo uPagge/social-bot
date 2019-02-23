@@ -1,6 +1,5 @@
-package org.sadtech.vkbot.autoresponder.action.impl;
+package org.sadtech.vkbot.autoresponder.action;
 
-import org.sadtech.vkbot.autoresponder.action.ActionUnit;
 import org.sadtech.vkbot.autoresponder.entity.unit.AnswerSave;
 import org.sadtech.vkbot.autoresponder.saver.SaveStatus;
 

@@ -1,6 +1,5 @@
 package org.sadtech.vkbot.autoresponder;
 
-import org.sadtech.autoresponder.service.UnitService;
 import org.sadtech.vkbot.autoresponder.entity.unit.MainUnit;
 import org.sadtech.vkbot.autoresponder.entity.unit.UnitActiveStatus;
 import org.sadtech.vkbot.core.VkConnect;
@@ -12,8 +11,8 @@ import java.util.List;
 
 public class MailAutoresponder extends AutoresponderMain<Mail> {
 
-    public MailAutoresponder(Sent sent, EventService<Mail> eventService, UnitService unitService, VkConnect vkConnect) {
-        super(sent, eventService, unitService);
+    public MailAutoresponder(Sent sent, EventService<Mail> eventService, VkConnect vkConnect) {
+        super(sent, eventService);
     }
 
     @Override

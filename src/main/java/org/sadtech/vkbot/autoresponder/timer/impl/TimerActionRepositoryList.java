@@ -1,5 +1,6 @@
 package org.sadtech.vkbot.autoresponder.timer.impl;
 
+import org.sadtech.vkbot.autoresponder.timer.TimerAction;
 import org.sadtech.vkbot.autoresponder.timer.TimerActionRepository;
 
 import java.util.ArrayList;
