@@ -16,10 +16,6 @@ public class MailAutoresponder extends AutoresponderMain<Mail> {
         super(sent, eventService, unitService);
     }
 
-    public MailAutoresponder(Sent sent, EventService<Mail> eventService, VkConnect vkConnect) {
-        super(sent, eventService);
-    }
-
     @Override
     public void sendReply(List<Mail> mailList) {
         for (Mail mail : mailList) {
@@ -34,18 +30,5 @@ public class MailAutoresponder extends AutoresponderMain<Mail> {
             }
         }
     }
-
-    private void activeUnitAfter(MainUnit mainUnit, Mail mail) {
-        if (mainUnit.getNextUnits() != null) {
-            mainUnit.getNextUnits().stream().filter(Unit -> Unit instanceof MainUnit).map(unit -> (MainUnit) unit).forEach(nextUnit -> {
-                if (nextUnit.getUnitActiveStatus().equals(UnitActiveStatus.AFTER)) {
-                    actionUnitMap.get(nextUnit.getTypeUnit()).action(nextUnit, mail.getBody(), mail.getPerson().getId());
-                    autoresponder.getPersonService().getPersonById(mail.getPerson().getId()).setUnit(nextUnit);
-                }
-            });
-        }
-    }
-
-
 
 }

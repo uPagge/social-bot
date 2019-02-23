@@ -2,8 +2,8 @@ package org.sadtech.vkbot.autoresponder.action;
 
 import org.sadtech.vkbot.autoresponder.entity.unit.MainUnit;
 
-public interface ActionUnit {
+public interface ActionUnit<T extends MainUnit> {
 
-    void action(MainUnit unit, String message, Integer idPerson);
+    void action(T unit, String message, Integer idPerson);
 
 }

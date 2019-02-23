@@ -8,7 +8,7 @@ import org.sadtech.vkbot.autoresponder.entity.unit.UnitAnswerCheck;
 
 import java.util.Map;
 
-public class UnitAnswerCheckAction implements ActionUnit {
+public class UnitAnswerCheckAction implements ActionUnit<UnitAnswerCheck> {
 
     public static final Logger log = Logger.getLogger(UnitAnswerCheckAction.class);
 
@@ -19,8 +19,7 @@ public class UnitAnswerCheckAction implements ActionUnit {
     }
 
     @Override
-    public void action(MainUnit unit, String message, Integer idPerson) {
-        UnitAnswerCheck unitAnswerCheck = (UnitAnswerCheck) unit;
+    public void action(UnitAnswerCheck unitAnswerCheck, String message, Integer idPerson) {
         unitAnswerCheck.setUserId(idPerson);
         MainUnit unitAnswer;
         if (unitAnswerCheck.getCheck().checked()) {

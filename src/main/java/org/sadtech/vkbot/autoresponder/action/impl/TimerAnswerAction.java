@@ -2,7 +2,6 @@ package org.sadtech.vkbot.autoresponder.action.impl;
 
 import org.apache.log4j.Logger;
 import org.sadtech.vkbot.autoresponder.action.ActionUnit;
-import org.sadtech.vkbot.autoresponder.entity.unit.MainUnit;
 import org.sadtech.vkbot.autoresponder.entity.unit.TimerAnswer;
 import org.sadtech.vkbot.autoresponder.entity.unit.TypeUnit;
 import org.sadtech.vkbot.autoresponder.timer.TimerActionService;
@@ -13,7 +12,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Timer;
 
-public class TimerAnswerAction implements ActionUnit {
+public class TimerAnswerAction implements ActionUnit<TimerAnswer> {
 
     public static final Logger log = Logger.getLogger(TimerAnswerAction.class);
 
@@ -37,8 +36,7 @@ public class TimerAnswerAction implements ActionUnit {
     }
 
     @Override
-    public void action(MainUnit unit, String message, Integer idPerson) {
-        TimerAnswer timerAnswer = (TimerAnswer) unit;
+    public void action(TimerAnswer timerAnswer, String message, Integer idPerson) {
         TimerAction timerAction = new TimerAction();
         if (timerAnswer.getIdUser() != null) {
             timerAction.setIdPerson(timerAnswer.getIdUser());

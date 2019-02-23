@@ -7,10 +7,13 @@ import org.sadtech.autoresponder.service.impl.PersonServiceImpl;
 import org.sadtech.autoresponder.service.impl.UnitServiceImpl;
 import org.sadtech.vkbot.autoresponder.action.ActionUnit;
 import org.sadtech.vkbot.autoresponder.action.impl.*;
+import org.sadtech.vkbot.autoresponder.entity.unit.MainUnit;
 import org.sadtech.vkbot.autoresponder.entity.unit.TypeUnit;
+import org.sadtech.vkbot.autoresponder.entity.unit.UnitActiveStatus;
 import org.sadtech.vkbot.autoresponder.repository.UnitMenuRepository;
 import org.sadtech.vkbot.autoresponder.timer.impl.TimerActionRepositoryList;
 import org.sadtech.vkbot.autoresponder.timer.impl.TimerActionServiceImpl;
+import org.sadtech.vkbot.core.entity.Mail;
 import org.sadtech.vkbot.core.sender.Sent;
 import org.sadtech.vkbot.core.service.distribution.impl.EventService;
 
@@ -37,10 +40,11 @@ public abstract class AutoresponderMain<T> implements Runnable {
     }
 
     public AutoresponderMain(Sent sent, EventService<T> eventService) {
-        this.unitService = new UnitServiceImpl(new UnitMenuRepository());
         this.eventService = eventService;
         this.sent = sent;
+
         PersonService personService = new PersonServiceImpl();
+        unitService = new UnitServiceImpl(new UnitMenuRepository());
         autoresponder = new Autoresponder(unitService, personService);
         init(sent);
     }
@@ -78,6 +82,17 @@ public abstract class AutoresponderMain<T> implements Runnable {
     }
 
     abstract void sendReply(List<T> mailList);
+
+    protected void activeUnitAfter(MainUnit mainUnit, Mail mail) {
+        if (mainUnit.getNextUnits() != null) {
+            mainUnit.getNextUnits().stream().filter(Unit -> Unit instanceof MainUnit).map(unit -> (MainUnit) unit).forEach(nextUnit -> {
+                if (nextUnit.getUnitActiveStatus().equals(UnitActiveStatus.AFTER)) {
+                    actionUnitMap.get(nextUnit.getTypeUnit()).action(nextUnit, mail.getBody(), mail.getPerson().getId());
+                    autoresponder.getPersonService().getPersonById(mail.getPerson().getId()).setUnit(nextUnit);
+                }
+            });
+        }
+    }
 
     @Override
     public void run() {

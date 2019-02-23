@@ -1,17 +1,13 @@
 package org.sadtech.vkbot.autoresponder.action.impl;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.log4j.Logger;
 import org.sadtech.vkbot.autoresponder.action.ActionUnit;
-import org.sadtech.vkbot.autoresponder.entity.unit.MainUnit;
 import org.sadtech.vkbot.autoresponder.entity.unit.TextAnswer;
 import org.sadtech.vkbot.core.sender.Sent;
 
 import java.util.List;
 
-public class TextAnswerAction implements ActionUnit {
-
-    public static final Logger log = Logger.getLogger(TextAnswerAction.class);
+public class TextAnswerAction implements ActionUnit<TextAnswer> {
 
     private Sent sent;
 
@@ -20,8 +16,7 @@ public class TextAnswerAction implements ActionUnit {
     }
 
     @Override
-    public void action(MainUnit unit, String message, Integer idPerson) {
-        TextAnswer textAnswer = (TextAnswer) unit;
+    public void action(TextAnswer textAnswer, String message, Integer idPerson) {
         List<String> wordsProg = null;
         if (textAnswer.getInsert() != null) {
             wordsProg = textAnswer.getInsert().insert();
