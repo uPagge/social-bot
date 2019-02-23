@@ -94,6 +94,10 @@ public abstract class AutoresponderMain<T> implements Runnable {
         }
     }
 
+    protected void addActionUnit(TypeUnit typeUnit, ActionUnit actionUnit) {
+        actionUnitMap.put(typeUnit, actionUnit);
+    }
+
     @Override
     public void run() {
         checkNewMessages();
