@@ -1,8 +1,8 @@
 package org.sadtech.vkbot.autoresponder.action;
 
 import org.apache.log4j.Logger;
-import org.sadtech.vkbot.autoresponder.entity.unit.AnswerTimer;
-import org.sadtech.vkbot.autoresponder.entity.unit.TypeUnit;
+import org.sadtech.vkbot.autoresponder.domain.unit.AnswerTimer;
+import org.sadtech.vkbot.autoresponder.domain.unit.TypeUnit;
 import org.sadtech.vkbot.autoresponder.timer.TimerActionService;
 import org.sadtech.vkbot.autoresponder.timer.TimerActionTask;
 import org.sadtech.vkbot.autoresponder.timer.TimerAction;

@@ -1,4 +1,4 @@
-package org.sadtech.vkbot.autoresponder.entity.unit;
+package org.sadtech.vkbot.autoresponder.domain.unit;
 
 import org.sadtech.autoresponder.entity.Unit;
 

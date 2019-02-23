@@ -1,6 +1,6 @@
 package org.sadtech.vkbot.autoresponder.action;
 
-import org.sadtech.vkbot.autoresponder.entity.unit.MainUnit;
+import org.sadtech.vkbot.autoresponder.domain.unit.MainUnit;
 
 public interface ActionUnit<T extends MainUnit> {
 

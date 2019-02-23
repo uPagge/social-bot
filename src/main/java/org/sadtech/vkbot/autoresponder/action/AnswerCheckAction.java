@@ -1,9 +1,9 @@
 package org.sadtech.vkbot.autoresponder.action;
 
 import org.apache.log4j.Logger;
-import org.sadtech.vkbot.autoresponder.entity.unit.MainUnit;
-import org.sadtech.vkbot.autoresponder.entity.unit.TypeUnit;
-import org.sadtech.vkbot.autoresponder.entity.unit.AnswerCheck;
+import org.sadtech.vkbot.autoresponder.domain.unit.MainUnit;
+import org.sadtech.vkbot.autoresponder.domain.unit.TypeUnit;
+import org.sadtech.vkbot.autoresponder.domain.unit.AnswerCheck;
 
 import java.util.Map;
 

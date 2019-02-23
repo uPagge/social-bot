@@ -1,6 +1,6 @@
 package org.sadtech.vkbot.autoresponder.timer;
 
-import org.sadtech.vkbot.autoresponder.entity.unit.MainUnit;
+import org.sadtech.vkbot.autoresponder.domain.unit.MainUnit;
 
 public class TimerAction {
 

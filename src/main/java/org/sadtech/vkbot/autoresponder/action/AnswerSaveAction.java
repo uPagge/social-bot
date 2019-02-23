@@ -1,6 +1,6 @@
 package org.sadtech.vkbot.autoresponder.action;
 
-import org.sadtech.vkbot.autoresponder.entity.unit.AnswerSave;
+import org.sadtech.vkbot.autoresponder.domain.unit.AnswerSave;
 import org.sadtech.vkbot.autoresponder.saver.SaveStatus;
 
 import java.util.Set;

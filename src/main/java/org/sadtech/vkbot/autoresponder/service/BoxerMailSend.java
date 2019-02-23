@@ -1,7 +1,7 @@
 package org.sadtech.vkbot.autoresponder.service;
 
-import org.sadtech.vkbot.core.entity.BoxAnswer;
-import org.sadtech.vkbot.core.entity.MailSend;
+import org.sadtech.vkbot.core.domain.BoxAnswer;
+import org.sadtech.vkbot.core.domain.MailSend;
 
 public class BoxerMailSend {
 

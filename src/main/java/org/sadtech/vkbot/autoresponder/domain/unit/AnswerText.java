@@ -1,7 +1,7 @@
-package org.sadtech.vkbot.autoresponder.entity.unit;
+package org.sadtech.vkbot.autoresponder.domain.unit;
 
-import org.sadtech.vkbot.core.entity.BoxAnswer;
-import org.sadtech.vkbot.autoresponder.entity.usercode.Insert;
+import org.sadtech.vkbot.core.domain.BoxAnswer;
+import org.sadtech.vkbot.autoresponder.domain.usercode.Insert;
 
 import java.util.Objects;
 

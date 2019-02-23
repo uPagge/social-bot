@@ -8,6 +8,7 @@ import org.sadtech.vkbot.core.sender.MailSenderVk;
 import java.util.HashMap;
 import java.util.Map;
 
+//@TODO: Избавить от связи с вк
 public class UserSanderSavable implements Savable {
 
     private Integer idUser;

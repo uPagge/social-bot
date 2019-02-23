@@ -1,6 +1,6 @@
-package org.sadtech.vkbot.autoresponder.entity.unit;
+package org.sadtech.vkbot.autoresponder.domain.unit;
 
-import org.sadtech.vkbot.autoresponder.entity.usercode.CheckData;
+import org.sadtech.vkbot.autoresponder.domain.usercode.CheckData;
 
 public class AnswerCheck extends MainUnit {
 

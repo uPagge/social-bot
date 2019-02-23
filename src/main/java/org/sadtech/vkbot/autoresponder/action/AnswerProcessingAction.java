@@ -1,6 +1,6 @@
 package org.sadtech.vkbot.autoresponder.action;
 
-import org.sadtech.vkbot.autoresponder.entity.unit.AnswerProcessing;
+import org.sadtech.vkbot.autoresponder.domain.unit.AnswerProcessing;
 import org.sadtech.vkbot.core.sender.Sent;
 
 public class AnswerProcessingAction implements ActionUnit<AnswerProcessing> {

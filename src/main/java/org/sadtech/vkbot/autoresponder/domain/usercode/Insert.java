@@ -1,4 +1,4 @@
-package org.sadtech.vkbot.autoresponder.entity.usercode;
+package org.sadtech.vkbot.autoresponder.domain.usercode;
 
 import java.util.List;
 

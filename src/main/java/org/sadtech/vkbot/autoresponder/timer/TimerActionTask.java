@@ -2,7 +2,7 @@ package org.sadtech.vkbot.autoresponder.timer;
 
 import org.apache.log4j.Logger;
 import org.sadtech.vkbot.autoresponder.action.ActionUnit;
-import org.sadtech.vkbot.autoresponder.entity.unit.TypeUnit;
+import org.sadtech.vkbot.autoresponder.domain.unit.TypeUnit;
 
 import java.util.Date;
 import java.util.Map;

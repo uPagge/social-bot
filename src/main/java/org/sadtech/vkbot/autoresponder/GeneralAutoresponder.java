@@ -2,32 +2,30 @@ package org.sadtech.vkbot.autoresponder;
 
 import org.sadtech.autoresponder.Autoresponder;
 import org.sadtech.autoresponder.entity.Unit;
-import org.sadtech.autoresponder.service.PersonService;
 import org.sadtech.autoresponder.service.PersonServiceImpl;
 import org.sadtech.vkbot.autoresponder.action.*;
-import org.sadtech.vkbot.autoresponder.entity.unit.MainUnit;
-import org.sadtech.vkbot.autoresponder.entity.unit.TypeUnit;
-import org.sadtech.vkbot.autoresponder.entity.unit.UnitActiveStatus;
+import org.sadtech.vkbot.autoresponder.domain.unit.MainUnit;
+import org.sadtech.vkbot.autoresponder.domain.unit.TypeUnit;
+import org.sadtech.vkbot.autoresponder.domain.unit.UnitActiveStatus;
 import org.sadtech.vkbot.autoresponder.timer.impl.TimerActionRepositoryList;
 import org.sadtech.vkbot.autoresponder.timer.impl.TimerActionServiceImpl;
-import org.sadtech.vkbot.core.entity.Mail;
+import org.sadtech.vkbot.core.domain.Mail;
 import org.sadtech.vkbot.core.sender.Sent;
 import org.sadtech.vkbot.core.service.distribution.impl.EventService;
 
 import java.util.*;
 
-public abstract class AutoresponderMain<T> implements Runnable {
+public abstract class GeneralAutoresponder<T> implements Runnable {
 
     private EventService<T> eventService;
     protected Autoresponder autoresponder;
     protected Sent sent;
     protected Map<TypeUnit, ActionUnit> actionUnitMap;
 
-    public AutoresponderMain(Sent sent, EventService<T> eventService) {
+    public GeneralAutoresponder(Sent sent, EventService<T> eventService) {
         this.eventService = eventService;
         this.sent = sent;
-        PersonService personService = new PersonServiceImpl();
-        autoresponder = new Autoresponder(personService);
+        autoresponder = new Autoresponder(new PersonServiceImpl());
         init(sent);
     }
 

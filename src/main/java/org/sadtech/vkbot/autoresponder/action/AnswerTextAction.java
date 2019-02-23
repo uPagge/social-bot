@@ -1,7 +1,7 @@
 package org.sadtech.vkbot.autoresponder.action;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.sadtech.vkbot.autoresponder.entity.unit.AnswerText;
+import org.sadtech.vkbot.autoresponder.domain.unit.AnswerText;
 import org.sadtech.vkbot.core.sender.Sent;
 
 import java.util.List;

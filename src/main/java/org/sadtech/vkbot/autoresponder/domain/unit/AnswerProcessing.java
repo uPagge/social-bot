@@ -1,6 +1,6 @@
-package org.sadtech.vkbot.autoresponder.entity.unit;
+package org.sadtech.vkbot.autoresponder.domain.unit;
 
-import org.sadtech.vkbot.autoresponder.entity.usercode.ProcessingData;
+import org.sadtech.vkbot.autoresponder.domain.usercode.ProcessingData;
 
 public class AnswerProcessing extends MainUnit {
 
