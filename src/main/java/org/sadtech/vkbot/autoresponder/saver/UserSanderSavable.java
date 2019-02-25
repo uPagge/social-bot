@@ -1,25 +1,20 @@
 package org.sadtech.vkbot.autoresponder.saver;
 
-import com.vk.api.sdk.objects.users.UserMin;
-import org.sadtech.vkbot.core.VkApi;
-import org.sadtech.vkbot.core.VkConnect;
-import org.sadtech.vkbot.core.sender.MailSenderVk;
+import org.sadtech.vkbot.core.sender.Sent;
 
 import java.util.HashMap;
 import java.util.Map;
 
-//@TODO: Избавить от связи с вк
 public class UserSanderSavable implements Savable {
 
+    private Sent sent;
     private Integer idUser;
-    private VkConnect vkConnect;
     private String nameForm;
     private Map<Integer, Map<String, String>> map = new HashMap<>();
-    private VkApi vkApi;
 
-    public UserSanderSavable(VkConnect vkConnect) {
-        this.vkConnect = vkConnect;
-        vkApi = new VkApi(vkConnect);
+    public UserSanderSavable(Sent sent, Integer idUser) {
+        this.idUser = idUser;
+        this.sent = sent;
     }
 
     public void setIdUser(Integer idUser) {
@@ -38,18 +33,15 @@ public class UserSanderSavable implements Savable {
 
     @Override
     public void push(Integer userId) {
-        MailSenderVk mailSandler = new MailSenderVk(vkConnect);
-
 
         StringBuilder stringBuilder = new StringBuilder();
-        UserMin userMin = vkApi.getUserMini(userId);
-        stringBuilder.append("========= ").append(nameForm).append(" =========\nОтправитель: ").append(userMin.getFirstName()).append(" ").append(userMin.getLastName()).append("\nСсылка: https://vk.com/id").append(userMin.getId()).append("\n--- --- ---\n");
+        stringBuilder.append("========= ").append(nameForm).append(" =========\n");
         for (String s : map.get(userId).keySet()) {
             stringBuilder.append(s).append(": ").append(map.get(userId).get(s)).append("\n");
         }
         stringBuilder.append("====================");
         map.remove(userId);
-        mailSandler.send(idUser, stringBuilder.toString());
+        sent.send(idUser, stringBuilder.toString());
     }
 
     public String getNameForm() {

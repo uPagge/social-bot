@@ -1,6 +1,5 @@
 package org.sadtech.vkbot.autoresponder.action;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.sadtech.vkbot.autoresponder.domain.unit.AnswerText;
 import org.sadtech.vkbot.core.sender.Sent;
 
@@ -21,10 +20,6 @@ public class AnswerTextAction implements ActionUnit<AnswerText> {
             wordsProg = answerText.getInsert().insert();
         }
 
-        if (CollectionUtils.isNotEmpty(wordsProg)) {
-            sent.send(idPerson, answerText.getBoxAnswer());
-        } else {
-            sent.send(idPerson, answerText.getBoxAnswer());
-        }
+        sent.send(idPerson, answerText.getBoxAnswer());
     }
 }

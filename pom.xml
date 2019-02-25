@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.sadtech.vkbot</groupId>
+    <groupId>org.sadtech.bot</groupId>
     <artifactId>autoresponder</artifactId>
     <version>0.4.3-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -37,7 +37,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.sadtech.vkbot</groupId>
+            <groupId>org.sadtech.bot</groupId>
             <artifactId>core</artifactId>
             <version>${vkbot.core.ver}</version>
         </dependency>

@@ -5,6 +5,7 @@ import org.sadtech.vkbot.autoresponder.saver.Savable;
 import org.sadtech.vkbot.autoresponder.saver.SaveStatus;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class AnswerSave extends MainUnit {
@@ -49,5 +50,21 @@ public class AnswerSave extends MainUnit {
     public void setNextUnit(Unit unit) {
         super.setNextUnit(unit);
         ((MainUnit) unit).setUnitActiveStatus(UnitActiveStatus.AFTER);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        AnswerSave that = (AnswerSave) o;
+        return Objects.equals(savable, that.savable) &&
+                Objects.equals(key, that.key) &&
+                Objects.equals(saveStatuses, that.saveStatuses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), savable, key, saveStatuses);
     }
 }

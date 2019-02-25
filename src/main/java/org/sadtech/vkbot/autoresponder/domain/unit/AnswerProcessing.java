@@ -2,6 +2,8 @@ package org.sadtech.vkbot.autoresponder.domain.unit;
 
 import org.sadtech.vkbot.autoresponder.domain.usercode.ProcessingData;
 
+import java.util.Objects;
+
 public class AnswerProcessing extends MainUnit {
 
     private ProcessingData processingData;
@@ -18,4 +20,17 @@ public class AnswerProcessing extends MainUnit {
         this.processingData = processingData;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        AnswerProcessing that = (AnswerProcessing) o;
+        return Objects.equals(processingData, that.processingData);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), processingData);
+    }
 }

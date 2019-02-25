@@ -5,6 +5,10 @@ import org.sadtech.vkbot.core.domain.MailSend;
 
 public class BoxerMailSend {
 
+    private BoxerMailSend() {
+        throw new IllegalStateException("Utility Class");
+    }
+
     public static MailSend create(BoxAnswer boxAnswer) {
         MailSend mailSend = new MailSend();
         mailSend.setMessage(boxAnswer.getMessage());

@@ -30,7 +30,7 @@ public abstract class GeneralAutoresponder<T> implements Runnable {
     }
 
     private void init(Sent sent) {
-        actionUnitMap = new HashMap<>();
+        actionUnitMap = new EnumMap<>(TypeUnit.class);
         actionUnitMap.put(TypeUnit.CHECK, new AnswerCheckAction(actionUnitMap));
         actionUnitMap.put(TypeUnit.PROCESSING, new AnswerProcessingAction(sent));
         actionUnitMap.put(TypeUnit.SAVE, new AnswerSaveAction());
@@ -49,7 +49,7 @@ public abstract class GeneralAutoresponder<T> implements Runnable {
             newData = new Date().getTime() / 1000 - 1;
             if (oldData < newData) {
                 List<T> mailList = eventService.getFirstEventByTime(Integer.parseInt(oldData.toString()), Integer.parseInt(newData.toString()));
-                if (mailList.size() > 0) {
+                if (mailList.isEmpty()) {
                     this.sendReply(mailList);
                 }
             }
@@ -61,7 +61,7 @@ public abstract class GeneralAutoresponder<T> implements Runnable {
 
     protected void activeUnitAfter(MainUnit mainUnit, Mail mail) {
         if (mainUnit.getNextUnits() != null) {
-            mainUnit.getNextUnits().stream().filter(Unit -> Unit instanceof MainUnit).map(unit -> (MainUnit) unit).forEach(nextUnit -> {
+            mainUnit.getNextUnits().stream().filter(unit -> unit instanceof MainUnit).map(unit -> (MainUnit) unit).forEach(nextUnit -> {
                 if (nextUnit.getUnitActiveStatus().equals(UnitActiveStatus.AFTER)) {
                     actionUnitMap.get(nextUnit.getTypeUnit()).action(nextUnit, mail.getBody(), mail.getPerson().getId());
                     autoresponder.getPersonService().getPersonById(mail.getPerson().getId()).setUnit(nextUnit);
