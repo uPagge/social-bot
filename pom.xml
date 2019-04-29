@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.sadtech.bot</groupId>
-    <artifactId>autoresponder</artifactId>
+    <artifactId>bot-autoresponder</artifactId>
     <version>0.4.3-SNAPSHOT</version>
     <packaging>jar</packaging>
     <build>
@@ -38,7 +38,7 @@
     <dependencies>
         <dependency>
             <groupId>org.sadtech.bot</groupId>
-            <artifactId>core</artifactId>
+            <artifactId>bot-core</artifactId>
             <version>${vkbot.core.ver}</version>
         </dependency>
 
