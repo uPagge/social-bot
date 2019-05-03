@@ -13,7 +13,6 @@ public class AnswerTextAction implements ActionUnit<AnswerText> {
 
     @Override
     public void action(AnswerText answerText, String message, Integer idPerson) {
-
         sent.send(idPerson, answerText.getBoxAnswer());
     }
 }

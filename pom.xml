@@ -21,18 +21,10 @@
         </plugins>
     </build>
 
-    <developers>
-        <developer>
-            <id>uPagge</id>
-            <name>Struchkov Mark</name>
-            <email>upagge@mail.ru</email>
-        </developer>
-    </developers>
-
     <properties>
         <vkbot.core.ver>0.4.3-SNAPSHOT</vkbot.core.ver>
         <junit.ver>4.12</junit.ver>
-        <autoresponder.ver>1.4.0-RELEASE</autoresponder.ver>
+        <autoresponder.ver>1.5.1-SNAPSHOT</autoresponder.ver>
     </properties>
 
     <dependencies>
@@ -62,5 +54,14 @@
         </dependency>
 
     </dependencies>
+
+    <developers>
+        <developer>
+            <id>uPagge</id>
+            <name>Struchkov Mark</name>
+            <email>upagge@mail.ru</email>
+            <organization>SADTECH</organization>
+        </developer>
+    </developers>
 
 </project>

@@ -9,9 +9,9 @@ public class AnswerCheck extends MainUnit {
     private MainUnit unitTrue;
     private MainUnit unitFalse;
     private CheckData check;
-    private Integer userId;
 
     public AnswerCheck() {
+        super();
         typeUnit = TypeUnit.CHECK;
     }
 
@@ -39,14 +39,6 @@ public class AnswerCheck extends MainUnit {
         this.check = check;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -55,12 +47,11 @@ public class AnswerCheck extends MainUnit {
         AnswerCheck that = (AnswerCheck) o;
         return Objects.equals(unitTrue, that.unitTrue) &&
                 Objects.equals(unitFalse, that.unitFalse) &&
-                Objects.equals(check, that.check) &&
-                Objects.equals(userId, that.userId);
+                Objects.equals(check, that.check);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), unitTrue, unitFalse, check, userId);
+        return Objects.hash(super.hashCode(), unitTrue, unitFalse, check);
     }
 }

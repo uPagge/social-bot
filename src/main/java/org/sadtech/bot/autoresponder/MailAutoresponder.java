@@ -12,6 +12,7 @@ public class MailAutoresponder extends GeneralAutoresponder<Mail> {
 
     public MailAutoresponder(Sent sent, EventService<Mail> eventService) {
         super(sent, eventService);
+
     }
 
     @Override

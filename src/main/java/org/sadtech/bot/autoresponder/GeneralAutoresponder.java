@@ -2,7 +2,7 @@ package org.sadtech.bot.autoresponder;
 
 import org.sadtech.autoresponder.Autoresponder;
 import org.sadtech.autoresponder.entity.Unit;
-import org.sadtech.autoresponder.service.PersonServiceImpl;
+import org.sadtech.autoresponder.service.UnitPointerServiceImpl;
 import org.sadtech.bot.autoresponder.action.*;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.domain.unit.TypeUnit;
@@ -24,13 +24,13 @@ public abstract class GeneralAutoresponder<T> implements Runnable {
     public GeneralAutoresponder(Sent sent, EventService<T> eventService) {
         this.eventService = eventService;
         this.sent = sent;
-        autoresponder = new Autoresponder(new PersonServiceImpl());
+        autoresponder = new Autoresponder(new UnitPointerServiceImpl());
         init(sent);
     }
 
     private void init(Sent sent) {
         actionUnitMap = new EnumMap<>(TypeUnit.class);
-        actionUnitMap.put(TypeUnit.CHECK, new AnswerCheckAction(actionUnitMap));
+        actionUnitMap.put(TypeUnit.CHECK, new AnswerCheckAction(actionUnitMap, autoresponder.getUnitPointerService()));
         actionUnitMap.put(TypeUnit.PROCESSING, new AnswerProcessingAction(sent));
         actionUnitMap.put(TypeUnit.SAVE, new AnswerSaveAction());
         actionUnitMap.put(TypeUnit.TEXT, new AnswerTextAction(sent));
@@ -48,7 +48,7 @@ public abstract class GeneralAutoresponder<T> implements Runnable {
             newData = new Date().getTime() / 1000 - 1;
             if (oldData < newData) {
                 List<T> mailList = eventService.getFirstEventByTime(Integer.parseInt(oldData.toString()), Integer.parseInt(newData.toString()));
-                if (!mailList.isEmpty()) {
+                if (mailList.size() > 0) {
                     this.sendReply(mailList);
                 }
             }
@@ -60,12 +60,15 @@ public abstract class GeneralAutoresponder<T> implements Runnable {
 
     protected void activeUnitAfter(MainUnit mainUnit, String message, Integer peerId) {
         if (mainUnit.getNextUnits() != null) {
-            mainUnit.getNextUnits().stream().filter(unit -> unit instanceof MainUnit).map(unit -> (MainUnit) unit).forEach(nextUnit -> {
-                if (nextUnit.getUnitActiveStatus().equals(UnitActiveStatus.AFTER)) {
-                    actionUnitMap.get(nextUnit.getTypeUnit()).action(nextUnit, message, peerId);
-                    autoresponder.getPersonService().getPersonById(peerId).setUnit(nextUnit);
-                }
-            });
+            mainUnit.getNextUnits().stream()
+                    .filter(unit -> unit instanceof MainUnit)
+                    .map(unit -> (MainUnit) unit)
+                    .forEach(nextUnit -> {
+                        if (nextUnit.getUnitActiveStatus().equals(UnitActiveStatus.AFTER)) {
+                            actionUnitMap.get(nextUnit.getTypeUnit()).action(nextUnit, message, peerId);
+                            autoresponder.getUnitPointerService().getByEntityId(peerId).setUnit(nextUnit);
+                        }
+                    });
         }
     }
 

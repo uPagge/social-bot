@@ -8,6 +8,14 @@ public abstract class MainUnit extends Unit {
 
     protected UnitActiveStatus unitActiveStatus = UnitActiveStatus.DEFAULT;
 
+    protected MainUnit(MainUnit... nextUnits) {
+        super(nextUnits);
+    }
+
+    public MainUnit() {
+        super();
+    }
+
     public TypeUnit getTypeUnit() {
         return typeUnit;
     }

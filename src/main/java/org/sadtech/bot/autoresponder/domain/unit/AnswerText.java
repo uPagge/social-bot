@@ -11,7 +11,12 @@ public class AnswerText extends MainUnit {
     private Insert insert;
 
     public AnswerText() {
+        super();
         typeUnit = TypeUnit.TEXT;
+    }
+
+    public AnswerText(MainUnit... mainUnit) {
+        super(mainUnit);
     }
 
     public BoxAnswer getBoxAnswer() {
