@@ -12,8 +12,8 @@ public class AnswerCheckAction implements ActionUnit<AnswerCheck> {
 
     private static final Logger log = Logger.getLogger(AnswerCheckAction.class);
 
-    private Map<TypeUnit, ActionUnit> actionUnitMap;
-    private UnitPointerService unitPointerService;
+    private final Map<TypeUnit, ActionUnit> actionUnitMap;
+    private final UnitPointerService unitPointerService;
 
     public AnswerCheckAction(Map<TypeUnit, ActionUnit> actionUnitMap, UnitPointerService unitPointerService) {
         this.actionUnitMap = actionUnitMap;

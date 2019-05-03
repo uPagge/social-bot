@@ -5,7 +5,7 @@ import org.sadtech.bot.core.sender.Sent;
 
 public class AnswerProcessingAction implements ActionUnit<AnswerProcessing> {
 
-    private Sent sent;
+    private final Sent sent;
 
     public AnswerProcessingAction(Sent sent) {
         this.sent = sent;

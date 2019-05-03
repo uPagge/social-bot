@@ -13,7 +13,7 @@ import java.util.Timer;
 
 public class AnswerTimerAction implements ActionUnit<AnswerTimer> {
 
-    public static final Logger log = Logger.getLogger(AnswerTimerAction.class);
+    private static final Logger log = Logger.getLogger(AnswerTimerAction.class);
 
     private TimerActionService timerService;
     private Long verificationPeriodSec = 30L;
