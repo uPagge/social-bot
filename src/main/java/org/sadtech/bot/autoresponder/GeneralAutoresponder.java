@@ -21,7 +21,7 @@ public abstract class GeneralAutoresponder<T> implements Runnable {
     protected Sent sent;
     protected Map<TypeUnit, ActionUnit> actionUnitMap;
 
-    public GeneralAutoresponder(Sent sent, EventService<T> eventService) {
+    protected GeneralAutoresponder(Sent sent, EventService<T> eventService) {
         this.eventService = eventService;
         this.sent = sent;
         autoresponder = new Autoresponder(new UnitPointerServiceImpl());
