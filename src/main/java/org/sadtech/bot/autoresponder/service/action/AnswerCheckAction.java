@@ -1,4 +1,4 @@
-package org.sadtech.bot.autoresponder.action;
+package org.sadtech.bot.autoresponder.service.action;
 
 import org.apache.log4j.Logger;
 import org.sadtech.autoresponder.service.UnitPointerService;
@@ -21,18 +21,19 @@ public class AnswerCheckAction implements ActionUnit<AnswerCheck> {
     }
 
     @Override
-    public void action(AnswerCheck answerCheck, String message, Integer idPerson) {
+    public MainUnit action(AnswerCheck answerCheck, String message, Integer userId) {
         MainUnit unitAnswer;
-        if (answerCheck.getCheck().checked(idPerson, message)) {
+        if (answerCheck.getCheck().checked(userId, message)) {
             log.info("Проверка пройдена");
             unitAnswer = answerCheck.getUnitTrue();
         } else {
             log.info("Проверка не пройдена");
             unitAnswer = answerCheck.getUnitFalse();
         }
-        if (unitAnswer!=null) {
-            actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, message, idPerson);
-            unitPointerService.getByEntityId(idPerson).setUnit(unitAnswer);
+        if (unitAnswer != null) {
+            unitPointerService.getByEntityId(userId).setUnit(unitAnswer);
+            actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, message, userId);
         }
+        return unitAnswer;
     }
 }

@@ -31,7 +31,7 @@ public class EmailSavable extends LocalSavable {
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(emailConfig.getUsername()));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailConfig.getPassword()));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailConfig.getUsername()));
             message.setSubject(nameForm);
             message.setText(stringBuilder.toString());
             Transport.send(message);

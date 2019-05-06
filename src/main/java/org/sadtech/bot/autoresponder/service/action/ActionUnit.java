@@ -1,9 +1,9 @@
-package org.sadtech.bot.autoresponder.action;
+package org.sadtech.bot.autoresponder.service.action;
 
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 
 public interface ActionUnit<T extends MainUnit> {
 
-    void action(T unit, String message, Integer idPerson);
+    MainUnit action(T unit, String message, Integer userId);
 
 }

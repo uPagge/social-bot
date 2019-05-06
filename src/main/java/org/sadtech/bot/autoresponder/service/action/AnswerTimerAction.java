@@ -1,7 +1,8 @@
-package org.sadtech.bot.autoresponder.action;
+package org.sadtech.bot.autoresponder.service.action;
 
 import org.apache.log4j.Logger;
 import org.sadtech.bot.autoresponder.domain.unit.AnswerTimer;
+import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.domain.unit.TypeUnit;
 import org.sadtech.bot.autoresponder.timer.TimerAction;
 import org.sadtech.bot.autoresponder.timer.TimerActionService;
@@ -35,16 +36,17 @@ public class AnswerTimerAction implements ActionUnit<AnswerTimer> {
     }
 
     @Override
-    public void action(AnswerTimer answerTimer, String message, Integer idPerson) {
+    public MainUnit action(AnswerTimer answerTimer, String message, Integer userId) {
         TimerAction timerAction = new TimerAction();
         if (answerTimer.getIdUser() != null) {
             timerAction.setIdPerson(answerTimer.getIdUser());
         } else {
-            timerAction.setIdPerson(idPerson);
+            timerAction.setIdPerson(userId);
         }
         timerAction.setUnit(answerTimer.getUnitAnswer());
         timerAction.setTimeActive(new Date().getTime() + answerTimer.getTimeDelaySec() * 1000);
         log.info("Таймер установлен: " + timerAction);
         timerService.add(timerAction);
+        return answerTimer;
     }
 }

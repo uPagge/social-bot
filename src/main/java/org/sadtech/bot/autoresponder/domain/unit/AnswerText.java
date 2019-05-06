@@ -31,6 +31,32 @@ public class AnswerText extends MainUnit {
         this.insert = insert;
     }
 
+    public static Builder builder() {
+        return new AnswerText().new Builder();
+    }
+
+    public class Builder extends MainUnit {
+
+        private Builder() {
+
+        }
+
+        public Builder message(String message) {
+            AnswerText.this.getBoxAnswer().setMessage(message);
+            return this;
+        }
+
+        public Builder nextUnit(MainUnit mainUnit) {
+            AnswerText.this.setNextUnit(mainUnit);
+            return this;
+        }
+
+        public AnswerText build() {
+            return AnswerText.this;
+        }
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

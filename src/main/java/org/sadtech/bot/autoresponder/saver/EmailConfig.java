@@ -2,9 +2,9 @@ package org.sadtech.bot.autoresponder.saver;
 
 import java.util.Properties;
 
-public final class EmailConfig {
+public class EmailConfig {
 
-    private Properties props;
+    private Properties props = new Properties();
     private String username;
     private String password;
 

@@ -12,7 +12,6 @@ public class MailAutoresponder extends GeneralAutoresponder<Mail> {
 
     public MailAutoresponder(Sent sent, EventService<Mail> eventService) {
         super(sent, eventService);
-
     }
 
     @Override
@@ -21,7 +20,8 @@ public class MailAutoresponder extends GeneralAutoresponder<Mail> {
             MainUnit unitAnswer = (MainUnit) autoresponder.answer(mail.getPeerId(), mail.getBody());
             if (unitAnswer != null) {
                 if (unitAnswer.getUnitActiveStatus().equals(UnitActiveStatus.DEFAULT)) {
-                    actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, mail.getBody(), mail.getPeerId());
+                    unitAnswer = actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, mail.getBody(), mail.getPeerId());
+                    autoresponder.getUnitPointerService().getByEntityId(mail.getPeerId()).setUnit(unitAnswer);
                 }
                 activeUnitAfter(unitAnswer, mail.getBody(), mail.getPeerId());
             } else {

@@ -3,10 +3,10 @@ package org.sadtech.bot.autoresponder;
 import org.sadtech.autoresponder.Autoresponder;
 import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.autoresponder.service.UnitPointerServiceImpl;
-import org.sadtech.bot.autoresponder.action.*;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.domain.unit.TypeUnit;
 import org.sadtech.bot.autoresponder.domain.unit.UnitActiveStatus;
+import org.sadtech.bot.autoresponder.service.action.*;
 import org.sadtech.bot.autoresponder.timer.impl.TimerActionRepositoryList;
 import org.sadtech.bot.autoresponder.timer.impl.TimerActionServiceImpl;
 import org.sadtech.bot.core.sender.Sent;
@@ -35,6 +35,7 @@ public abstract class GeneralAutoresponder<T> implements Runnable {
         actionUnitMap.put(TypeUnit.SAVE, new AnswerSaveAction());
         actionUnitMap.put(TypeUnit.TEXT, new AnswerTextAction(sent));
         actionUnitMap.put(TypeUnit.TIMER, new AnswerTimerAction(new TimerActionServiceImpl(new TimerActionRepositoryList()), actionUnitMap));
+        actionUnitMap.put(TypeUnit.YES_OR_NO, new AnswerTestUnitAction(actionUnitMap, autoresponder.getUnitPointerService()));
     }
 
     public void setMenuUnit(Set<Unit> menuUnit) {
@@ -56,7 +57,7 @@ public abstract class GeneralAutoresponder<T> implements Runnable {
         }
     }
 
-    abstract void sendReply(List<T> mailList);
+    public abstract void sendReply(List<T> mailList);
 
     protected void activeUnitAfter(MainUnit mainUnit, String message, Integer peerId) {
         if (mainUnit.getNextUnits() != null) {

@@ -1,7 +1,7 @@
 package org.sadtech.bot.autoresponder.timer;
 
 import org.apache.log4j.Logger;
-import org.sadtech.bot.autoresponder.action.ActionUnit;
+import org.sadtech.bot.autoresponder.service.action.ActionUnit;
 import org.sadtech.bot.autoresponder.domain.unit.TypeUnit;
 
 import java.util.Date;

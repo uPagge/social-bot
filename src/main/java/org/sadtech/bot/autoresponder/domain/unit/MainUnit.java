@@ -30,6 +30,7 @@ public abstract class MainUnit extends Unit {
         this.unitActiveStatus = unitActiveStatus;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
