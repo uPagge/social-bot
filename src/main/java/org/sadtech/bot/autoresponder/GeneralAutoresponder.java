@@ -36,7 +36,8 @@ public abstract class GeneralAutoresponder<T extends Content> implements Runnabl
         actionUnitMap.put(TypeUnit.SAVE, new AnswerSaveAction());
         actionUnitMap.put(TypeUnit.TEXT, new AnswerTextAction(sent));
         actionUnitMap.put(TypeUnit.TIMER, new AnswerTimerAction(new TimerActionServiceImpl(new TimerActionRepositoryList()), actionUnitMap));
-        actionUnitMap.put(TypeUnit.YES_OR_NO, new AnswerValidityAction(actionUnitMap, autoresponder.getUnitPointerService()));
+        actionUnitMap.put(TypeUnit.VALIDITY, new AnswerValidityAction(actionUnitMap, autoresponder.getUnitPointerService()));
+        actionUnitMap.put(TypeUnit.HIDDEN_SAVE, new AnswerHiddenSaveAction());
     }
 
     public void setMenuUnit(Set<Unit> menuUnit) {
