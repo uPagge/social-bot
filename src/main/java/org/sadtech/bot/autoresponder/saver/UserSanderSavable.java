@@ -4,11 +4,11 @@ import org.sadtech.bot.core.sender.Sent;
 
 public class UserSanderSavable extends LocalSavable {
 
-    private Sent sent;
-    private Integer idUser;
+    private final Sent sent;
+    private final Integer personId;
 
-    public UserSanderSavable(Sent sent, Integer idUser) {
-        this.idUser = idUser;
+    public UserSanderSavable(Sent sent, Integer personId) {
+        this.personId = personId;
         this.sent = sent;
     }
 
@@ -21,7 +21,7 @@ public class UserSanderSavable extends LocalSavable {
         }
         stringBuilder.append("====================");
         map.remove(userId);
-        sent.send(idUser, stringBuilder.toString());
+        sent.send(personId, stringBuilder.toString());
     }
 
 }

@@ -5,15 +5,15 @@ import java.util.Map;
 
 public class TempSaveImpl implements TempSave {
 
-    private Map<Integer, String> saveMap = new HashMap<>();
+    private final Map<Integer, String> saveMap = new HashMap<>();
 
     @Override
-    public void save(Integer userId, String message) {
-        saveMap.put(userId, message);
+    public void save(Integer personId, String message) {
+        saveMap.put(personId, message);
     }
 
     @Override
-    public String load(Integer userId) {
-        return saveMap.get(userId);
+    public String load(Integer personId) {
+        return saveMap.get(personId);
     }
 }

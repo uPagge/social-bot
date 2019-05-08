@@ -1,11 +1,16 @@
 package org.sadtech.bot.autoresponder.saver;
 
+import org.apache.log4j.Logger;
+import org.sadtech.bot.autoresponder.exception.MailSendException;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Map;
 
 public class EmailSavable extends LocalSavable {
+
+    private static final Logger log = Logger.getLogger(EmailSavable.class);
 
     private final EmailConfig emailConfig;
 
@@ -97,7 +102,8 @@ public class EmailSavable extends LocalSavable {
             message.setContent(stringBuilder.toString(), "text/html; charset=utf-8");
             Transport.send(message);
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
+            throw new MailSendException();
         }
     }
 

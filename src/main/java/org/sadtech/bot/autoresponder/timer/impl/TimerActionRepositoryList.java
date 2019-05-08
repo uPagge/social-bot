@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TimerActionRepositoryList implements TimerActionRepository {
 
-    private List<TimerAction> timerActionList = new ArrayList<>();
+    private final List<TimerAction> timerActionList = new ArrayList<>();
 
     public void add(TimerAction timerAction) {
         timerActionList.add(timerAction);
@@ -16,10 +16,6 @@ public class TimerActionRepositoryList implements TimerActionRepository {
 
     public List<TimerAction> getTimerActionList() {
         return timerActionList;
-    }
-
-    public void setTimerActionList(List<TimerAction> timerActionList) {
-        this.timerActionList = timerActionList;
     }
 
     public void remove(TimerAction timerAction) {
