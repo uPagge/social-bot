@@ -17,8 +17,8 @@ public class AnswerValidityAction implements ActionUnit<AnswerValidity, Mail> {
 
     private final Map<TypeUnit, ActionUnit> actionUnitMap;
     private final UnitPointerService unitPointerService;
-    public final static Set<String> WORDS_YES = Stream.of("да", "WORDS_YES", "ага").collect(Collectors.toSet());
-    public final static Set<String> WORDS_NO = Stream.of("нет", "WORDS_NO", "неа").collect(Collectors.toSet());
+    public static final Set<String> WORDS_YES = Stream.of("да", "WORDS_YES", "ага").collect(Collectors.toSet());
+    public static final Set<String> WORDS_NO = Stream.of("нет", "WORDS_NO", "неа").collect(Collectors.toSet());
 
     public AnswerValidityAction(Map<TypeUnit, ActionUnit> actionUnitMap, UnitPointerService unitPointerService) {
         this.actionUnitMap = actionUnitMap;

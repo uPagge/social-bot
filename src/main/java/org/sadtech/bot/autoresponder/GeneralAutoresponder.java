@@ -17,9 +17,9 @@ import java.util.*;
 
 public abstract class GeneralAutoresponder<T extends Content> implements Runnable {
 
-    private EventService<T> eventService;
-    protected Autoresponder autoresponder;
-    protected Sent sent;
+    private final EventService<T> eventService;
+    protected final Autoresponder autoresponder;
+    protected final Sent sent;
     protected Map<TypeUnit, ActionUnit> actionUnitMap;
 
     protected GeneralAutoresponder(Sent sent, EventService<T> eventService) {

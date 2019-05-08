@@ -8,8 +8,6 @@ public interface TimerActionRepository {
 
     List<TimerAction> getTimerActionList();
 
-    void setTimerActionList(List<TimerAction> timerActionList);
-
     void remove(TimerAction timerAction);
 
 }

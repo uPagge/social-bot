@@ -9,7 +9,7 @@ import java.util.List;
 
 public class TimerActionServiceImpl implements TimerActionService {
 
-    private TimerActionRepository timerActionRepositoryList;
+    private final TimerActionRepository timerActionRepositoryList;
 
     public TimerActionServiceImpl(TimerActionRepositoryList timerActionRepositoryList) {
         this.timerActionRepositoryList = timerActionRepositoryList;
@@ -17,10 +17,6 @@ public class TimerActionServiceImpl implements TimerActionService {
 
     public TimerActionRepository getTimerActionRepositoryList() {
         return timerActionRepositoryList;
-    }
-
-    public void setTimerActionRepositoryList(TimerActionRepository timerActionRepositoryList) {
-        this.timerActionRepositoryList = timerActionRepositoryList;
     }
 
     public List<TimerAction> getTimerActive(Long time) {

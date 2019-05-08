@@ -12,8 +12,8 @@ public class TimerActionTask extends TimerTask {
 
     private static final Logger log = Logger.getLogger(TimerActionTask.class);
 
-    private TimerActionService timerService;
-    private Map<TypeUnit, ActionUnit> actionUnitMap;
+    private final TimerActionService timerService;
+    private final Map<TypeUnit, ActionUnit> actionUnitMap;
 
     public TimerActionTask(TimerActionService timerService, Map<TypeUnit, ActionUnit> actionUnitMap) {
         log.info("Инициализация сервиса по активации таймеров");

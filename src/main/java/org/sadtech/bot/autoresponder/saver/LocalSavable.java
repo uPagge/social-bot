@@ -5,7 +5,7 @@ import java.util.Map;
 
 public abstract class LocalSavable implements Savable {
 
-    Map<Integer, Map<String, String>> map = new HashMap<>();
+    final Map<Integer, Map<String, String>> map = new HashMap<>();
     String nameForm;
 
     @Override
