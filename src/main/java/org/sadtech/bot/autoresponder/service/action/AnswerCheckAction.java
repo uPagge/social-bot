@@ -5,10 +5,11 @@ import org.sadtech.autoresponder.service.UnitPointerService;
 import org.sadtech.bot.autoresponder.domain.unit.AnswerCheck;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.domain.unit.TypeUnit;
+import org.sadtech.bot.core.domain.Mail;
 
 import java.util.Map;
 
-public class AnswerCheckAction implements ActionUnit<AnswerCheck> {
+public class AnswerCheckAction implements ActionUnit<AnswerCheck, Mail> {
 
     private static final Logger log = Logger.getLogger(AnswerCheckAction.class);
 
@@ -21,9 +22,9 @@ public class AnswerCheckAction implements ActionUnit<AnswerCheck> {
     }
 
     @Override
-    public MainUnit action(AnswerCheck answerCheck, String message, Integer userId) {
+    public MainUnit action(AnswerCheck answerCheck, Mail mail) {
         MainUnit unitAnswer;
-        if (answerCheck.getCheck().checked(userId, message)) {
+        if (answerCheck.getCheck().checked(mail.getPersonId(), mail.getMessage())) {
             log.info("Проверка пройдена");
             unitAnswer = answerCheck.getUnitTrue();
         } else {
@@ -31,8 +32,8 @@ public class AnswerCheckAction implements ActionUnit<AnswerCheck> {
             unitAnswer = answerCheck.getUnitFalse();
         }
         if (unitAnswer != null) {
-            unitPointerService.getByEntityId(userId).setUnit(unitAnswer);
-            actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, message, userId);
+            unitPointerService.getByEntityId(mail.getPersonId()).setUnit(unitAnswer);
+            actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, mail);
         }
         return unitAnswer;
     }

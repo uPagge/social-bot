@@ -1,9 +1,10 @@
 package org.sadtech.bot.autoresponder.domain.unit;
 
 import org.sadtech.bot.autoresponder.domain.usercode.TestInsert;
-import org.sadtech.bot.autoresponder.service.action.AnswerTestUnitAction;
+import org.sadtech.bot.autoresponder.saver.TempSave;
+import org.sadtech.bot.autoresponder.service.action.AnswerValidityAction;
 
-public class AnswerTestUnit extends MainUnit {
+public class AnswerValidity extends MainUnit {
 
     private MainUnit yes;
     private MainUnit no;
@@ -11,7 +12,7 @@ public class AnswerTestUnit extends MainUnit {
     private TempSave tempSave;
     private TestInsert testInsert;
 
-    public AnswerTestUnit() {
+    public AnswerValidity() {
         typeUnit = TypeUnit.YES_OR_NO;
     }
 
@@ -21,7 +22,7 @@ public class AnswerTestUnit extends MainUnit {
 
     public void setYes(MainUnit yes) {
         this.yes = yes;
-        super.setKeyWords(AnswerTestUnitAction.WORDS_YES);
+        super.setKeyWords(AnswerValidityAction.WORDS_YES);
     }
 
     public MainUnit getNo() {
@@ -30,7 +31,7 @@ public class AnswerTestUnit extends MainUnit {
 
     public void setNo(MainUnit no) {
         this.no = no;
-        super.setKeyWords(AnswerTestUnitAction.WORDS_NO);
+        super.setKeyWords(AnswerValidityAction.WORDS_NO);
     }
 
     public TempSave getTempSave() {

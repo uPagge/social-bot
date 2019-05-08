@@ -9,12 +9,13 @@ import org.sadtech.bot.autoresponder.domain.unit.UnitActiveStatus;
 import org.sadtech.bot.autoresponder.service.action.*;
 import org.sadtech.bot.autoresponder.timer.impl.TimerActionRepositoryList;
 import org.sadtech.bot.autoresponder.timer.impl.TimerActionServiceImpl;
+import org.sadtech.bot.core.domain.Content;
 import org.sadtech.bot.core.sender.Sent;
 import org.sadtech.bot.core.service.EventService;
 
 import java.util.*;
 
-public abstract class GeneralAutoresponder<T> implements Runnable {
+public abstract class GeneralAutoresponder<T extends Content> implements Runnable {
 
     private EventService<T> eventService;
     protected Autoresponder autoresponder;
@@ -35,7 +36,7 @@ public abstract class GeneralAutoresponder<T> implements Runnable {
         actionUnitMap.put(TypeUnit.SAVE, new AnswerSaveAction());
         actionUnitMap.put(TypeUnit.TEXT, new AnswerTextAction(sent));
         actionUnitMap.put(TypeUnit.TIMER, new AnswerTimerAction(new TimerActionServiceImpl(new TimerActionRepositoryList()), actionUnitMap));
-        actionUnitMap.put(TypeUnit.YES_OR_NO, new AnswerTestUnitAction(actionUnitMap, autoresponder.getUnitPointerService()));
+        actionUnitMap.put(TypeUnit.YES_OR_NO, new AnswerValidityAction(actionUnitMap, autoresponder.getUnitPointerService()));
     }
 
     public void setMenuUnit(Set<Unit> menuUnit) {
@@ -59,15 +60,15 @@ public abstract class GeneralAutoresponder<T> implements Runnable {
 
     public abstract void sendReply(List<T> mailList);
 
-    protected void activeUnitAfter(MainUnit mainUnit, String message, Integer peerId) {
+    protected void activeUnitAfter(MainUnit mainUnit, T content) {
         if (mainUnit.getNextUnits() != null) {
             mainUnit.getNextUnits().stream()
                     .filter(unit -> unit instanceof MainUnit)
                     .map(unit -> (MainUnit) unit)
                     .forEach(nextUnit -> {
                         if (nextUnit.getUnitActiveStatus().equals(UnitActiveStatus.AFTER)) {
-                            actionUnitMap.get(nextUnit.getTypeUnit()).action(nextUnit, message, peerId);
-                            autoresponder.getUnitPointerService().getByEntityId(peerId).setUnit(nextUnit);
+                            actionUnitMap.get(nextUnit.getTypeUnit()).action(nextUnit, content);
+                            autoresponder.getUnitPointerService().getByEntityId(content.getPersonId()).setUnit(nextUnit);
                         }
                     });
         }

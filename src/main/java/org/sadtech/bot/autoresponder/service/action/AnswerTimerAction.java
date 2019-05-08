@@ -7,12 +7,13 @@ import org.sadtech.bot.autoresponder.domain.unit.TypeUnit;
 import org.sadtech.bot.autoresponder.timer.TimerAction;
 import org.sadtech.bot.autoresponder.timer.TimerActionService;
 import org.sadtech.bot.autoresponder.timer.TimerActionTask;
+import org.sadtech.bot.core.domain.Content;
 
 import java.util.Date;
 import java.util.Map;
 import java.util.Timer;
 
-public class AnswerTimerAction implements ActionUnit<AnswerTimer> {
+public class AnswerTimerAction implements ActionUnit<AnswerTimer, Content> {
 
     private static final Logger log = Logger.getLogger(AnswerTimerAction.class);
 
@@ -36,12 +37,12 @@ public class AnswerTimerAction implements ActionUnit<AnswerTimer> {
     }
 
     @Override
-    public MainUnit action(AnswerTimer answerTimer, String message, Integer userId) {
+    public MainUnit action(AnswerTimer answerTimer, Content content) {
         TimerAction timerAction = new TimerAction();
         if (answerTimer.getIdUser() != null) {
             timerAction.setIdPerson(answerTimer.getIdUser());
         } else {
-            timerAction.setIdPerson(userId);
+            timerAction.setIdPerson(content.getPersonId());
         }
         timerAction.setUnit(answerTimer.getUnitAnswer());
         timerAction.setTimeActive(new Date().getTime() + answerTimer.getTimeDelaySec() * 1000);

@@ -1,4 +1,4 @@
-package org.sadtech.bot.autoresponder.domain.unit;
+package org.sadtech.bot.autoresponder.saver;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -17,15 +17,15 @@ public class MailAutoresponder extends GeneralAutoresponder<Mail> {
     @Override
     public void sendReply(List<Mail> mailList) {
         for (Mail mail : mailList) {
-            MainUnit unitAnswer = (MainUnit) autoresponder.answer(mail.getPeerId(), mail.getBody());
+            MainUnit unitAnswer = (MainUnit) autoresponder.answer(mail.getPersonId(), mail.getMessage());
             if (unitAnswer != null) {
                 if (unitAnswer.getUnitActiveStatus().equals(UnitActiveStatus.DEFAULT)) {
-                    unitAnswer = actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, mail.getBody(), mail.getPeerId());
-                    autoresponder.getUnitPointerService().getByEntityId(mail.getPeerId()).setUnit(unitAnswer);
+                    unitAnswer = actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, mail);
+                    autoresponder.getUnitPointerService().getByEntityId(mail.getPersonId()).setUnit(unitAnswer);
                 }
-                activeUnitAfter(unitAnswer, mail.getBody(), mail.getPeerId());
+                activeUnitAfter(unitAnswer, mail);
             } else {
-                sent.send(mail.getPeerId(), "К сожалению, я еще не знаю что вам ответить");
+                sent.send(mail.getPersonId(), "К сожалению, я еще не знаю что вам ответить");
             }
         }
     }
