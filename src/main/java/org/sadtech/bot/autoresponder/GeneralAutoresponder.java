@@ -69,6 +69,7 @@ public abstract class GeneralAutoresponder<T extends Content> implements Runnabl
                         if (nextUnit.getUnitActiveStatus().equals(UnitActiveStatus.AFTER)) {
                             actionUnitMap.get(nextUnit.getTypeUnit()).action(nextUnit, content);
                             autoresponder.getUnitPointerService().getByEntityId(content.getPersonId()).setUnit(nextUnit);
+                            activeUnitAfter(nextUnit, content);
                         }
                     });
         }

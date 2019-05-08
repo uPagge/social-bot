@@ -6,7 +6,7 @@
 
     <groupId>org.sadtech.bot</groupId>
     <artifactId>bot-autoresponder</artifactId>
-    <version>0.5.2-RELEASE</version>
+    <version>0.5.3-SNAPSHOT</version>
     <packaging>jar</packaging>
     <build>
         <plugins>
@@ -22,7 +22,7 @@
     </build>
 
     <properties>
-        <vkbot.core.ver>0.5.1-RELEASE</vkbot.core.ver>
+        <bot.core.ver>0.5.2-SNAPSHOT</bot.core.ver>
         <junit.ver>4.12</junit.ver>
         <autoresponder.ver>1.5.1-SNAPSHOT</autoresponder.ver>
     </properties>
@@ -31,7 +31,7 @@
         <dependency>
             <groupId>org.sadtech.bot</groupId>
             <artifactId>bot-core</artifactId>
-            <version>${vkbot.core.ver}</version>
+            <version>${bot.core.ver}</version>
         </dependency>
 
         <dependency>
