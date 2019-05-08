@@ -48,7 +48,7 @@ public class AnswerValidityAction implements ActionUnit<AnswerValidity, Mail> {
     }
 
     private Mail getNewMail(Mail mail, String save) {
-        Mail newMail = mail.clone();
+        Mail newMail = mail.prototype();
         newMail.setMessage(save);
         return newMail;
     }

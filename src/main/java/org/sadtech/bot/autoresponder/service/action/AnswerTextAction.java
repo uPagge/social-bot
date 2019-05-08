@@ -19,7 +19,7 @@ public class AnswerTextAction implements ActionUnit<AnswerText, Content> {
 
     @Override
     public MainUnit action(AnswerText answerText, Content content) {
-        BoxAnswer boxAnswer = answerText.getBoxAnswer().clone();
+        BoxAnswer boxAnswer = answerText.getBoxAnswer().prototype();
         if (answerText.getInsert()!=null) {
             List<String> words = answerText.getInsert().insert(content.getPersonId());
             String newMessage = InsertWords.insert(boxAnswer.getMessage(), words);
