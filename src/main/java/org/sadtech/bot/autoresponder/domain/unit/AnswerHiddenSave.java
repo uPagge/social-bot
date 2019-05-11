@@ -1,24 +1,23 @@
 package org.sadtech.bot.autoresponder.domain.unit;
 
 import org.sadtech.bot.autoresponder.domain.usercode.ProcessingData;
+import org.sadtech.bot.autoresponder.saver.Savable;
 
 import java.util.Objects;
 
 public class AnswerHiddenSave extends AnswerSave {
 
-    private ProcessingData processingData;
+    private final ProcessingData processingData;
 
-    public AnswerHiddenSave() {
+    public AnswerHiddenSave(String key, Savable savable, ProcessingData processingData) {
+        super(key, savable);
+        this.processingData = processingData;
         typeUnit = TypeUnit.HIDDEN_SAVE;
         unitActiveStatus = UnitActiveStatus.AFTER;
     }
 
     public ProcessingData getProcessingData() {
         return processingData;
-    }
-
-    public void setProcessingData(ProcessingData processingData) {
-        this.processingData = processingData;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package org.sadtech.bot.autoresponder.service.action;
 
-import org.apache.log4j.Logger;
 import org.sadtech.bot.autoresponder.domain.unit.AnswerTimer;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.domain.unit.TypeUnit;
@@ -8,6 +7,8 @@ import org.sadtech.bot.autoresponder.timer.TimerAction;
 import org.sadtech.bot.autoresponder.timer.TimerActionService;
 import org.sadtech.bot.autoresponder.timer.TimerActionTask;
 import org.sadtech.bot.core.domain.Content;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.Timer;
 
 public class AnswerTimerAction implements ActionUnit<AnswerTimer, Content> {
 
-    private static final Logger log = Logger.getLogger(AnswerTimerAction.class);
+    private static final Logger log = LoggerFactory.getLogger(AnswerTimerAction.class);
 
     private TimerActionService timerService;
     private Long verificationPeriodSec = 30L;

@@ -6,21 +6,12 @@ import java.util.Objects;
 
 public abstract class MainUnit extends Unit {
 
-    protected UnitActiveStatus unitActiveStatus = UnitActiveStatus.DEFAULT;
-
-    protected MainUnit(MainUnit... nextUnits) {
-        super(nextUnits);
-    }
-
-    public MainUnit() {
-        super();
-    }
+    UnitActiveStatus unitActiveStatus = UnitActiveStatus.DEFAULT;
+    TypeUnit typeUnit;
 
     public TypeUnit getTypeUnit() {
         return typeUnit;
     }
-
-    protected TypeUnit typeUnit;
 
     public UnitActiveStatus getUnitActiveStatus() {
         return unitActiveStatus;

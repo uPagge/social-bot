@@ -10,11 +10,13 @@ import java.util.Set;
 
 public class AnswerSave extends MainUnit {
 
-    private Savable savable;
-    private String key;
+    private final Savable savable;
+    private final String key;
     private Set<SaveStatus> saveStatuses = new HashSet<>();
 
-    public AnswerSave() {
+    public AnswerSave(String key, Savable savable) {
+        this.savable = savable;
+        this.key = key;
         typeUnit = TypeUnit.SAVE;
     }
 
@@ -22,16 +24,9 @@ public class AnswerSave extends MainUnit {
         return savable;
     }
 
-    public void setSavable(Savable savable) {
-        this.savable = savable;
-    }
 
     public String getKey() {
         return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 
     public Set<SaveStatus> getSaveStatuses() {

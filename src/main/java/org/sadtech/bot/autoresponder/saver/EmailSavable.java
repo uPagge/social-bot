@@ -1,7 +1,8 @@
 package org.sadtech.bot.autoresponder.saver;
 
-import org.apache.log4j.Logger;
 import org.sadtech.bot.autoresponder.exception.MailSendException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -10,7 +11,7 @@ import java.util.Map;
 
 public class EmailSavable extends LocalSavable {
 
-    private static final Logger log = Logger.getLogger(EmailSavable.class);
+    private static final Logger log = LoggerFactory.getLogger(EmailSavable.class);
 
     private final EmailConfig emailConfig;
 

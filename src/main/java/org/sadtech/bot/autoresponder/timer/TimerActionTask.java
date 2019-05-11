@@ -1,8 +1,9 @@
 package org.sadtech.bot.autoresponder.timer;
 
-import org.apache.log4j.Logger;
 import org.sadtech.bot.autoresponder.domain.unit.TypeUnit;
 import org.sadtech.bot.autoresponder.service.action.ActionUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.Map;
@@ -10,7 +11,7 @@ import java.util.TimerTask;
 
 public class TimerActionTask extends TimerTask {
 
-    private static final Logger log = Logger.getLogger(TimerActionTask.class);
+    private static final Logger log = LoggerFactory.getLogger(TimerActionTask.class);
 
     private final TimerActionService timerService;
     private final Map<TypeUnit, ActionUnit> actionUnitMap;

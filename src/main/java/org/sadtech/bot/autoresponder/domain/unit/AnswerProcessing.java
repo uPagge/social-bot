@@ -6,18 +6,15 @@ import java.util.Objects;
 
 public class AnswerProcessing extends MainUnit {
 
-    private ProcessingData processingData;
+    private final ProcessingData processingData;
 
-    public AnswerProcessing() {
+    public AnswerProcessing(ProcessingData processingData) {
+        this.processingData = processingData;
         typeUnit = TypeUnit.PROCESSING;
     }
 
     public ProcessingData getProcessingData() {
         return processingData;
-    }
-
-    public void setProcessingData(ProcessingData processingData) {
-        this.processingData = processingData;
     }
 
     @Override

@@ -1,17 +1,18 @@
 package org.sadtech.bot.autoresponder.service.action;
 
-import org.apache.log4j.Logger;
 import org.sadtech.autoresponder.service.UnitPointerService;
 import org.sadtech.bot.autoresponder.domain.unit.AnswerCheck;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.domain.unit.TypeUnit;
 import org.sadtech.bot.core.domain.Mail;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class AnswerCheckAction implements ActionUnit<AnswerCheck, Mail> {
 
-    private static final Logger log = Logger.getLogger(AnswerCheckAction.class);
+    private static final Logger log = LoggerFactory.getLogger(AnswerCheckAction.class);
 
     private final Map<TypeUnit, ActionUnit> actionUnitMap;
     private final UnitPointerService unitPointerService;

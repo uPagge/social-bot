@@ -8,6 +8,10 @@ public class EmailConfig {
     private String username;
     private String password;
 
+    private EmailConfig() {
+
+    }
+
     public Properties getProps() {
         return props;
     }

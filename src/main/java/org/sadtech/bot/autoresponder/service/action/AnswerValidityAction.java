@@ -6,6 +6,7 @@ import org.sadtech.bot.autoresponder.domain.unit.AnswerText;
 import org.sadtech.bot.autoresponder.domain.unit.AnswerValidity;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.domain.unit.TypeUnit;
+import org.sadtech.bot.core.domain.BoxAnswer;
 import org.sadtech.bot.core.domain.Mail;
 
 import java.util.Map;
@@ -41,7 +42,8 @@ public class AnswerValidityAction implements ActionUnit<AnswerValidity, Mail> {
                 return actionUnit(unit.getDataNull(), mail);
             } else {
                 unit.getTempSave().save(personId, save.getValue());
-                AnswerText answerText = AnswerText.builder().message(save.getKey()).nextUnit(unit).build();
+                AnswerText answerText = new AnswerText(BoxAnswer.builder().message(save.getKey()).build());
+                answerText.setNextUnit(unit);
                 return actionUnit(answerText, mail);
             }
         }

@@ -6,12 +6,14 @@ import java.util.Objects;
 
 public class AnswerCheck extends MainUnit {
 
-    private MainUnit unitTrue;
-    private MainUnit unitFalse;
-    private CheckData check;
+    private final MainUnit unitTrue;
+    private final MainUnit unitFalse;
+    private final CheckData check;
 
-    public AnswerCheck() {
-        super();
+    public AnswerCheck(MainUnit unitTrue, MainUnit unitFalse, CheckData check) {
+        this.unitTrue = unitTrue;
+        this.unitFalse = unitFalse;
+        this.check = check;
         typeUnit = TypeUnit.CHECK;
     }
 
@@ -19,24 +21,12 @@ public class AnswerCheck extends MainUnit {
         return unitTrue;
     }
 
-    public void setUnitTrue(MainUnit unitTrue) {
-        this.unitTrue = unitTrue;
-    }
-
     public MainUnit getUnitFalse() {
         return unitFalse;
     }
 
-    public void setUnitFalse(MainUnit unitFalse) {
-        this.unitFalse = unitFalse;
-    }
-
     public CheckData getCheck() {
         return check;
-    }
-
-    public void setCheck(CheckData check) {
-        this.check = check;
     }
 
     @Override
