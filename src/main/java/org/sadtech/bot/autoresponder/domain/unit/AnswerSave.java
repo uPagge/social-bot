@@ -42,9 +42,11 @@ public class AnswerSave extends MainUnit {
     }
 
     @Override
-    public void setNextUnit(Unit unit) {
-        super.setNextUnit(unit);
-        ((MainUnit) unit).setUnitActiveStatus(UnitActiveStatus.AFTER);
+    public void setNextUnit(Unit... units) {
+        super.setNextUnit(units);
+        for (Unit unit : units) {
+            ((MainUnit) unit).setUnitActiveStatus(UnitActiveStatus.AFTER);
+        }
     }
 
     @Override

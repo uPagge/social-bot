@@ -1,5 +1,6 @@
 package org.sadtech.bot.autoresponder;
 
+import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.domain.unit.UnitActiveStatus;
 import org.sadtech.bot.core.domain.Mail;
@@ -7,11 +8,12 @@ import org.sadtech.bot.core.sender.Sent;
 import org.sadtech.bot.core.service.EventService;
 
 import java.util.List;
+import java.util.Set;
 
 public class MailAutoresponder extends GeneralAutoresponder<Mail> {
 
-    public MailAutoresponder(Sent sent, EventService<Mail> eventService) {
-        super(sent, eventService);
+    public MailAutoresponder(Set<Unit> menuUnit, Sent sent, EventService<Mail> eventService) {
+        super(menuUnit, sent, eventService);
     }
 
     @Override
@@ -25,7 +27,9 @@ public class MailAutoresponder extends GeneralAutoresponder<Mail> {
                 }
                 activeUnitAfter(unitAnswer, mail);
             } else {
-                sent.send(mail.getPersonId(), "К сожалению, я еще не знаю что вам ответить");
+                if (defaultUnit != null) {
+                    actionUnitMap.get(defaultUnit.getTypeUnit()).action(defaultUnit, mail);
+                }
             }
         }
     }

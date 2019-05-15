@@ -21,11 +21,12 @@ public abstract class GeneralAutoresponder<T extends Content> implements Runnabl
     protected final Autoresponder autoresponder;
     protected final Sent sent;
     protected Map<TypeUnit, ActionUnit> actionUnitMap;
+    protected MainUnit defaultUnit;
 
-    protected GeneralAutoresponder(Sent sent, EventService<T> eventService) {
+    protected GeneralAutoresponder(Set<Unit> menuUnit, Sent sent, EventService<T> eventService) {
         this.eventService = eventService;
         this.sent = sent;
-        autoresponder = new Autoresponder(new UnitPointerServiceImpl());
+        autoresponder = new Autoresponder(new UnitPointerServiceImpl(), menuUnit);
         init(sent);
     }
 
@@ -40,15 +41,11 @@ public abstract class GeneralAutoresponder<T extends Content> implements Runnabl
         actionUnitMap.put(TypeUnit.HIDDEN_SAVE, new AnswerHiddenSaveAction());
     }
 
-    public void setMenuUnit(Set<Unit> menuUnit) {
-        this.autoresponder.setMenuUnits(menuUnit);
-    }
-
     private void checkNewMessages() {
         Long oldData = new Date().getTime() / 1000 - 1;
         Long newData;
         while (true) {
-            newData = new Date().getTime() / 1000 - 10;
+            newData = new Date().getTime() / 1000 - 1;
             if (oldData < newData) {
                 List<T> mailList = eventService.getFirstEventByTime(Integer.parseInt(oldData.toString()), Integer.parseInt(newData.toString()));
                 if (mailList.size() > 0) {
@@ -78,6 +75,10 @@ public abstract class GeneralAutoresponder<T extends Content> implements Runnabl
 
     protected void addActionUnit(TypeUnit typeUnit, ActionUnit actionUnit) {
         actionUnitMap.put(typeUnit, actionUnit);
+    }
+
+    public void setDefaultUnit(MainUnit defaultUnit) {
+        this.defaultUnit = defaultUnit;
     }
 
     @Override
