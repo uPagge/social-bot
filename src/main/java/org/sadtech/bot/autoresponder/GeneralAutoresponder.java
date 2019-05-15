@@ -48,7 +48,7 @@ public abstract class GeneralAutoresponder<T extends Content> implements Runnabl
         Long oldData = new Date().getTime() / 1000 - 1;
         Long newData;
         while (true) {
-            newData = new Date().getTime() / 1000 - 1;
+            newData = new Date().getTime() / 1000 - 10;
             if (oldData < newData) {
                 List<T> mailList = eventService.getFirstEventByTime(Integer.parseInt(oldData.toString()), Integer.parseInt(newData.toString()));
                 if (mailList.size() > 0) {
