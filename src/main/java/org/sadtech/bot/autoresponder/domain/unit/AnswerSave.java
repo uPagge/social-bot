@@ -4,6 +4,7 @@ import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.bot.autoresponder.saver.Savable;
 import org.sadtech.bot.autoresponder.saver.SaveStatus;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -37,8 +38,8 @@ public class AnswerSave extends MainUnit {
         this.saveStatuses = saveStatuses;
     }
 
-    public void setSaveStatus(SaveStatus saveStatus) {
-        this.saveStatuses.add(saveStatus);
+    public void setSaveStatus(SaveStatus... saveStatus) {
+        this.saveStatuses.addAll(Arrays.asList(saveStatus));
     }
 
     @Override
