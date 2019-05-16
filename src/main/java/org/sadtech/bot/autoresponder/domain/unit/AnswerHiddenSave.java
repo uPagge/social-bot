@@ -13,7 +13,7 @@ public class AnswerHiddenSave extends AnswerSave {
         super(key, savable);
         this.processingData = processingData;
         typeUnit = TypeUnit.HIDDEN_SAVE;
-        unitActiveStatus = UnitActiveStatus.AFTER;
+        activeStatus = UnitActiveStatus.AFTER;
     }
 
     public ProcessingData getProcessingData() {

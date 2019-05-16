@@ -10,7 +10,7 @@ public class AnswerTimer extends MainUnit {
 
     public AnswerTimer(MainUnit unitAnswer) {
         this.unitAnswer = unitAnswer;
-        unitActiveStatus = UnitActiveStatus.AFTER;
+        activeStatus = UnitActiveStatus.AFTER;
         typeUnit = TypeUnit.TIMER;
     }
 

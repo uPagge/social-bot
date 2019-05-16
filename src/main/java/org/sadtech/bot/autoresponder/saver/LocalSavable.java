@@ -9,13 +9,13 @@ public abstract class LocalSavable implements Savable {
     String nameForm;
 
     @Override
-    public void init(Integer userId) {
-        map.put(userId, new HashMap<>());
+    public void init(Integer personId) {
+        map.put(personId, new HashMap<>());
     }
 
     @Override
-    public void save(Integer userId, String key, String value) {
-        map.get(userId).put(key, value);
+    public void save(Integer personId, String key, String value) {
+        map.get(personId).put(key, value);
     }
 
     public String getNameForm() {

@@ -46,7 +46,7 @@ public class AnswerSave extends MainUnit {
     public void setNextUnit(Unit... units) {
         super.setNextUnit(units);
         for (Unit unit : units) {
-            ((MainUnit) unit).setUnitActiveStatus(UnitActiveStatus.AFTER);
+            ((MainUnit) unit).setActiveStatus(UnitActiveStatus.AFTER);
         }
     }
 

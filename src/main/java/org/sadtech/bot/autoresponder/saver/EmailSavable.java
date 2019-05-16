@@ -20,7 +20,7 @@ public class EmailSavable extends LocalSavable {
     }
 
     @Override
-    public void push(Integer userId) {
+    public void push(Integer personId) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<table cellspacing=\"0\" cellpadding=\"0\" width=\"600\" bgcolor=\"#FFFFFF\">\n" +
                 " <tbody>\n" +
@@ -45,7 +45,7 @@ public class EmailSavable extends LocalSavable {
                         " <div style=\"line-height:160%;\">\n" +
                         " <table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n" +
                         " <tbody>");
-        for (Map.Entry<String, String> entry : map.get(userId).entrySet()) {
+        for (Map.Entry<String, String> entry : map.get(personId).entrySet()) {
             stringBuilder.append("<tr>\n" +
                     " <td valign=\"top\" style=\"padding-right:10px;color:#808080\">")
                     .append(entry.getKey())

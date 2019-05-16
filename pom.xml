@@ -54,6 +54,21 @@
             <version>${mail.ver}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-speech</artifactId>
+            <version>1.3.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-io -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+
+
+
     </dependencies>
 
     <developers>
