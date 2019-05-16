@@ -1,6 +1,6 @@
 package org.sadtech.bot.autoresponder.saver;
 
-import org.sadtech.bot.autoresponder.exception.MailSendException;
+import org.sadtech.bot.core.exception.MailSendException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -14,7 +14,13 @@ import org.sadtech.bot.core.filter.Filter;
 import org.sadtech.bot.core.sender.Sent;
 import org.sadtech.bot.core.service.EventService;
 
-import java.util.*;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class GeneralAutoresponder<T extends Content> implements Runnable {
 
@@ -48,23 +54,19 @@ public abstract class GeneralAutoresponder<T extends Content> implements Runnabl
     }
 
     private void checkNewMessages() {
-        Long oldData = new Date().getTime() / 1000 - 1;
-        Long newData;
+        LocalDateTime oldData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).minusSeconds(3);
+        LocalDateTime newData;
         while (true) {
-            newData = new Date().getTime() / 1000 - 1;
-            if (oldData < newData) {
-                List<T> events = eventService.getFirstEventByTime(Integer.parseInt(oldData.toString()), Integer.parseInt(newData.toString()));
-                if (events.size() > 0) {
-                    for (Filter filter : filters) {
-                        events.parallelStream().forEach(event -> filter.doFilter(event));
-                    }
-                    events.parallelStream().forEach(event -> {
-                        MainUnit processing = processing(event);
-                        activeUnitAfter(processing, event);
-                    });
-                }
+            newData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).minusSeconds(1);
+            if (oldData.isBefore(newData)) {
+                List<T> events = eventService.getFirstEventByTime(oldData, newData);
+                events.parallelStream().forEach(event -> {
+                    filters.forEach(filter -> filter.doFilter(event));
+                    MainUnit processing = processing(event);
+                    activeUnitAfter(processing, event);
+                });
             }
-            oldData = new Long(newData.toString());
+            oldData = newData;
         }
     }
 
