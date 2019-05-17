@@ -1,15 +1,11 @@
 package org.sadtech.bot.autoresponder.saver;
 
-import org.sadtech.bot.core.sender.Sent;
-
 public class UserSanderSavable extends LocalSavable {
 
-    private final Sent sent;
     private final Integer personId;
 
-    public UserSanderSavable(Sent sent, Integer personId) {
+    public UserSanderSavable(Integer personId) {
         this.personId = personId;
-        this.sent = sent;
     }
 
     @Override

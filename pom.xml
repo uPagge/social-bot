@@ -26,7 +26,6 @@
         <autoresponder.ver>1.5.1-SNAPSHOT</autoresponder.ver>
 
         <junit.ver>4.12</junit.ver>
-        <mail.ver>1.4</mail.ver>
     </properties>
 
     <dependencies>
@@ -46,12 +45,6 @@
             <groupId>org.sadtech.autoresponder</groupId>
             <artifactId>autoresponder</artifactId>
             <version>${autoresponder.ver}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>${mail.ver}</version>
         </dependency>
 
         <dependency>

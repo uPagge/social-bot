@@ -54,7 +54,7 @@ public abstract class GeneralAutoresponder<T extends Content> implements Runnabl
     }
 
     private void checkNewMessages() {
-        LocalDateTime oldData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).minusSeconds(3);
+        LocalDateTime oldData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()));
         LocalDateTime newData;
         while (true) {
             newData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).minusSeconds(1);
