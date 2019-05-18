@@ -13,7 +13,7 @@ public class AnswerValidity extends MainUnit {
     private TestInsert testInsert;
 
     public AnswerValidity() {
-        typeUnit = TypeUnit.YES_OR_NO;
+        typeUnit = TypeUnit.VALIDITY;
     }
 
     public MainUnit getYes() {

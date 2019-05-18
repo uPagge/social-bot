@@ -1,7 +1,9 @@
 package org.sadtech.bot.autoresponder.saver;
 
-import org.apache.log4j.Logger;
-import org.sadtech.bot.autoresponder.exception.MailSendException;
+import org.sadtech.bot.core.exception.MailSendException;
+import org.sadtech.bot.core.sender.email.EmailConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -10,7 +12,7 @@ import java.util.Map;
 
 public class EmailSavable extends LocalSavable {
 
-    private static final Logger log = Logger.getLogger(EmailSavable.class);
+    private static final Logger log = LoggerFactory.getLogger(EmailSavable.class);
 
     private final EmailConfig emailConfig;
 
@@ -19,7 +21,7 @@ public class EmailSavable extends LocalSavable {
     }
 
     @Override
-    public void push(Integer userId) {
+    public void push(Integer personId) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<table cellspacing=\"0\" cellpadding=\"0\" width=\"600\" bgcolor=\"#FFFFFF\">\n" +
                 " <tbody>\n" +
@@ -44,7 +46,7 @@ public class EmailSavable extends LocalSavable {
                         " <div style=\"line-height:160%;\">\n" +
                         " <table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n" +
                         " <tbody>");
-        for (Map.Entry<String, String> entry : map.get(userId).entrySet()) {
+        for (Map.Entry<String, String> entry : map.get(personId).entrySet()) {
             stringBuilder.append("<tr>\n" +
                     " <td valign=\"top\" style=\"padding-right:10px;color:#808080\">")
                     .append(entry.getKey())

@@ -1,16 +1,19 @@
 package org.sadtech.bot.autoresponder.domain.unit;
 
 import org.sadtech.bot.autoresponder.domain.usercode.ProcessingData;
+import org.sadtech.bot.autoresponder.saver.Savable;
 
 import java.util.Objects;
 
-public class AnswerProcessing extends MainUnit {
+public class AnswerHiddenSave extends AnswerSave {
 
     private final ProcessingData processingData;
 
-    public AnswerProcessing(ProcessingData processingData) {
+    public AnswerHiddenSave(String key, Savable savable, ProcessingData processingData) {
+        super(key, savable);
         this.processingData = processingData;
-        typeUnit = TypeUnit.PROCESSING;
+        typeUnit = TypeUnit.HIDDEN_SAVE;
+        activeStatus = UnitActiveStatus.AFTER;
     }
 
     public ProcessingData getProcessingData() {
@@ -20,9 +23,9 @@ public class AnswerProcessing extends MainUnit {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof AnswerHiddenSave)) return false;
         if (!super.equals(o)) return false;
-        AnswerProcessing that = (AnswerProcessing) o;
+        AnswerHiddenSave that = (AnswerHiddenSave) o;
         return Objects.equals(processingData, that.processingData);
     }
 

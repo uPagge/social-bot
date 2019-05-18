@@ -1,21 +1,24 @@
 package org.sadtech.bot.autoresponder.saver;
 
+import org.sadtech.bot.core.sender.Sent;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class LocalSavable implements Savable {
 
-    final Map<Integer, Map<String, String>> map = new HashMap<>();
-    String nameForm;
+    protected final Map<Integer, Map<String, String>> map = new HashMap<>();
+    protected String nameForm;
+    protected Sent sent;
 
     @Override
-    public void init(Integer userId) {
-        map.put(userId, new HashMap<>());
+    public void init(Integer personId) {
+        map.put(personId, new HashMap<>());
     }
 
     @Override
-    public void save(Integer userId, String key, String value) {
-        map.get(userId).put(key, value);
+    public void save(Integer personId, String key, String value) {
+        map.get(personId).put(key, value);
     }
 
     public String getNameForm() {
@@ -24,5 +27,13 @@ public abstract class LocalSavable implements Savable {
 
     public void setNameForm(String nameForm) {
         this.nameForm = nameForm;
+    }
+
+    public Sent getSent() {
+        return sent;
+    }
+
+    public void setSent(Sent sent) {
+        this.sent = sent;
     }
 }

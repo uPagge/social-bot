@@ -4,17 +4,20 @@ import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.bot.autoresponder.saver.Savable;
 import org.sadtech.bot.autoresponder.saver.SaveStatus;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 public class AnswerSave extends MainUnit {
 
-    private Savable savable;
-    private String key;
+    private final Savable savable;
+    private final String key;
     private Set<SaveStatus> saveStatuses = new HashSet<>();
 
-    public AnswerSave() {
+    public AnswerSave(String key, Savable savable) {
+        this.savable = savable;
+        this.key = key;
         typeUnit = TypeUnit.SAVE;
     }
 
@@ -22,16 +25,9 @@ public class AnswerSave extends MainUnit {
         return savable;
     }
 
-    public void setSavable(Savable savable) {
-        this.savable = savable;
-    }
 
     public String getKey() {
         return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 
     public Set<SaveStatus> getSaveStatuses() {
@@ -42,14 +38,16 @@ public class AnswerSave extends MainUnit {
         this.saveStatuses = saveStatuses;
     }
 
-    public void setSaveStatus(SaveStatus saveStatus) {
-        this.saveStatuses.add(saveStatus);
+    public void setSaveStatus(SaveStatus... saveStatus) {
+        this.saveStatuses.addAll(Arrays.asList(saveStatus));
     }
 
     @Override
-    public void setNextUnit(Unit unit) {
-        super.setNextUnit(unit);
-        ((MainUnit) unit).setUnitActiveStatus(UnitActiveStatus.AFTER);
+    public void setNextUnit(Unit... units) {
+        super.setNextUnit(units);
+        for (Unit unit : units) {
+            ((MainUnit) unit).setActiveStatus(UnitActiveStatus.AFTER);
+        }
     }
 
     @Override

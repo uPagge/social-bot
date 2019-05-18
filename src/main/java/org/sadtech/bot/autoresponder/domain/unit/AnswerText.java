@@ -7,16 +7,12 @@ import java.util.Objects;
 
 public class AnswerText extends MainUnit {
 
-    private BoxAnswer boxAnswer = new BoxAnswer();
+    private final BoxAnswer boxAnswer;
     private Insert insert;
 
-    public AnswerText() {
-        super();
+    public AnswerText(BoxAnswer boxAnswer) {
+        this.boxAnswer = boxAnswer;
         typeUnit = TypeUnit.TEXT;
-    }
-
-    public AnswerText(MainUnit... mainUnit) {
-        super(mainUnit);
     }
 
     public BoxAnswer getBoxAnswer() {
@@ -31,31 +27,6 @@ public class AnswerText extends MainUnit {
         this.insert = insert;
     }
 
-    public static Builder builder() {
-        return new AnswerText().new Builder();
-    }
-
-    public class Builder extends MainUnit {
-
-        private Builder() {
-
-        }
-
-        public Builder message(String message) {
-            AnswerText.this.getBoxAnswer().setMessage(message);
-            return this;
-        }
-
-        public Builder nextUnit(MainUnit mainUnit) {
-            AnswerText.this.setNextUnit(mainUnit);
-            return this;
-        }
-
-        public AnswerText build() {
-            return AnswerText.this;
-        }
-
-    }
 
     @Override
     public boolean equals(Object o) {

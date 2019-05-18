@@ -6,28 +6,19 @@ import java.util.Objects;
 
 public abstract class MainUnit extends Unit {
 
-    protected UnitActiveStatus unitActiveStatus = UnitActiveStatus.DEFAULT;
-
-    protected MainUnit(MainUnit... nextUnits) {
-        super(nextUnits);
-    }
-
-    public MainUnit() {
-        super();
-    }
+    UnitActiveStatus activeStatus = UnitActiveStatus.DEFAULT;
+    TypeUnit typeUnit;
 
     public TypeUnit getTypeUnit() {
         return typeUnit;
     }
 
-    protected TypeUnit typeUnit;
-
-    public UnitActiveStatus getUnitActiveStatus() {
-        return unitActiveStatus;
+    public UnitActiveStatus getActiveStatus() {
+        return activeStatus;
     }
 
-    public void setUnitActiveStatus(UnitActiveStatus unitActiveStatus) {
-        this.unitActiveStatus = unitActiveStatus;
+    public void setActiveStatus(UnitActiveStatus activeStatus) {
+        this.activeStatus = activeStatus;
     }
 
 
@@ -37,12 +28,12 @@ public abstract class MainUnit extends Unit {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         MainUnit mainUnit = (MainUnit) o;
-        return unitActiveStatus == mainUnit.unitActiveStatus &&
+        return activeStatus == mainUnit.activeStatus &&
                 typeUnit == mainUnit.typeUnit;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), unitActiveStatus, typeUnit);
+        return Objects.hash(super.hashCode(), activeStatus, typeUnit);
     }
 }

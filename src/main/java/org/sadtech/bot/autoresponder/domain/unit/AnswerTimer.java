@@ -4,21 +4,18 @@ import java.util.Objects;
 
 public class AnswerTimer extends MainUnit {
 
-    private MainUnit unitAnswer;
+    private final MainUnit unitAnswer;
     private Long timeDelaySec;
     private Integer idUser;
 
-    public AnswerTimer() {
-        unitActiveStatus = UnitActiveStatus.AFTER;
+    public AnswerTimer(MainUnit unitAnswer) {
+        this.unitAnswer = unitAnswer;
+        activeStatus = UnitActiveStatus.AFTER;
         typeUnit = TypeUnit.TIMER;
     }
 
     public MainUnit getUnitAnswer() {
         return unitAnswer;
-    }
-
-    public void setUnitAnswer(MainUnit unitAnswer) {
-        this.unitAnswer = unitAnswer;
     }
 
     public Long getTimeDelaySec() {
