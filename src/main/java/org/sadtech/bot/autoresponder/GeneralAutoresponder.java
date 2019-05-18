@@ -1,5 +1,6 @@
 package org.sadtech.bot.autoresponder;
 
+import org.omg.CORBA.MARSHAL;
 import org.sadtech.autoresponder.Autoresponder;
 import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.autoresponder.service.UnitPointerServiceImpl;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class GeneralAutoresponder<T extends Content> implements Runnable {
+public class GeneralAutoresponder<T extends Content> implements Runnable {
 
     private final EventService<T> eventService;
     protected final Autoresponder autoresponder;
@@ -43,12 +44,12 @@ public abstract class GeneralAutoresponder<T extends Content> implements Runnabl
 
     private void init(Sent sent) {
         actionUnitMap = new EnumMap<>(TypeUnit.class);
-        actionUnitMap.put(TypeUnit.CHECK, new AnswerCheckAction(actionUnitMap, autoresponder.getUnitPointerService()));
+        actionUnitMap.put(TypeUnit.CHECK, new AnswerCheckAction());
         actionUnitMap.put(TypeUnit.PROCESSING, new AnswerProcessingAction(sent));
         actionUnitMap.put(TypeUnit.SAVE, new AnswerSaveAction());
         actionUnitMap.put(TypeUnit.TEXT, new AnswerTextAction(sent));
         actionUnitMap.put(TypeUnit.TIMER, new AnswerTimerAction(new TimerActionServiceImpl(new TimerActionRepositoryList()), actionUnitMap));
-        actionUnitMap.put(TypeUnit.VALIDITY, new AnswerValidityAction(actionUnitMap, autoresponder.getUnitPointerService()));
+        actionUnitMap.put(TypeUnit.VALIDITY, new AnswerValidityAction());
         actionUnitMap.put(TypeUnit.HIDDEN_SAVE, new AnswerHiddenSaveAction());
         actionUnitMap.put(TypeUnit.NEXT, new AnswerNextAction(autoresponder, actionUnitMap, autoresponder.getUnitPointerService()));
     }
@@ -62,15 +63,19 @@ public abstract class GeneralAutoresponder<T extends Content> implements Runnabl
                 List<T> events = eventService.getFirstEventByTime(oldData, newData);
                 events.parallelStream().forEach(event -> {
                     filters.forEach(filter -> filter.doFilter(event));
-                    MainUnit mainUnit = processing(event);
-                    activeUnitAfter(mainUnit, event);
+                    MainUnit unitAnswer = (MainUnit) autoresponder.answer(event.getPersonId(), event.getMessage());
+                    MainUnit newUnitAnswer = actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, event);
+                    while (!newUnitAnswer.equals(unitAnswer)) {
+                        unitAnswer = newUnitAnswer;
+                        newUnitAnswer = actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, event);
+                    }
+                    autoresponder.getUnitPointerService().edit(event.getPersonId(), unitAnswer);
+                    activeUnitAfter(unitAnswer, event);
                 });
             }
             oldData = newData;
         }
     }
-
-    public abstract MainUnit processing(T event);
 
     protected void activeUnitAfter(MainUnit mainUnit, T content) {
         if (mainUnit.getNextUnits() != null) {

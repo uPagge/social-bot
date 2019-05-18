@@ -16,15 +16,8 @@ import java.util.stream.Stream;
 
 public class AnswerValidityAction implements ActionUnit<AnswerValidity, Mail> {
 
-    private final Map<TypeUnit, ActionUnit> actionUnitMap;
-    private final UnitPointerService unitPointerService;
     public static final Set<String> WORDS_YES = Stream.of("да", "WORDS_YES", "ага").collect(Collectors.toSet());
     public static final Set<String> WORDS_NO = Stream.of("нет", "WORDS_NO", "неа").collect(Collectors.toSet());
-
-    public AnswerValidityAction(Map<TypeUnit, ActionUnit> actionUnitMap, UnitPointerService unitPointerService) {
-        this.actionUnitMap = actionUnitMap;
-        this.unitPointerService = unitPointerService;
-    }
 
     @Override
     public MainUnit action(AnswerValidity unit, Mail mail) {
@@ -32,19 +25,21 @@ public class AnswerValidityAction implements ActionUnit<AnswerValidity, Mail> {
         Integer personId = mail.getPersonId();
         if (WORDS_YES.contains(message.toLowerCase())) {
             String save = unit.getTempSave().load(personId);
-            return actionUnit(unit.getYes(), getNewMail(mail, save));
+            getNewMail(mail, save);
+            return unit.getYes();
         } else if (WORDS_NO.contains(message.toLowerCase())) {
             String save = unit.getTempSave().load(personId);
-            return actionUnit(unit.getNo(), getNewMail(mail, save));
+            getNewMail(mail, save);
+            return unit.getNo();
         } else {
             Pair<String, String> save = unit.getTestInsert().insert(personId, message);
             if (save.getValue() == null) {
-                return actionUnit(unit.getDataNull(), mail);
+                return unit.getDataNull();
             } else {
                 unit.getTempSave().save(personId, save.getValue());
                 AnswerText answerText = new AnswerText(BoxAnswer.builder().message(save.getKey()).build());
                 answerText.setNextUnit(unit);
-                return actionUnit(answerText, mail);
+                return answerText;
             }
         }
     }
@@ -55,9 +50,4 @@ public class AnswerValidityAction implements ActionUnit<AnswerValidity, Mail> {
         return newMail;
     }
 
-    private MainUnit actionUnit(MainUnit mainUnit, Mail mail) {
-        actionUnitMap.get(mainUnit.getTypeUnit()).action(mainUnit, mail);
-        unitPointerService.getByEntityId(mail.getPersonId()).setUnit(mainUnit);
-        return mainUnit;
-    }
 }
