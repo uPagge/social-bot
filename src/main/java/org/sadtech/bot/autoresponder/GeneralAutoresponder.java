@@ -62,8 +62,8 @@ public abstract class GeneralAutoresponder<T extends Content> implements Runnabl
                 List<T> events = eventService.getFirstEventByTime(oldData, newData);
                 events.parallelStream().forEach(event -> {
                     filters.forEach(filter -> filter.doFilter(event));
-                    MainUnit processing = processing(event);
-                    activeUnitAfter(processing, event);
+                    MainUnit mainUnit = processing(event);
+                    activeUnitAfter(mainUnit, event);
                 });
             }
             oldData = newData;
