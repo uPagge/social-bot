@@ -1,5 +1,7 @@
 package org.sadtech.bot.autoresponder.saver;
 
+import javafx.util.Pair;
+
 public class UserSanderSavable extends LocalSavable {
 
     private final Integer personId;
@@ -12,11 +14,11 @@ public class UserSanderSavable extends LocalSavable {
     public void push(Integer personId) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("========= ").append(nameForm).append(" =========\n");
-        for (String s : map.get(personId).keySet()) {
-            stringBuilder.append(s).append(": ").append(map.get(personId).get(s)).append("\n");
+        for (Pair pair : saveMap.get(personId)) {
+            stringBuilder.append(pair.getKey()).append(": ").append(pair.getValue()).append("\n");
         }
         stringBuilder.append("====================");
-        map.remove(personId);
+        saveMap.remove(personId);
         sent.send(this.personId, stringBuilder.toString());
     }
 

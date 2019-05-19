@@ -1,10 +1,10 @@
 package org.sadtech.bot.autoresponder.saver;
 
-public interface Savable {
+public interface Savable<S> {
 
     void init(Integer personId);
 
-    void save(Integer personId, String key, String value);
+    void save(Integer personId, S save);
 
     void push(Integer personId);
 

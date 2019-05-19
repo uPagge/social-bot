@@ -1,5 +1,6 @@
 package org.sadtech.bot.autoresponder.saver;
 
+import javafx.util.Pair;
 import org.sadtech.bot.core.exception.MailSendException;
 import org.sadtech.bot.core.sender.email.EmailConfig;
 import org.slf4j.Logger;
@@ -8,9 +9,8 @@ import org.slf4j.LoggerFactory;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.Map;
 
-public class EmailSavable extends LocalSavable {
+public class EmailSavable extends LocalSavable<Pair<String, String>> {
 
     private static final Logger log = LoggerFactory.getLogger(EmailSavable.class);
 
@@ -46,14 +46,14 @@ public class EmailSavable extends LocalSavable {
                         " <div style=\"line-height:160%;\">\n" +
                         " <table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n" +
                         " <tbody>");
-        for (Map.Entry<String, String> entry : map.get(personId).entrySet()) {
+        for (Pair<String, String> pair : saveMap.get(personId)) {
             stringBuilder.append("<tr>\n" +
                     " <td valign=\"top\" style=\"padding-right:10px;color:#808080\">")
-                    .append(entry.getKey())
+                    .append(pair.getKey())
                     .append(":\n" +
                             " </td>\n" +
                             " <td style=\"padding-bottom:6px\">")
-                    .append(entry.getValue())
+                    .append(pair.getValue())
                     .append("</td></tr>");
         }
         stringBuilder.append("</tbody>\n" +

@@ -6,7 +6,7 @@
 
     <groupId>org.sadtech.bot</groupId>
     <artifactId>bot-autoresponder</artifactId>
-    <version>0.6.0-RELEASE</version>
+    <version>0.6.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <build>
         <plugins>
@@ -22,8 +22,8 @@
     </build>
 
     <properties>
-        <bot.core.ver>0.6.0-RELEASE</bot.core.ver>
-        <autoresponder.ver>1.6.0-RELEASE</autoresponder.ver>
+        <bot.core.ver>0.6.1-SNAPSHOT</bot.core.ver>
+        <autoresponder.ver>1.6.1-SNAPSHOT</autoresponder.ver>
 
         <junit.ver>4.12</junit.ver>
     </properties>

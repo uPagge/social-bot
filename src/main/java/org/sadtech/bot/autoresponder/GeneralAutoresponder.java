@@ -1,6 +1,5 @@
 package org.sadtech.bot.autoresponder;
 
-import org.omg.CORBA.MARSHAL;
 import org.sadtech.autoresponder.Autoresponder;
 import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.autoresponder.service.UnitPointerServiceImpl;
@@ -22,6 +21,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class GeneralAutoresponder<T extends Content> implements Runnable {
 
@@ -51,7 +51,7 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
         actionUnitMap.put(TypeUnit.TIMER, new AnswerTimerAction(new TimerActionServiceImpl(new TimerActionRepositoryList()), actionUnitMap));
         actionUnitMap.put(TypeUnit.VALIDITY, new AnswerValidityAction());
         actionUnitMap.put(TypeUnit.HIDDEN_SAVE, new AnswerHiddenSaveAction());
-        actionUnitMap.put(TypeUnit.NEXT, new AnswerNextAction(autoresponder, actionUnitMap, autoresponder.getUnitPointerService()));
+        actionUnitMap.put(TypeUnit.NEXT, new AnswerNextAction(autoresponder));
     }
 
     private void checkNewMessages() {
@@ -60,21 +60,25 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
         while (true) {
             newData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).minusSeconds(1);
             if (oldData.isBefore(newData)) {
-                List<T> events = eventService.getFirstEventByTime(oldData, newData);
-                events.parallelStream().forEach(event -> {
-                    filters.forEach(filter -> filter.doFilter(event));
-                    MainUnit unitAnswer = (MainUnit) autoresponder.answer(event.getPersonId(), event.getMessage());
-                    MainUnit newUnitAnswer = actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, event);
-                    while (!newUnitAnswer.equals(unitAnswer)) {
-                        unitAnswer = newUnitAnswer;
-                        newUnitAnswer = actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, event);
-                    }
-                    autoresponder.getUnitPointerService().edit(event.getPersonId(), unitAnswer);
-                    activeUnitAfter(unitAnswer, event);
-                });
+                eventService.getFirstEventByTime(oldData, newData)
+                        .parallelStream().forEach(processing());
             }
             oldData = newData;
         }
+    }
+
+    private Consumer<T> processing() {
+        return event -> {
+            filters.forEach(filter -> filter.doFilter(event));
+            MainUnit unitAnswer = (MainUnit) autoresponder.answer(event.getPersonId(), event.getMessage());
+            MainUnit newUnitAnswer = getAction(event, unitAnswer);
+            while (!newUnitAnswer.equals(unitAnswer)) {
+                unitAnswer = newUnitAnswer;
+                newUnitAnswer = getAction(event, unitAnswer);
+            }
+            autoresponder.getUnitPointerService().edit(event.getPersonId(), unitAnswer);
+            activeUnitAfter(unitAnswer, event);
+        };
     }
 
     protected void activeUnitAfter(MainUnit mainUnit, T content) {
@@ -84,12 +88,16 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
                     .map(unit -> (MainUnit) unit)
                     .forEach(nextUnit -> {
                         if (UnitActiveStatus.AFTER.equals(nextUnit.getActiveStatus())) {
-                            actionUnitMap.get(nextUnit.getTypeUnit()).action(nextUnit, content);
+                            getAction(content, nextUnit);
                             autoresponder.getUnitPointerService().getByEntityId(content.getPersonId()).setUnit(nextUnit);
                             activeUnitAfter(nextUnit, content);
                         }
                     });
         }
+    }
+
+    private MainUnit getAction(T event, MainUnit unitAnswer) {
+        return actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, event);
     }
 
     protected void addActionUnit(TypeUnit typeUnit, ActionUnit actionUnit) {

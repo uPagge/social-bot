@@ -2,23 +2,25 @@ package org.sadtech.bot.autoresponder.saver;
 
 import org.sadtech.bot.core.sender.Sent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public abstract class LocalSavable implements Savable {
+public abstract class LocalSavable<S> implements Savable<S> {
 
-    protected final Map<Integer, Map<String, String>> map = new HashMap<>();
+    protected final Map<Integer, List<S>> saveMap = new HashMap<>();
     protected String nameForm;
     protected Sent sent;
 
     @Override
     public void init(Integer personId) {
-        map.put(personId, new HashMap<>());
+        saveMap.put(personId, new ArrayList<>());
     }
 
     @Override
-    public void save(Integer personId, String key, String value) {
-        map.get(personId).put(key, value);
+    public void save(Integer personId, S save) {
+        saveMap.get(personId).add(save);
     }
 
     public String getNameForm() {

@@ -1,6 +1,7 @@
 package org.sadtech.bot.autoresponder.domain.unit;
 
 import org.sadtech.autoresponder.entity.Unit;
+import org.sadtech.bot.autoresponder.domain.usercode.SaveData;
 import org.sadtech.bot.autoresponder.saver.Savable;
 import org.sadtech.bot.autoresponder.saver.SaveStatus;
 
@@ -14,6 +15,7 @@ public class AnswerSave extends MainUnit {
     private final Savable savable;
     private final String key;
     private Set<SaveStatus> saveStatuses = new HashSet<>();
+    private SaveData saveData;
 
     public AnswerSave(String key, Savable savable) {
         this.savable = savable;
@@ -40,6 +42,14 @@ public class AnswerSave extends MainUnit {
 
     public void setSaveStatus(SaveStatus... saveStatus) {
         this.saveStatuses.addAll(Arrays.asList(saveStatus));
+    }
+
+    public SaveData getSaveData() {
+        return saveData;
+    }
+
+    public void setSaveData(SaveData saveData) {
+        this.saveData = saveData;
     }
 
     @Override
