@@ -31,7 +31,7 @@ public class AnswerText extends MainUnit {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof AnswerText)) return false;
         if (!super.equals(o)) return false;
         AnswerText that = (AnswerText) o;
         return Objects.equals(boxAnswer, that.boxAnswer) &&

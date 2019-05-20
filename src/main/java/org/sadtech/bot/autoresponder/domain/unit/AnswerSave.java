@@ -13,23 +13,39 @@ import java.util.Set;
 public class AnswerSave extends MainUnit {
 
     private final Savable savable;
-    private final String key;
+    private String key;
     private Set<SaveStatus> saveStatuses = new HashSet<>();
     private SaveData saveData;
+    private final Boolean hidden;
 
-    public AnswerSave(String key, Savable savable) {
+
+    public AnswerSave(Savable savable, Boolean hidden) {
         this.savable = savable;
-        this.key = key;
         typeUnit = TypeUnit.SAVE;
+        this.hidden = hidden;
+        if (hidden) {
+            activeStatus = UnitActiveStatus.AFTER;
+        } else {
+            activeStatus = UnitActiveStatus.DEFAULT;
+        }
+    }
+
+    public AnswerSave(Savable savable) {
+        this.savable = savable;
+        typeUnit = TypeUnit.SAVE;
+        hidden = false;
     }
 
     public Savable getSavable() {
         return savable;
     }
 
-
     public String getKey() {
         return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public Set<SaveStatus> getSaveStatuses() {
@@ -52,6 +68,10 @@ public class AnswerSave extends MainUnit {
         this.saveData = saveData;
     }
 
+    public Boolean getHidden() {
+        return hidden;
+    }
+
     @Override
     public void setNextUnit(Unit... units) {
         super.setNextUnit(units);
@@ -63,16 +83,18 @@ public class AnswerSave extends MainUnit {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof AnswerSave)) return false;
         if (!super.equals(o)) return false;
         AnswerSave that = (AnswerSave) o;
         return Objects.equals(savable, that.savable) &&
                 Objects.equals(key, that.key) &&
-                Objects.equals(saveStatuses, that.saveStatuses);
+                Objects.equals(saveStatuses, that.saveStatuses) &&
+                Objects.equals(saveData, that.saveData) &&
+                Objects.equals(hidden, that.hidden);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), savable, key, saveStatuses);
+        return Objects.hash(super.hashCode(), savable, key, saveStatuses, saveData, hidden);
     }
 }

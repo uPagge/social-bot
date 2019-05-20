@@ -17,10 +17,7 @@ import org.sadtech.bot.core.service.EventService;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class GeneralAutoresponder<T extends Content> implements Runnable {
@@ -50,7 +47,6 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
         actionUnitMap.put(TypeUnit.TEXT, new AnswerTextAction(sent));
         actionUnitMap.put(TypeUnit.TIMER, new AnswerTimerAction(new TimerActionServiceImpl(new TimerActionRepositoryList()), this));
         actionUnitMap.put(TypeUnit.VALIDITY, new AnswerValidityAction());
-        actionUnitMap.put(TypeUnit.HIDDEN_SAVE, new AnswerHiddenSaveAction());
         actionUnitMap.put(TypeUnit.NEXT, new AnswerNextAction(autoresponder));
     }
 
@@ -81,23 +77,23 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
             unitAnswer = newUnitAnswer;
             newUnitAnswer = getAction(event, unitAnswer);
         }
-        activeUnitAfter(unitAnswer, event);
+        unitAnswer = activeUnitAfter(unitAnswer, event);
         autoresponder.getUnitPointerService().edit(event.getPersonId(), unitAnswer);
     }
 
-    protected void activeUnitAfter(MainUnit mainUnit, T content) {
+    protected MainUnit activeUnitAfter(MainUnit mainUnit, T content) {
         if (mainUnit.getNextUnits() != null) {
-            mainUnit.getNextUnits().stream()
+            Optional<MainUnit> first = mainUnit.getNextUnits().stream()
                     .filter(unit -> unit instanceof MainUnit)
                     .map(unit -> (MainUnit) unit)
-                    .forEach(nextUnit -> {
-                        if (UnitActiveStatus.AFTER.equals(nextUnit.getActiveStatus())) {
-                            getAction(content, nextUnit);
-                            autoresponder.getUnitPointerService().getByEntityId(content.getPersonId()).setUnit(nextUnit);
-                            activeUnitAfter(nextUnit, content);
-                        }
-                    });
+                    .filter(mainUnit1 -> UnitActiveStatus.AFTER.equals(mainUnit1.getActiveStatus()))
+                    .findFirst();
+            if (first.isPresent()) {
+                getAction(content, first.get());
+                return activeUnitAfter(first.get(), content);
+            }
         }
+        return mainUnit;
     }
 
     private MainUnit getAction(T event, MainUnit unitAnswer) {
