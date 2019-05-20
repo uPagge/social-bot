@@ -22,4 +22,5 @@ public class AnswerCheckAction implements ActionUnit<AnswerCheck, Mail> {
         }
         return unitAnswer;
     }
+
 }

@@ -48,7 +48,7 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
         actionUnitMap.put(TypeUnit.PROCESSING, new AnswerProcessingAction(sent));
         actionUnitMap.put(TypeUnit.SAVE, new AnswerSaveAction());
         actionUnitMap.put(TypeUnit.TEXT, new AnswerTextAction(sent));
-        actionUnitMap.put(TypeUnit.TIMER, new AnswerTimerAction(new TimerActionServiceImpl(new TimerActionRepositoryList()), actionUnitMap));
+        actionUnitMap.put(TypeUnit.TIMER, new AnswerTimerAction(new TimerActionServiceImpl(new TimerActionRepositoryList()), this));
         actionUnitMap.put(TypeUnit.VALIDITY, new AnswerValidityAction());
         actionUnitMap.put(TypeUnit.HIDDEN_SAVE, new AnswerHiddenSaveAction());
         actionUnitMap.put(TypeUnit.NEXT, new AnswerNextAction(autoresponder));
@@ -71,14 +71,18 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
         return event -> {
             filters.forEach(filter -> filter.doFilter(event));
             MainUnit unitAnswer = (MainUnit) autoresponder.answer(event.getPersonId(), event.getMessage());
-            MainUnit newUnitAnswer = getAction(event, unitAnswer);
-            while (!newUnitAnswer.equals(unitAnswer)) {
-                unitAnswer = newUnitAnswer;
-                newUnitAnswer = getAction(event, unitAnswer);
-            }
-            autoresponder.getUnitPointerService().edit(event.getPersonId(), unitAnswer);
-            activeUnitAfter(unitAnswer, event);
+            answer(event, unitAnswer);
         };
+    }
+
+    public void answer(T event, MainUnit unitAnswer) {
+        MainUnit newUnitAnswer = getAction(event, unitAnswer);
+        while (!newUnitAnswer.equals(unitAnswer)) {
+            unitAnswer = newUnitAnswer;
+            newUnitAnswer = getAction(event, unitAnswer);
+        }
+        activeUnitAfter(unitAnswer, event);
+        autoresponder.getUnitPointerService().edit(event.getPersonId(), unitAnswer);
     }
 
     protected void activeUnitAfter(MainUnit mainUnit, T content) {

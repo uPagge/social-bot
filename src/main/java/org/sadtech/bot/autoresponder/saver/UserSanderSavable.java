@@ -2,7 +2,7 @@ package org.sadtech.bot.autoresponder.saver;
 
 import javafx.util.Pair;
 
-public class UserSanderSavable extends LocalSavable {
+public class UserSanderSavable extends LocalSavable<Pair> {
 
     private final Integer personId;
 

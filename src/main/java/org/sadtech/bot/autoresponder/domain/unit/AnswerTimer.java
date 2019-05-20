@@ -6,7 +6,7 @@ public class AnswerTimer extends MainUnit {
 
     private final MainUnit unitAnswer;
     private Long timeDelaySec;
-    private Integer idUser;
+    private Integer personId;
 
     public AnswerTimer(MainUnit unitAnswer) {
         this.unitAnswer = unitAnswer;
@@ -26,12 +26,12 @@ public class AnswerTimer extends MainUnit {
         this.timeDelaySec = timeDelaySec;
     }
 
-    public Integer getIdUser() {
-        return idUser;
+    public Integer getPersonId() {
+        return personId;
     }
 
-    public void setIdUser(Integer idUser) {
-        this.idUser = idUser;
+    public void setPersonId(Integer personId) {
+        this.personId = personId;
     }
 
     @Override
@@ -42,11 +42,11 @@ public class AnswerTimer extends MainUnit {
         AnswerTimer that = (AnswerTimer) o;
         return Objects.equals(unitAnswer, that.unitAnswer) &&
                 Objects.equals(timeDelaySec, that.timeDelaySec) &&
-                Objects.equals(idUser, that.idUser);
+                Objects.equals(personId, that.personId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), unitAnswer, timeDelaySec, idUser);
+        return Objects.hash(super.hashCode(), unitAnswer, timeDelaySec, personId);
     }
 }

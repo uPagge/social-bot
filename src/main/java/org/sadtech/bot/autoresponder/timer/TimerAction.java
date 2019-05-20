@@ -2,11 +2,13 @@ package org.sadtech.bot.autoresponder.timer;
 
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 
+import java.time.LocalDateTime;
+
 public class TimerAction {
 
     private MainUnit unit;
-    private Integer idPerson;
-    private Long timeActive;
+    private Integer personId;
+    private LocalDateTime timeActive;
 
     public MainUnit getUnit() {
         return unit;
@@ -16,26 +18,26 @@ public class TimerAction {
         this.unit = unit;
     }
 
-    public Integer getIdPerson() {
-        return idPerson;
+    public Integer getPersonId() {
+        return personId;
     }
 
-    public void setIdPerson(Integer idPerson) {
-        this.idPerson = idPerson;
+    public void setPersonId(Integer personId) {
+        this.personId = personId;
     }
 
-    public Long getTimeActive() {
+    public LocalDateTime getTimeActive() {
         return timeActive;
     }
 
-    public void setTimeActive(Long timeActive) {
+    public void setTimeActive(LocalDateTime timeActive) {
         this.timeActive = timeActive;
     }
 
     @Override
     public String toString() {
         return "TimerAction{" +
-                "idPerson=" + idPerson +
+                "personId=" + personId +
                 ", timeActive=" + timeActive +
                 '}';
     }

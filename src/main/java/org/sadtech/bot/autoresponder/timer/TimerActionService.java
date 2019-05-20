@@ -1,10 +1,11 @@
 package org.sadtech.bot.autoresponder.timer;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TimerActionService {
 
-    List<TimerAction> getTimerActive(Long time);
+    List<TimerAction> getTimerActive(LocalDateTime time);
 
     void add(TimerAction timerAction);
 

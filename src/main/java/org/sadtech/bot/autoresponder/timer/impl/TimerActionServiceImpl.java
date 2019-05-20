@@ -4,6 +4,7 @@ import org.sadtech.bot.autoresponder.timer.TimerAction;
 import org.sadtech.bot.autoresponder.timer.TimerActionRepository;
 import org.sadtech.bot.autoresponder.timer.TimerActionService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +20,10 @@ public class TimerActionServiceImpl implements TimerActionService {
         return timerActionRepositoryList;
     }
 
-    public List<TimerAction> getTimerActive(Long time) {
+    public List<TimerAction> getTimerActive(LocalDateTime time) {
         List<TimerAction> timerActions = new ArrayList<>();
         for (TimerAction timerAction : timerActionRepositoryList.getTimerActionList()) {
-            if (timerAction.getTimeActive() <= time) {
+            if (timerAction.getTimeActive().isAfter(time)) {
                 timerActions.add(timerAction);
             }
         }
