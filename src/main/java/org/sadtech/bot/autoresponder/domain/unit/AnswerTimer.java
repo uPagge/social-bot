@@ -4,12 +4,11 @@ import java.util.Objects;
 
 public class AnswerTimer extends MainUnit {
 
-    private final MainUnit unitAnswer;
-    private Long timeDelaySec;
+    private MainUnit unitAnswer;
+    private Integer timeDelaySec;
     private Integer personId;
 
-    public AnswerTimer(MainUnit unitAnswer) {
-        this.unitAnswer = unitAnswer;
+    private AnswerTimer() {
         activeStatus = UnitActiveStatus.AFTER;
         typeUnit = TypeUnit.TIMER;
     }
@@ -18,21 +17,45 @@ public class AnswerTimer extends MainUnit {
         return unitAnswer;
     }
 
-    public Long getTimeDelaySec() {
+    public Integer getTimeDelaySec() {
         return timeDelaySec;
-    }
-
-    public void setTimeDelaySec(Long timeDelaySec) {
-        this.timeDelaySec = timeDelaySec;
     }
 
     public Integer getPersonId() {
         return personId;
     }
 
-    public void setPersonId(Integer personId) {
-        this.personId = personId;
+    public static Builder builder() {
+        return new AnswerTimer().new Builder();
     }
+
+    public class Builder {
+
+        private Builder() {
+
+        }
+
+        public Builder unitAnswer(MainUnit unitAnswer) {
+            AnswerTimer.this.unitAnswer = unitAnswer;
+            return this;
+        }
+
+        public Builder timeDelaySec(Integer sec) {
+            AnswerTimer.this.timeDelaySec = sec;
+            return this;
+        }
+
+        public Builder personId(Integer personId) {
+            AnswerTimer.this.personId = personId;
+            return this;
+        }
+
+        public AnswerTimer build() {
+            return AnswerTimer.this;
+        }
+
+    }
+
 
     @Override
     public boolean equals(Object o) {

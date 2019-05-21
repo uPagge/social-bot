@@ -86,7 +86,7 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
             Optional<MainUnit> first = mainUnit.getNextUnits().stream()
                     .filter(unit -> unit instanceof MainUnit)
                     .map(unit -> (MainUnit) unit)
-                    .filter(mainUnit1 -> UnitActiveStatus.AFTER.equals(mainUnit1.getActiveStatus()))
+                    .filter(unit -> UnitActiveStatus.AFTER.equals(unit.getActiveStatus()))
                     .findFirst();
             if (first.isPresent()) {
                 getAction(content, first.get());

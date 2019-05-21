@@ -5,35 +5,18 @@ import org.sadtech.bot.autoresponder.domain.usercode.SaveData;
 import org.sadtech.bot.autoresponder.saver.Savable;
 import org.sadtech.bot.autoresponder.saver.SaveStatus;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class AnswerSave extends MainUnit {
 
-    private final Savable savable;
+    private Savable savable;
     private String key;
     private Set<SaveStatus> saveStatuses = new HashSet<>();
     private SaveData saveData;
-    private final Boolean hidden;
+    private Boolean hidden = false;
 
-
-    public AnswerSave(Savable savable, Boolean hidden) {
-        this.savable = savable;
+    private AnswerSave() {
         typeUnit = TypeUnit.SAVE;
-        this.hidden = hidden;
-        if (hidden) {
-            activeStatus = UnitActiveStatus.AFTER;
-        } else {
-            activeStatus = UnitActiveStatus.DEFAULT;
-        }
-    }
-
-    public AnswerSave(Savable savable) {
-        this.savable = savable;
-        typeUnit = TypeUnit.SAVE;
-        hidden = false;
     }
 
     public Savable getSavable() {
@@ -44,37 +27,83 @@ public class AnswerSave extends MainUnit {
         return key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
     public Set<SaveStatus> getSaveStatuses() {
         return saveStatuses;
-    }
-
-    public void setSaveStatuses(Set<SaveStatus> saveStatuses) {
-        this.saveStatuses = saveStatuses;
-    }
-
-    public void setSaveStatus(SaveStatus... saveStatus) {
-        this.saveStatuses.addAll(Arrays.asList(saveStatus));
     }
 
     public SaveData getSaveData() {
         return saveData;
     }
 
-    public void setSaveData(SaveData saveData) {
-        this.saveData = saveData;
-    }
-
     public Boolean getHidden() {
         return hidden;
+    }
+
+    public static Builder builder() {
+        return new AnswerSave().new Builder();
+    }
+
+    public class Builder {
+
+        private Builder() {
+
+        }
+
+        public Builder savable(Savable savable) {
+            AnswerSave.this.savable = savable;
+            return this;
+        }
+
+        public Builder key(String key) {
+            AnswerSave.this.key = key;
+            return this;
+        }
+
+        public Builder saveStatus(SaveStatus... saveStatuses) {
+            AnswerSave.this.saveStatuses.addAll(Arrays.asList(saveStatuses));
+            return this;
+        }
+
+        public Builder nextUnit(MainUnit... mainUnits) {
+            AnswerSave.this.setNextUnit(mainUnits);
+            return this;
+        }
+
+        public Builder nextUnits(Set<Unit> mainUnits) {
+            AnswerSave.this.setNextUnits(mainUnits);
+            return this;
+        }
+
+        public Builder saveData(SaveData saveData) {
+            AnswerSave.this.saveData = saveData;
+            return this;
+        }
+
+        public Builder hidden(Boolean hidden) {
+            AnswerSave.this.hidden = hidden;
+            activeStatus = (hidden) ? UnitActiveStatus.AFTER : UnitActiveStatus.DEFAULT;
+            return this;
+        }
+
+        public AnswerSave build() {
+            return AnswerSave.this;
+        }
+
     }
 
     @Override
     public void setNextUnit(Unit... units) {
         super.setNextUnit(units);
+        maintenanceNextUnit(Arrays.asList(units));
+    }
+
+    @Override
+    public void setNextUnits(Set<Unit> nextUnits) {
+        super.setNextUnits(nextUnits);
+        maintenanceNextUnit(nextUnits);
+    }
+
+    private void maintenanceNextUnit(Collection<Unit> units) {
         for (Unit unit : units) {
             ((MainUnit) unit).setActiveStatus(UnitActiveStatus.AFTER);
         }

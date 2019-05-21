@@ -11,21 +11,22 @@ public class AnswerText extends MainUnit {
     private Insert insert;
 
     public AnswerText(BoxAnswer boxAnswer) {
-        this.boxAnswer = boxAnswer;
         typeUnit = TypeUnit.TEXT;
+        this.boxAnswer = boxAnswer;
     }
 
     public BoxAnswer getBoxAnswer() {
         return boxAnswer;
     }
 
+    public void setInsert(Insert insert) {
+        this.insert = insert;
+    }
+
     public Insert getInsert() {
         return insert;
     }
 
-    public void setInsert(Insert insert) {
-        this.insert = insert;
-    }
 
 
     @Override

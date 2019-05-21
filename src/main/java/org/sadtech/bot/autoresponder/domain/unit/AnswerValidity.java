@@ -4,57 +4,99 @@ import org.sadtech.bot.autoresponder.domain.usercode.TestInsert;
 import org.sadtech.bot.autoresponder.saver.TempSave;
 import org.sadtech.bot.autoresponder.service.action.AnswerValidityAction;
 
+import java.util.Objects;
+
 public class AnswerValidity extends MainUnit {
 
-    private MainUnit yes;
-    private MainUnit no;
-    private MainUnit dataNull;
+    private MainUnit unitYes;
+    private MainUnit unitNo;
+    private MainUnit unitNull;
     private TempSave tempSave;
     private TestInsert testInsert;
 
-    public AnswerValidity() {
+    private AnswerValidity() {
         typeUnit = TypeUnit.VALIDITY;
     }
 
-    public MainUnit getYes() {
-        return yes;
+    public MainUnit getUnitYes() {
+        return unitYes;
     }
 
-    public void setYes(MainUnit yes) {
-        this.yes = yes;
-        super.setKeyWords(AnswerValidityAction.WORDS_YES);
-    }
-
-    public MainUnit getNo() {
-        return no;
-    }
-
-    public void setNo(MainUnit no) {
-        this.no = no;
-        super.setKeyWords(AnswerValidityAction.WORDS_NO);
+    public MainUnit getUnitNo() {
+        return unitNo;
     }
 
     public TempSave getTempSave() {
         return tempSave;
     }
 
-    public void setTempSave(TempSave tempSave) {
-        this.tempSave = tempSave;
-    }
-
     public TestInsert getTestInsert() {
         return testInsert;
     }
 
-    public void setTestInsert(TestInsert testInsert) {
-        this.testInsert = testInsert;
+    public MainUnit getUnitNull() {
+        return unitNull;
     }
 
-    public MainUnit getDataNull() {
-        return dataNull;
+    public static Builder builder() {
+        return new AnswerValidity().new Builder();
     }
 
-    public void setDataNull(MainUnit dataNull) {
-        this.dataNull = dataNull;
+    public class Builder {
+
+        private Builder() {
+
+        }
+
+        public Builder unitYes(MainUnit unitYes) {
+            AnswerValidity.this.unitYes = unitYes;
+            AnswerValidity.this.setKeyWords(AnswerValidityAction.WORDS_YES);
+            return this;
+        }
+
+        public Builder unitNo(MainUnit unitNo) {
+            AnswerValidity.this.unitNo = unitNo;
+            AnswerValidity.this.setKeyWords(AnswerValidityAction.WORDS_NO);
+            return this;
+        }
+
+        public Builder unitNull(MainUnit unitNull) {
+            AnswerValidity.this.unitNull = unitNull;
+            return this;
+        }
+
+        public Builder tempSave(TempSave tempSave) {
+            AnswerValidity.this.tempSave = tempSave;
+            return this;
+        }
+
+        public Builder testInsert(TestInsert testInsert) {
+            AnswerValidity.this.testInsert = testInsert;
+            return this;
+        }
+
+        public AnswerValidity build() {
+            return AnswerValidity.this;
+        }
+
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AnswerValidity)) return false;
+        if (!super.equals(o)) return false;
+        AnswerValidity that = (AnswerValidity) o;
+        return Objects.equals(unitYes, that.unitYes) &&
+                Objects.equals(unitNo, that.unitNo) &&
+                Objects.equals(unitNull, that.unitNull) &&
+                Objects.equals(tempSave, that.tempSave) &&
+                Objects.equals(testInsert, that.testInsert);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), unitYes, unitNo, unitNull, tempSave, testInsert);
     }
 }
