@@ -1,4 +1,4 @@
-package org.sadtech.bot.autoresponder.saver;
+package org.sadtech.bot.autoresponder.save;
 
 import javafx.util.Pair;
 

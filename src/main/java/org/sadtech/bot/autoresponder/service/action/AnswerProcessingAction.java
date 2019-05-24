@@ -2,7 +2,7 @@ package org.sadtech.bot.autoresponder.service.action;
 
 import org.sadtech.bot.autoresponder.domain.unit.AnswerProcessing;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
-import org.sadtech.bot.core.domain.Mail;
+import org.sadtech.bot.core.domain.content.Mail;
 import org.sadtech.bot.core.service.sender.Sent;
 
 public class AnswerProcessingAction implements ActionUnit<AnswerProcessing, Mail> {

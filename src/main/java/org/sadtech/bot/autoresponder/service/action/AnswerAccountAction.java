@@ -7,7 +7,7 @@ import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.timer.Timer;
 import org.sadtech.bot.autoresponder.timer.TimerService;
 import org.sadtech.bot.core.domain.BoxAnswer;
-import org.sadtech.bot.core.domain.Content;
+import org.sadtech.bot.core.domain.content.Content;
 import org.sadtech.bot.core.domain.money.Account;
 import org.sadtech.bot.core.service.AccountService;
 

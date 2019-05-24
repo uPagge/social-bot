@@ -28,7 +28,7 @@ public class TimerServiceImpl implements TimerService {
     }
 
     public Integer add(Timer timer) {
-        log.info("Таймер установлен: " + timer);
+        log.info("Таймер установлен: {}", timer);
         return timerRepository.add(timer);
     }
 

@@ -3,7 +3,7 @@ package org.sadtech.bot.autoresponder.service.action;
 import org.sadtech.autoresponder.Autoresponder;
 import org.sadtech.bot.autoresponder.domain.unit.AnswerNext;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
-import org.sadtech.bot.core.domain.Mail;
+import org.sadtech.bot.core.domain.content.Mail;
 
 public class AnswerNextAction implements ActionUnit<AnswerNext, Mail> {
 

@@ -2,7 +2,8 @@ package org.sadtech.bot.autoresponder.timer;
 
 import org.sadtech.bot.autoresponder.GeneralAutoresponder;
 import org.sadtech.bot.autoresponder.domain.usercode.CheckData;
-import org.sadtech.bot.core.domain.Content;
+import org.sadtech.bot.core.domain.content.Content;
+import org.sadtech.bot.core.utils.Contents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +28,9 @@ public class TimerActionTask extends TimerTask {
     @Override
     public void run() {
         LocalDateTime nowDate = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()));
-        log.info("Сервис таймеров сработал. Время: " + nowDate);
+        log.info("Сервис таймеров сработал. Время: {}", nowDate);
         for (Timer timer : timerService.getTimerActive(nowDate)) {
-            Content emptyContent = Content.EMPTY_CONTENT;
+            Content emptyContent = Contents.EMPTY_CONTENT;
             emptyContent.setPersonId(timer.getPersonId());
             CheckData checkLoop = timer.getCheckLoop();
 

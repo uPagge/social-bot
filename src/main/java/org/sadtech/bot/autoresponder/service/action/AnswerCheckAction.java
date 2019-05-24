@@ -2,7 +2,7 @@ package org.sadtech.bot.autoresponder.service.action;
 
 import org.sadtech.bot.autoresponder.domain.unit.AnswerCheck;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
-import org.sadtech.bot.core.domain.Content;
+import org.sadtech.bot.core.domain.content.Content;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

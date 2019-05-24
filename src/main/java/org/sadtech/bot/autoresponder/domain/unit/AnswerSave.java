@@ -2,8 +2,8 @@ package org.sadtech.bot.autoresponder.domain.unit;
 
 import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.bot.autoresponder.domain.usercode.SaveData;
-import org.sadtech.bot.autoresponder.saver.Savable;
-import org.sadtech.bot.autoresponder.saver.SaveStatus;
+import org.sadtech.bot.autoresponder.save.Savable;
+import org.sadtech.bot.autoresponder.save.SaveStatus;
 
 import java.util.*;
 

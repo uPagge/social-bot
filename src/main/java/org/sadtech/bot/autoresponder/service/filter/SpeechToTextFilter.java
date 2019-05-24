@@ -4,11 +4,11 @@ package org.sadtech.bot.autoresponder.service.filter;
 import com.google.cloud.speech.v1.*;
 import com.google.protobuf.ByteString;
 import org.apache.commons.io.IOUtils;
-import org.sadtech.bot.core.domain.Mail;
 import org.sadtech.bot.core.domain.attachment.Attachment;
 import org.sadtech.bot.core.domain.attachment.AttachmentType;
 import org.sadtech.bot.core.domain.attachment.AudioMessage;
-import org.sadtech.bot.core.filter.Filter;
+import org.sadtech.bot.core.domain.content.Mail;
+import org.sadtech.bot.core.service.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +20,7 @@ public class SpeechToTextFilter implements Filter<Mail> {
     private static final Logger log = LoggerFactory.getLogger(SpeechToTextFilter.class);
 
     @Override
-    public void doFilter(Mail mail) {
+    public void processing(Mail mail) {
         if (mail.getAttachments() != null) {
             for (Attachment attachment : mail.getAttachments()) {
                 if (AttachmentType.AUDIO_MESSAGE.equals(attachment.getType())) {

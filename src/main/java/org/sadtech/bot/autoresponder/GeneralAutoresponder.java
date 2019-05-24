@@ -7,12 +7,11 @@ import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.domain.unit.TypeUnit;
 import org.sadtech.bot.autoresponder.domain.unit.UnitActiveStatus;
 import org.sadtech.bot.autoresponder.service.action.*;
-import org.sadtech.bot.autoresponder.timer.impl.TimerRepositoryMap;
-import org.sadtech.bot.autoresponder.timer.impl.TimerServiceImpl;
-import org.sadtech.bot.core.domain.Content;
-import org.sadtech.bot.core.filter.Filter;
+import org.sadtech.bot.autoresponder.timer.TimerService;
+import org.sadtech.bot.core.domain.content.Content;
 import org.sadtech.bot.core.service.AccountService;
 import org.sadtech.bot.core.service.EventService;
+import org.sadtech.bot.core.service.filter.Filter;
 import org.sadtech.bot.core.service.sender.Sent;
 
 import java.time.Clock;
@@ -25,14 +24,11 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
 
     private final EventService<T> eventService;
     protected final Autoresponder autoresponder;
-    protected final Sent sent;
     protected Map<TypeUnit, ActionUnit> actionUnitMap = new EnumMap<>(TypeUnit.class);
     protected List<Filter> filters;
-    private static final TimerServiceImpl TIMER_SERVICE = new TimerServiceImpl(new TimerRepositoryMap());
 
     protected GeneralAutoresponder(Set<Unit> menuUnit, Sent sent, EventService<T> eventService) {
         this.eventService = eventService;
-        this.sent = sent;
         autoresponder = new Autoresponder(new UnitPointerServiceImpl(), menuUnit);
         init(sent);
     }
@@ -41,18 +37,33 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
         this.filters = filters;
     }
 
+    private MainUnit getAction(T event, MainUnit unitAnswer) {
+        return actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, event);
+    }
+
+    protected void addActionUnit(TypeUnit typeUnit, ActionUnit actionUnit) {
+        actionUnitMap.put(typeUnit, actionUnit);
+    }
+
+    public void setDefaultUnit(MainUnit defaultUnit) {
+        autoresponder.setDefaultUnit(defaultUnit);
+    }
+
     private void init(Sent sent) {
         actionUnitMap.put(TypeUnit.CHECK, new AnswerCheckAction());
         actionUnitMap.put(TypeUnit.PROCESSING, new AnswerProcessingAction(sent));
-        actionUnitMap.put(TypeUnit.SAVE, new AnswerSaveAction());
         actionUnitMap.put(TypeUnit.TEXT, new AnswerTextAction(sent));
-        actionUnitMap.put(TypeUnit.TIMER, new AnswerTimerAction(TIMER_SERVICE, this));
+        actionUnitMap.put(TypeUnit.SAVE, new AnswerSaveAction());
         actionUnitMap.put(TypeUnit.VALIDITY, new AnswerValidityAction());
         actionUnitMap.put(TypeUnit.NEXT, new AnswerNextAction(autoresponder));
     }
 
-    public void initAccountAction(AccountService accountService) {
-        actionUnitMap.put(TypeUnit.ACCOUNT, new AnswerAccountAction(accountService, TIMER_SERVICE));
+    public void initTimerAction(TimerService timerService) {
+        actionUnitMap.put(TypeUnit.TIMER, new AnswerTimerAction(timerService, this));
+    }
+
+    public void initAccountAction(AccountService accountService, TimerService timerService) {
+        actionUnitMap.put(TypeUnit.ACCOUNT, new AnswerAccountAction(accountService, timerService));
     }
 
     private void checkNewMessages() {
@@ -70,7 +81,7 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
 
     private Consumer<T> processing() {
         return event -> {
-            filters.forEach(filter -> filter.doFilter(event));
+            filters.forEach(filter -> filter.processing(event));
             MainUnit unitAnswer = (MainUnit) autoresponder.answer(event.getPersonId(), event.getMessage());
             answer(event, unitAnswer);
         };
@@ -99,18 +110,6 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
             }
         }
         return mainUnit;
-    }
-
-    private MainUnit getAction(T event, MainUnit unitAnswer) {
-        return actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, event);
-    }
-
-    protected void addActionUnit(TypeUnit typeUnit, ActionUnit actionUnit) {
-        actionUnitMap.put(typeUnit, actionUnit);
-    }
-
-    public void setDefaultUnit(MainUnit defaultUnit) {
-        autoresponder.setDefaultUnit(defaultUnit);
     }
 
     @Override

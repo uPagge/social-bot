@@ -1,7 +1,7 @@
 package org.sadtech.bot.autoresponder.domain.unit;
 
 import org.sadtech.bot.autoresponder.domain.usercode.TestInsert;
-import org.sadtech.bot.autoresponder.saver.TempSave;
+import org.sadtech.bot.autoresponder.save.TempSave;
 import org.sadtech.bot.autoresponder.service.action.AnswerValidityAction;
 
 import java.util.Objects;

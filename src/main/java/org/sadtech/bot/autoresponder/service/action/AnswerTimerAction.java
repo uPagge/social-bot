@@ -6,17 +6,13 @@ import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.timer.Timer;
 import org.sadtech.bot.autoresponder.timer.TimerActionTask;
 import org.sadtech.bot.autoresponder.timer.TimerService;
-import org.sadtech.bot.core.domain.Content;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.sadtech.bot.core.domain.content.Content;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 public class AnswerTimerAction implements ActionUnit<AnswerTimer, Content> {
-
-    private static final Logger log = LoggerFactory.getLogger(AnswerTimerAction.class);
 
     private TimerService timerService;
     private Long verificationPeriodSec = 15L;
@@ -46,7 +42,7 @@ public class AnswerTimerAction implements ActionUnit<AnswerTimer, Content> {
             timer.personId(content.getPersonId());
         }
         timer.unitAnswer(answerTimer.getUnitAnswer())
-                .timeActive(LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).plusSeconds(answerTimer.getTimeDelaySec() * 1000))
+                .timeActive(LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).plusSeconds(answerTimer.getTimeDelaySec() * 1000L))
                 .periodSec(answerTimer.getTimeDelaySec())
                 .checkLoop(answerTimer.getCheckLoop())
                 .timeDeath(LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).plusSeconds(answerTimer.getTimeDeathSec()));

@@ -4,9 +4,9 @@ import javafx.util.Pair;
 import org.sadtech.bot.autoresponder.domain.unit.AnswerSave;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.domain.usercode.SaveData;
-import org.sadtech.bot.autoresponder.saver.Savable;
-import org.sadtech.bot.autoresponder.saver.SaveStatus;
-import org.sadtech.bot.core.domain.Mail;
+import org.sadtech.bot.autoresponder.save.Savable;
+import org.sadtech.bot.autoresponder.save.SaveStatus;
+import org.sadtech.bot.core.domain.content.Mail;
 
 import java.util.Set;
 

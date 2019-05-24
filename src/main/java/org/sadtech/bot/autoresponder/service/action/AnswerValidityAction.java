@@ -5,16 +5,17 @@ import org.sadtech.bot.autoresponder.domain.unit.AnswerText;
 import org.sadtech.bot.autoresponder.domain.unit.AnswerValidity;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.core.domain.BoxAnswer;
-import org.sadtech.bot.core.domain.Mail;
+import org.sadtech.bot.core.domain.content.Mail;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AnswerValidityAction implements ActionUnit<AnswerValidity, Mail> {
 
-    public static final Set<String> WORDS_YES = Stream.of("да", "ага").collect(Collectors.toSet());
-    public static final Set<String> WORDS_NO = Stream.of("нет", "неа").collect(Collectors.toSet());
+    public static final Set<String> WORDS_YES = Collections.unmodifiableSet(Stream.of("да", "ага").collect(Collectors.toSet()));
+    public static final Set<String> WORDS_NO = Collections.unmodifiableSet(Stream.of("нет", "неа").collect(Collectors.toSet()));
 
     @Override
     public MainUnit action(AnswerValidity unit, Mail mail) {
