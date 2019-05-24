@@ -9,11 +9,16 @@ import org.sadtech.bot.core.domain.attachment.Attachment;
 import org.sadtech.bot.core.domain.attachment.AttachmentType;
 import org.sadtech.bot.core.domain.attachment.AudioMessage;
 import org.sadtech.bot.core.filter.Filter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
 
 public class SpeechToTextFilter implements Filter<Mail> {
+
+    private static final Logger log = LoggerFactory.getLogger(SpeechToTextFilter.class);
+
     @Override
     public void doFilter(Mail mail) {
         if (mail.getAttachments() != null) {
@@ -41,7 +46,7 @@ public class SpeechToTextFilter implements Filter<Mail> {
                             mail.setMessage(alternative.getTranscript());
                         }
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        log.error(e.getMessage());
                     }
                 }
             }

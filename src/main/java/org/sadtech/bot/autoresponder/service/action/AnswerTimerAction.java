@@ -3,9 +3,9 @@ package org.sadtech.bot.autoresponder.service.action;
 import org.sadtech.bot.autoresponder.GeneralAutoresponder;
 import org.sadtech.bot.autoresponder.domain.unit.AnswerTimer;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
-import org.sadtech.bot.autoresponder.timer.TimerAction;
-import org.sadtech.bot.autoresponder.timer.TimerActionService;
+import org.sadtech.bot.autoresponder.timer.Timer;
 import org.sadtech.bot.autoresponder.timer.TimerActionTask;
+import org.sadtech.bot.autoresponder.timer.TimerService;
 import org.sadtech.bot.core.domain.Content;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,20 +13,19 @@ import org.slf4j.LoggerFactory;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Timer;
 
 public class AnswerTimerAction implements ActionUnit<AnswerTimer, Content> {
 
     private static final Logger log = LoggerFactory.getLogger(AnswerTimerAction.class);
 
-    private TimerActionService timerService;
+    private TimerService timerService;
     private Long verificationPeriodSec = 15L;
 
-    public AnswerTimerAction(TimerActionService timerService, GeneralAutoresponder generalAutoresponder) {
+    public AnswerTimerAction(TimerService timerService, GeneralAutoresponder generalAutoresponder) {
         this.timerService = timerService;
 
         TimerActionTask timerActionTask = new TimerActionTask(timerService, generalAutoresponder);
-        Timer timer = new Timer(true);
+        java.util.Timer timer = new java.util.Timer(true);
         timer.schedule(timerActionTask, 0, 1000L * verificationPeriodSec);
     }
 
@@ -40,16 +39,18 @@ public class AnswerTimerAction implements ActionUnit<AnswerTimer, Content> {
 
     @Override
     public MainUnit action(AnswerTimer answerTimer, Content content) {
-        TimerAction timerAction = new TimerAction();
+        Timer.Builder timer = Timer.builder();
         if (answerTimer.getPersonId() != null) {
-            timerAction.setPersonId(answerTimer.getPersonId());
+            timer.personId(answerTimer.getPersonId());
         } else {
-            timerAction.setPersonId(content.getPersonId());
+            timer.personId(content.getPersonId());
         }
-        timerAction.setUnit(answerTimer.getUnitAnswer());
-        timerAction.setTimeActive(LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).plusSeconds(answerTimer.getTimeDelaySec() * 1000));
-        log.info("Таймер установлен: " + timerAction);
-        timerService.add(timerAction);
+        timer.unitAnswer(answerTimer.getUnitAnswer())
+                .timeActive(LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).plusSeconds(answerTimer.getTimeDelaySec() * 1000))
+                .periodSec(answerTimer.getTimeDelaySec())
+                .checkLoop(answerTimer.getCheckLoop())
+                .timeDeath(LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).plusSeconds(answerTimer.getTimeDeathSec()));
+        timerService.add(timer.build());
         return answerTimer;
     }
 }

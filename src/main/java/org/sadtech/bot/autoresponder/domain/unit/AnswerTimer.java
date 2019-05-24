@@ -1,12 +1,16 @@
 package org.sadtech.bot.autoresponder.domain.unit;
 
+import org.sadtech.bot.autoresponder.domain.usercode.CheckData;
+
 import java.util.Objects;
 
 public class AnswerTimer extends MainUnit {
 
     private MainUnit unitAnswer;
     private Integer timeDelaySec;
+    private Integer timeDeathSec;
     private Integer personId;
+    private CheckData checkLoop;
 
     private AnswerTimer() {
         activeStatus = UnitActiveStatus.AFTER;
@@ -23,6 +27,14 @@ public class AnswerTimer extends MainUnit {
 
     public Integer getPersonId() {
         return personId;
+    }
+
+    public CheckData getCheckLoop() {
+        return checkLoop;
+    }
+
+    public Integer getTimeDeathSec() {
+        return timeDeathSec;
     }
 
     public static Builder builder() {
@@ -50,6 +62,16 @@ public class AnswerTimer extends MainUnit {
             return this;
         }
 
+        public Builder checkLoop(CheckData checkLoop) {
+            AnswerTimer.this.checkLoop = checkLoop;
+            return this;
+        }
+
+        public Builder timeDeathSec(Integer timeDeathSec) {
+            AnswerTimer.this.timeDeathSec = timeDeathSec;
+            return this;
+        }
+
         public AnswerTimer build() {
             return AnswerTimer.this;
         }
@@ -60,16 +82,17 @@ public class AnswerTimer extends MainUnit {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof AnswerTimer)) return false;
         if (!super.equals(o)) return false;
         AnswerTimer that = (AnswerTimer) o;
         return Objects.equals(unitAnswer, that.unitAnswer) &&
                 Objects.equals(timeDelaySec, that.timeDelaySec) &&
-                Objects.equals(personId, that.personId);
+                Objects.equals(personId, that.personId) &&
+                Objects.equals(checkLoop, that.checkLoop);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), unitAnswer, timeDelaySec, personId);
+        return Objects.hash(super.hashCode(), unitAnswer, timeDelaySec, personId, checkLoop);
     }
 }

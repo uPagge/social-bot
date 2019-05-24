@@ -2,7 +2,7 @@ package org.sadtech.bot.autoresponder.saver;
 
 import javafx.util.Pair;
 import org.sadtech.bot.core.exception.MailSendException;
-import org.sadtech.bot.core.sender.email.EmailConfig;
+import org.sadtech.bot.core.service.sender.email.EmailConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

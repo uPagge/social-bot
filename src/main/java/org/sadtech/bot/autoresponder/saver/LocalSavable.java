@@ -1,6 +1,6 @@
 package org.sadtech.bot.autoresponder.saver;
 
-import org.sadtech.bot.core.sender.Sent;
+import org.sadtech.bot.core.service.sender.Sent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
