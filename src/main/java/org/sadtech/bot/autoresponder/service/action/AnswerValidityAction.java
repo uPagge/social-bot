@@ -22,15 +22,15 @@ public class AnswerValidityAction implements ActionUnit<AnswerValidity, Mail> {
         String message = mail.getMessage();
         Integer personId = mail.getPersonId();
         if (WORDS_YES.contains(message.toLowerCase())) {
-            String save = unit.getTempSave().load(personId);
-            getNewMail(mail, save);
+            String save = unit.getTempSave().getLastElement(personId);
+            mail.setMessage(save);
             return unit.getUnitYes();
         } else if (WORDS_NO.contains(message.toLowerCase())) {
-            String save = unit.getTempSave().load(personId);
-            getNewMail(mail, save);
+            String save = unit.getTempSave().getLastElement(personId);
+            mail.setMessage(save);
             return unit.getUnitNo();
         } else {
-            Pair<String, String> save = unit.getTestInsert().insert(personId, message);
+            Pair<String, String> save = unit.getPairInsert().insert(mail);
             if (save.getValue() == null) {
                 return unit.getUnitNull();
             } else {
@@ -40,12 +40,6 @@ public class AnswerValidityAction implements ActionUnit<AnswerValidity, Mail> {
                 return answerText;
             }
         }
-    }
-
-    private Mail getNewMail(Mail mail, String save) {
-        Mail newMail = mail.prototype();
-        newMail.setMessage(save);
-        return newMail;
     }
 
 }

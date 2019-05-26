@@ -1,11 +1,11 @@
 package org.sadtech.bot.autoresponder.service.action;
 
 import org.sadtech.bot.autoresponder.GeneralAutoresponder;
+import org.sadtech.bot.autoresponder.domain.Timer;
 import org.sadtech.bot.autoresponder.domain.unit.AnswerTimer;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
-import org.sadtech.bot.autoresponder.timer.Timer;
-import org.sadtech.bot.autoresponder.timer.TimerActionTask;
-import org.sadtech.bot.autoresponder.timer.TimerService;
+import org.sadtech.bot.autoresponder.service.timer.TimerActionTask;
+import org.sadtech.bot.autoresponder.service.timer.TimerService;
 import org.sadtech.bot.core.domain.content.Content;
 
 import java.time.Clock;
@@ -36,11 +36,7 @@ public class AnswerTimerAction implements ActionUnit<AnswerTimer, Content> {
     @Override
     public MainUnit action(AnswerTimer answerTimer, Content content) {
         Timer.Builder timer = Timer.builder();
-        if (answerTimer.getPersonId() != null) {
-            timer.personId(answerTimer.getPersonId());
-        } else {
-            timer.personId(content.getPersonId());
-        }
+        timer.personId(content.getPersonId());
         timer.unitAnswer(answerTimer.getUnitAnswer())
                 .timeActive(LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).plusSeconds(answerTimer.getTimeDelaySec() * 1000L))
                 .periodSec(answerTimer.getTimeDelaySec())

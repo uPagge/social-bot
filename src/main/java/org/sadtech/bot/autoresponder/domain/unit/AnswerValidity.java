@@ -1,8 +1,8 @@
 package org.sadtech.bot.autoresponder.domain.unit;
 
-import org.sadtech.bot.autoresponder.domain.usercode.TestInsert;
-import org.sadtech.bot.autoresponder.save.TempSave;
 import org.sadtech.bot.autoresponder.service.action.AnswerValidityAction;
+import org.sadtech.bot.autoresponder.service.save.Savable;
+import org.sadtech.bot.autoresponder.service.usercode.PairInsert;
 
 import java.util.Objects;
 
@@ -11,8 +11,8 @@ public class AnswerValidity extends MainUnit {
     private MainUnit unitYes;
     private MainUnit unitNo;
     private MainUnit unitNull;
-    private TempSave tempSave;
-    private TestInsert testInsert;
+    private Savable<String> tempSave;
+    private PairInsert pairInsert;
 
     private AnswerValidity() {
         typeUnit = TypeUnit.VALIDITY;
@@ -26,12 +26,12 @@ public class AnswerValidity extends MainUnit {
         return unitNo;
     }
 
-    public TempSave getTempSave() {
+    public Savable<String> getTempSave() {
         return tempSave;
     }
 
-    public TestInsert getTestInsert() {
-        return testInsert;
+    public PairInsert getPairInsert() {
+        return pairInsert;
     }
 
     public MainUnit getUnitNull() {
@@ -65,13 +65,13 @@ public class AnswerValidity extends MainUnit {
             return this;
         }
 
-        public Builder tempSave(TempSave tempSave) {
-            AnswerValidity.this.tempSave = tempSave;
+        public Builder tempSave(Savable<String> savable) {
+            AnswerValidity.this.tempSave = savable;
             return this;
         }
 
-        public Builder testInsert(TestInsert testInsert) {
-            AnswerValidity.this.testInsert = testInsert;
+        public Builder testInsert(PairInsert pairInsert) {
+            AnswerValidity.this.pairInsert = pairInsert;
             return this;
         }
 
@@ -92,11 +92,11 @@ public class AnswerValidity extends MainUnit {
                 Objects.equals(unitNo, that.unitNo) &&
                 Objects.equals(unitNull, that.unitNull) &&
                 Objects.equals(tempSave, that.tempSave) &&
-                Objects.equals(testInsert, that.testInsert);
+                Objects.equals(pairInsert, that.pairInsert);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), unitYes, unitNo, unitNull, tempSave, testInsert);
+        return Objects.hash(super.hashCode(), unitYes, unitNo, unitNull, tempSave, pairInsert);
     }
 }

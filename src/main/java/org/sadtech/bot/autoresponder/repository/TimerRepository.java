@@ -1,4 +1,6 @@
-package org.sadtech.bot.autoresponder.timer;
+package org.sadtech.bot.autoresponder.repository;
+
+import org.sadtech.bot.autoresponder.domain.Timer;
 
 import java.time.LocalDateTime;
 import java.util.Collection;

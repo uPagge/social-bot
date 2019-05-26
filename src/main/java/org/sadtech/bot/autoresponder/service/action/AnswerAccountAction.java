@@ -1,11 +1,11 @@
 package org.sadtech.bot.autoresponder.service.action;
 
+import org.sadtech.bot.autoresponder.domain.Timer;
 import org.sadtech.bot.autoresponder.domain.unit.AccountAutoCheck;
 import org.sadtech.bot.autoresponder.domain.unit.AnswerAccount;
 import org.sadtech.bot.autoresponder.domain.unit.AnswerText;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
-import org.sadtech.bot.autoresponder.timer.Timer;
-import org.sadtech.bot.autoresponder.timer.TimerService;
+import org.sadtech.bot.autoresponder.service.timer.TimerService;
 import org.sadtech.bot.core.domain.BoxAnswer;
 import org.sadtech.bot.core.domain.content.Content;
 import org.sadtech.bot.core.domain.money.Account;
@@ -43,7 +43,7 @@ public class AnswerAccountAction implements ActionUnit<AnswerAccount, Content> {
                     .personId(content.getPersonId())
                     .unitAnswer(autoCheck.getSuccessfulPayment())
                     .unitDeath(autoCheck.getFailedPayment())
-                    .checkLoop((id, mes) -> accountService.paymentVerification(accountId))
+                    .checkLoop(content1 -> accountService.paymentVerification(accountId))
                     .periodSec(autoCheck.getPeriodSec())
                     .timeActive(LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).plusSeconds(autoCheck.getPeriodSec()))
                     .timeDeath(LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).plusHours(autoCheck.getLifetimeHours()))
@@ -51,6 +51,6 @@ public class AnswerAccountAction implements ActionUnit<AnswerAccount, Content> {
             timerService.add(timer);
         }
 
-        return new AnswerText(BoxAnswer.builder().message("Для оплаты укажите номер счета " + accountId).build());
+        return new AnswerText(BoxAnswer.builder().message("Для оплаты укажите номер счета " + accountId + "\nСумма к оплате: " + answerAccount.getTotalSum()).build());
     }
 }

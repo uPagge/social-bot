@@ -1,4 +1,4 @@
-package org.sadtech.bot.autoresponder.save;
+package org.sadtech.bot.autoresponder.service.save;
 
 import javafx.util.Pair;
 import org.sadtech.bot.core.exception.MailSendException;
@@ -10,7 +10,7 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class EmailSavable extends LocalSavable<Pair<String, String>> {
+public class EmailSavable extends LocalListSavable<Pair<String, String>> {
 
     private static final Logger log = LoggerFactory.getLogger(EmailSavable.class);
 

@@ -1,6 +1,6 @@
 package org.sadtech.bot.autoresponder.domain.unit;
 
-import org.sadtech.bot.autoresponder.domain.usercode.CheckData;
+import org.sadtech.bot.autoresponder.service.usercode.CheckData;
 
 import java.util.Objects;
 

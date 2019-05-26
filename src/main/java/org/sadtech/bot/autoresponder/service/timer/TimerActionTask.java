@@ -1,7 +1,8 @@
-package org.sadtech.bot.autoresponder.timer;
+package org.sadtech.bot.autoresponder.service.timer;
 
 import org.sadtech.bot.autoresponder.GeneralAutoresponder;
-import org.sadtech.bot.autoresponder.domain.usercode.CheckData;
+import org.sadtech.bot.autoresponder.domain.Timer;
+import org.sadtech.bot.autoresponder.service.usercode.CheckData;
 import org.sadtech.bot.core.domain.content.Content;
 import org.sadtech.bot.core.utils.Contents;
 import org.slf4j.Logger;
@@ -36,25 +37,27 @@ public class TimerActionTask extends TimerTask {
 
             if (!timeDeath(nowDate, timer.getTimeDeath())) {
                 if (checkLoop != null) {
-                    if (checkLoop.checked(emptyContent.getPersonId(), emptyContent.getMessage())) {
+                    if (checkLoop.checked(emptyContent)) {
                         generalAutoresponder.answer(emptyContent, timer.getUnitAnswer());
                         timerService.remove(timer.getId());
-                    }
-                    if (timer.getPeriodSec() != null) {
-                        timer.setTimeActive(timer.getTimeActive().plusSeconds(timer.getPeriodSec()));
-                        timerService.edit(timer.getId(), timer);
+                    } else {
+                        reinstallation(timer);
                     }
                 } else {
                     generalAutoresponder.answer(emptyContent, timer.getUnitAnswer());
-                    if (timer.getPeriodSec() != null) {
-                        timer.setTimeActive(timer.getTimeActive().plusSeconds(timer.getPeriodSec()));
-                        timerService.edit(timer.getId(), timer);
-                    }
+                    reinstallation(timer);
                 }
             } else {
                 death(timer, emptyContent);
             }
 
+        }
+    }
+
+    private void reinstallation(Timer timer) {
+        if (timer.getPeriodSec() != null) {
+            timer.setTimeActive(timer.getTimeActive().plusSeconds(timer.getPeriodSec()));
+            timerService.edit(timer.getId(), timer);
         }
     }
 

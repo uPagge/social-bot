@@ -1,7 +1,7 @@
-package org.sadtech.bot.autoresponder.timer;
+package org.sadtech.bot.autoresponder.domain;
 
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
-import org.sadtech.bot.autoresponder.domain.usercode.CheckData;
+import org.sadtech.bot.autoresponder.service.usercode.CheckData;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

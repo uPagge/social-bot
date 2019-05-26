@@ -1,6 +1,6 @@
 package org.sadtech.bot.autoresponder.domain.unit;
 
-import org.sadtech.bot.autoresponder.domain.usercode.CheckData;
+import org.sadtech.bot.autoresponder.service.usercode.CheckData;
 
 import java.util.Objects;
 
@@ -9,7 +9,6 @@ public class AnswerTimer extends MainUnit {
     private MainUnit unitAnswer;
     private Integer timeDelaySec;
     private Integer timeDeathSec;
-    private Integer personId;
     private CheckData checkLoop;
 
     private AnswerTimer() {
@@ -23,10 +22,6 @@ public class AnswerTimer extends MainUnit {
 
     public Integer getTimeDelaySec() {
         return timeDelaySec;
-    }
-
-    public Integer getPersonId() {
-        return personId;
     }
 
     public CheckData getCheckLoop() {
@@ -57,11 +52,6 @@ public class AnswerTimer extends MainUnit {
             return this;
         }
 
-        public Builder personId(Integer personId) {
-            AnswerTimer.this.personId = personId;
-            return this;
-        }
-
         public Builder checkLoop(CheckData checkLoop) {
             AnswerTimer.this.checkLoop = checkLoop;
             return this;
@@ -87,12 +77,11 @@ public class AnswerTimer extends MainUnit {
         AnswerTimer that = (AnswerTimer) o;
         return Objects.equals(unitAnswer, that.unitAnswer) &&
                 Objects.equals(timeDelaySec, that.timeDelaySec) &&
-                Objects.equals(personId, that.personId) &&
                 Objects.equals(checkLoop, that.checkLoop);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), unitAnswer, timeDelaySec, personId, checkLoop);
+        return Objects.hash(super.hashCode(), unitAnswer, timeDelaySec, checkLoop);
     }
 }

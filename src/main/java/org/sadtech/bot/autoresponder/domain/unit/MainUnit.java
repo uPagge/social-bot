@@ -6,8 +6,8 @@ import java.util.Objects;
 
 public abstract class MainUnit extends Unit {
 
-    UnitActiveStatus activeStatus = UnitActiveStatus.DEFAULT;
-    TypeUnit typeUnit;
+    protected UnitActiveStatus activeStatus = UnitActiveStatus.DEFAULT;
+    protected TypeUnit typeUnit;
 
     public TypeUnit getTypeUnit() {
         return typeUnit;

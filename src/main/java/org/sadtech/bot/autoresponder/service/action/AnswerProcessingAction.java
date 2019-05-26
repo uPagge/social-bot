@@ -15,7 +15,7 @@ public class AnswerProcessingAction implements ActionUnit<AnswerProcessing, Mail
 
     @Override
     public MainUnit action(AnswerProcessing answerProcessing, Mail mail) {
-        sent.send(mail.getPersonId(), answerProcessing.getProcessingData().processing(mail.getPersonId(), mail.getMessage()));
+        sent.send(mail.getPersonId(), answerProcessing.getProcessingData().processing(mail));
         return answerProcessing;
     }
 }

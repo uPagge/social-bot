@@ -13,7 +13,7 @@ public class AnswerCheckAction implements ActionUnit<AnswerCheck, Content> {
     @Override
     public MainUnit action(AnswerCheck answerCheck, Content mail) {
         MainUnit unitAnswer;
-        if (answerCheck.getCheck().checked(mail.getPersonId(), mail.getMessage())) {
+        if (answerCheck.getCheck().checked(mail)) {
             log.info("Проверка пройдена");
             unitAnswer = answerCheck.getUnitTrue();
         } else {

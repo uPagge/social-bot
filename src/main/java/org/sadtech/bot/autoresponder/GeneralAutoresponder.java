@@ -7,11 +7,11 @@ import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.domain.unit.TypeUnit;
 import org.sadtech.bot.autoresponder.domain.unit.UnitActiveStatus;
 import org.sadtech.bot.autoresponder.service.action.*;
-import org.sadtech.bot.autoresponder.timer.TimerService;
+import org.sadtech.bot.autoresponder.service.timer.TimerService;
 import org.sadtech.bot.core.domain.content.Content;
 import org.sadtech.bot.core.service.AccountService;
 import org.sadtech.bot.core.service.EventService;
-import org.sadtech.bot.core.service.filter.Filter;
+import org.sadtech.bot.core.service.Filter;
 import org.sadtech.bot.core.service.sender.Sent;
 
 import java.time.Clock;

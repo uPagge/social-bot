@@ -1,6 +1,6 @@
 package org.sadtech.bot.autoresponder.domain.unit;
 
-import org.sadtech.bot.autoresponder.domain.usercode.Insert;
+import org.sadtech.bot.autoresponder.service.usercode.Insert;
 import org.sadtech.bot.core.domain.BoxAnswer;
 
 import java.util.Objects;

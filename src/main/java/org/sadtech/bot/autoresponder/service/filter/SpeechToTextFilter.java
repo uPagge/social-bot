@@ -4,11 +4,11 @@ package org.sadtech.bot.autoresponder.service.filter;
 import com.google.cloud.speech.v1.*;
 import com.google.protobuf.ByteString;
 import org.apache.commons.io.IOUtils;
-import org.sadtech.bot.core.domain.attachment.Attachment;
-import org.sadtech.bot.core.domain.attachment.AttachmentType;
-import org.sadtech.bot.core.domain.attachment.AudioMessage;
 import org.sadtech.bot.core.domain.content.Mail;
-import org.sadtech.bot.core.service.filter.Filter;
+import org.sadtech.bot.core.domain.content.attachment.Attachment;
+import org.sadtech.bot.core.domain.content.attachment.AttachmentType;
+import org.sadtech.bot.core.domain.content.attachment.AudioMessage;
+import org.sadtech.bot.core.service.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

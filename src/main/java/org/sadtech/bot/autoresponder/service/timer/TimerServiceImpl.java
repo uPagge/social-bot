@@ -1,8 +1,8 @@
-package org.sadtech.bot.autoresponder.timer.impl;
+package org.sadtech.bot.autoresponder.service.timer;
 
-import org.sadtech.bot.autoresponder.timer.Timer;
-import org.sadtech.bot.autoresponder.timer.TimerRepository;
-import org.sadtech.bot.autoresponder.timer.TimerService;
+import org.sadtech.bot.autoresponder.domain.Timer;
+import org.sadtech.bot.autoresponder.repository.TimerRepository;
+import org.sadtech.bot.autoresponder.repository.TimerRepositoryMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

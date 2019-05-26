@@ -1,8 +1,8 @@
-package org.sadtech.bot.autoresponder.save;
+package org.sadtech.bot.autoresponder.service.save;
 
 import javafx.util.Pair;
 
-public class UserSanderSavable extends LocalSavable<Pair> {
+public class UserSanderSavable extends LocalListSavable<Pair> {
 
     private final Integer personId;
 
