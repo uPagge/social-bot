@@ -1,6 +1,6 @@
 package org.sadtech.bot.autoresponder.domain.unit;
 
-import org.sadtech.bot.autoresponder.domain.usercode.ProcessingData;
+import org.sadtech.bot.autoresponder.service.usercode.ProcessingData;
 
 import java.util.Objects;
 

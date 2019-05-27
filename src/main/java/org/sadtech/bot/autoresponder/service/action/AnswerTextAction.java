@@ -3,9 +3,9 @@ package org.sadtech.bot.autoresponder.service.action;
 import org.sadtech.bot.autoresponder.domain.unit.AnswerText;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.core.domain.BoxAnswer;
-import org.sadtech.bot.core.domain.Content;
-import org.sadtech.bot.core.insert.InsertWords;
-import org.sadtech.bot.core.sender.Sent;
+import org.sadtech.bot.core.domain.content.Content;
+import org.sadtech.bot.core.service.sender.Sent;
+import org.sadtech.bot.core.utils.InsertWords;
 
 import java.util.List;
 
