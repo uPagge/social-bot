@@ -25,7 +25,7 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
     private final EventService<T> eventService;
     protected final Autoresponder autoresponder;
     protected Map<TypeUnit, ActionUnit> actionUnitMap = new EnumMap<>(TypeUnit.class);
-    protected List<Filter> filters;
+    protected List<Filter<T>> filters;
 
     protected GeneralAutoresponder(Set<Unit> menuUnit, Sent sent, EventService<T> eventService) {
         this.eventService = eventService;
@@ -33,7 +33,7 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
         init(sent);
     }
 
-    public void setFilters(List<Filter> filters) {
+    public void setFilters(List<Filter<T>> filters) {
         this.filters = filters;
     }
 

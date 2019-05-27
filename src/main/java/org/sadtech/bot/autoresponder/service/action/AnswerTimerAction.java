@@ -19,7 +19,6 @@ public class AnswerTimerAction implements ActionUnit<AnswerTimer, Content> {
 
     public AnswerTimerAction(TimerService timerService, GeneralAutoresponder generalAutoresponder) {
         this.timerService = timerService;
-
         TimerActionTask timerActionTask = new TimerActionTask(timerService, generalAutoresponder);
         java.util.Timer timer = new java.util.Timer(true);
         timer.schedule(timerActionTask, 0, 1000L * verificationPeriodSec);
@@ -38,10 +37,12 @@ public class AnswerTimerAction implements ActionUnit<AnswerTimer, Content> {
         Timer.Builder timer = Timer.builder();
         timer.personId(content.getPersonId());
         timer.unitAnswer(answerTimer.getUnitAnswer())
-                .timeActive(LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).plusSeconds(answerTimer.getTimeDelaySec() * 1000L))
+                .timeActive(LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()))
+                        .plusSeconds(answerTimer.getTimeDelaySec() * 1000L))
                 .periodSec(answerTimer.getTimeDelaySec())
                 .checkLoop(answerTimer.getCheckLoop())
-                .timeDeath(LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).plusSeconds(answerTimer.getTimeDeathSec()));
+                .timeDeath(LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()))
+                        .plusSeconds(answerTimer.getTimeDeathSec()));
         timerService.add(timer.build());
         return answerTimer;
     }

@@ -45,12 +45,20 @@ public class AnswerAccountAction implements ActionUnit<AnswerAccount, Content> {
                     .unitDeath(autoCheck.getFailedPayment())
                     .checkLoop(content1 -> accountService.paymentVerification(accountId))
                     .periodSec(autoCheck.getPeriodSec())
-                    .timeActive(LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).plusSeconds(autoCheck.getPeriodSec()))
-                    .timeDeath(LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).plusHours(autoCheck.getLifetimeHours()))
+                    .timeActive(LocalDateTime
+                            .now(Clock.tickSeconds(ZoneId.systemDefault()))
+                            .plusSeconds(autoCheck.getPeriodSec()))
+                    .timeDeath(LocalDateTime
+                            .now(Clock.tickSeconds(ZoneId.systemDefault()))
+                            .plusHours(autoCheck.getLifetimeHours()))
                     .build();
             timerService.add(timer);
         }
 
-        return new AnswerText(BoxAnswer.builder().message("Для оплаты укажите номер счета " + accountId + "\nСумма к оплате: " + answerAccount.getTotalSum()).build());
+        return new AnswerText(BoxAnswer
+                .builder()
+                .message("Для оплаты укажите номер счета " + accountId + "\nСумма к оплате: "
+                        + answerAccount.getTotalSum())
+                .build());
     }
 }

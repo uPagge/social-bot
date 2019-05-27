@@ -14,9 +14,9 @@ public class UserSanderSavable extends LocalListSavable<Pair> {
     public void push(Integer personId) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("========= ").append(nameForm).append(" =========\n");
-        for (Pair pair : saveMap.get(personId)) {
-            stringBuilder.append(pair.getKey()).append(": ").append(pair.getValue()).append("\n");
-        }
+        download(personId)
+                .forEach(pair -> stringBuilder
+                        .append(pair.getKey()).append(": ").append(pair.getValue()).append("\n"));
         stringBuilder.append("====================");
         saveMap.remove(personId);
         sent.send(this.personId, stringBuilder.toString());

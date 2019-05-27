@@ -30,27 +30,32 @@ public class TimerActionTask extends TimerTask {
     public void run() {
         LocalDateTime nowDate = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()));
         log.info("Сервис таймеров сработал. Время: {}", nowDate);
-        for (Timer timer : timerService.getTimerActive(nowDate)) {
-            Content emptyContent = Contents.EMPTY_CONTENT;
-            emptyContent.setPersonId(timer.getPersonId());
-            CheckData checkLoop = timer.getCheckLoop();
 
-            if (!timeDeath(nowDate, timer.getTimeDeath())) {
-                if (checkLoop != null) {
-                    if (checkLoop.checked(emptyContent)) {
-                        generalAutoresponder.answer(emptyContent, timer.getUnitAnswer());
-                        timerService.remove(timer.getId());
-                    } else {
-                        reinstallation(timer);
-                    }
-                } else {
+        timerService.getTimerActive(nowDate)
+                .parallelStream()
+                .forEach(timer -> processingTimer(timer, nowDate));
+
+    }
+
+    private void processingTimer(Timer timer, LocalDateTime nowDate) {
+        Content emptyContent = Contents.EMPTY_CONTENT;
+        emptyContent.setPersonId(timer.getPersonId());
+        CheckData checkLoop = timer.getCheckLoop();
+
+        if (!timeDeath(nowDate, timer.getTimeDeath())) {
+            if (checkLoop != null) {
+                if (checkLoop.checked(emptyContent)) {
                     generalAutoresponder.answer(emptyContent, timer.getUnitAnswer());
+                    timerService.remove(timer.getId());
+                } else {
                     reinstallation(timer);
                 }
             } else {
-                death(timer, emptyContent);
+                generalAutoresponder.answer(emptyContent, timer.getUnitAnswer());
+                reinstallation(timer);
             }
-
+        } else {
+            death(timer, emptyContent);
         }
     }
 
