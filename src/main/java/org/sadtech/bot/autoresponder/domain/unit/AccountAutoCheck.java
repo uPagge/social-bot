@@ -56,4 +56,14 @@ public class AccountAutoCheck {
     public int hashCode() {
         return Objects.hash(successfulPayment, failedPayment, periodSec, lifetimeHours);
     }
+
+    @Override
+    public String toString() {
+        return "AccountAutoCheck{" +
+                "successfulPayment=" + successfulPayment +
+                ", failedPayment=" + failedPayment +
+                ", periodSec=" + periodSec +
+                ", lifetimeHours=" + lifetimeHours +
+                '}';
+    }
 }

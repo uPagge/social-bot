@@ -7,7 +7,7 @@ import org.sadtech.bot.autoresponder.domain.unit.AnswerText;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.service.timer.TimerService;
 import org.sadtech.bot.core.domain.BoxAnswer;
-import org.sadtech.bot.core.domain.content.Content;
+import org.sadtech.bot.core.domain.content.Mail;
 import org.sadtech.bot.core.domain.money.Account;
 import org.sadtech.bot.core.service.AccountService;
 
@@ -15,7 +15,7 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-public class AnswerAccountAction implements ActionUnit<AnswerAccount, Content> {
+public class AnswerAccountAction implements ActionUnit<AnswerAccount, Mail> {
 
     private final AccountService accountService;
     private TimerService timerService;
@@ -30,9 +30,9 @@ public class AnswerAccountAction implements ActionUnit<AnswerAccount, Content> {
     }
 
     @Override
-    public MainUnit action(AnswerAccount answerAccount, Content content) {
+    public MainUnit action(AnswerAccount answerAccount, Mail mail) {
         Account account = new Account();
-        account.setBelongsPersonId(content.getPersonId());
+        account.setBelongsPersonId(mail.getPersonId());
         account.setTotalSum(answerAccount.getTotalSum());
 
         Integer accountId = accountService.add(account);
@@ -40,7 +40,7 @@ public class AnswerAccountAction implements ActionUnit<AnswerAccount, Content> {
         AccountAutoCheck autoCheck = answerAccount.getAutoCheck();
         if (autoCheck != null && timerService != null) {
             Timer timer = Timer.builder()
-                    .personId(content.getPersonId())
+                    .personId(mail.getPersonId())
                     .unitAnswer(autoCheck.getSuccessfulPayment())
                     .unitDeath(autoCheck.getFailedPayment())
                     .checkLoop(content1 -> accountService.paymentVerification(accountId))
@@ -55,10 +55,12 @@ public class AnswerAccountAction implements ActionUnit<AnswerAccount, Content> {
             timerService.add(timer);
         }
 
-        return new AnswerText(BoxAnswer
-                .builder()
+
+        BoxAnswer boxAnswer = BoxAnswer.builder()
                 .message("Для оплаты укажите номер счета " + accountId + "\nСумма к оплате: "
                         + answerAccount.getTotalSum())
-                .build());
+                .build();
+
+        return AnswerText.builder().boxAnswer(boxAnswer).build();
     }
 }

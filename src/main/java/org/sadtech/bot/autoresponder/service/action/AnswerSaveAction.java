@@ -6,14 +6,14 @@ import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.service.save.Savable;
 import org.sadtech.bot.autoresponder.service.save.SaveStatus;
 import org.sadtech.bot.autoresponder.service.usercode.SaveData;
-import org.sadtech.bot.core.domain.content.Mail;
+import org.sadtech.bot.core.domain.content.Content;
 
 import java.util.Set;
 
-public class AnswerSaveAction implements ActionUnit<AnswerSave, Mail> {
+public class AnswerSaveAction implements ActionUnit<AnswerSave, Content> {
 
     @Override
-    public MainUnit action(AnswerSave answerSave, Mail mail) {
+    public MainUnit action(AnswerSave answerSave, Content mail) {
         Set<SaveStatus> unitSaveStatus = answerSave.getSaveStatuses();
         Savable savable = answerSave.getSavable();
         if (unitSaveStatus.contains(SaveStatus.INIT) || unitSaveStatus.contains(SaveStatus.FULL)) {

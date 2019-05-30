@@ -10,7 +10,7 @@ import org.sadtech.bot.autoresponder.service.action.*;
 import org.sadtech.bot.autoresponder.service.timer.TimerService;
 import org.sadtech.bot.core.domain.content.Content;
 import org.sadtech.bot.core.service.AccountService;
-import org.sadtech.bot.core.service.EventService;
+import org.sadtech.bot.core.service.ContentService;
 import org.sadtech.bot.core.service.Filter;
 import org.sadtech.bot.core.service.sender.Sent;
 
@@ -22,13 +22,13 @@ import java.util.function.Consumer;
 
 public class GeneralAutoresponder<T extends Content> implements Runnable {
 
-    private final EventService<T> eventService;
+    private final ContentService<T> contentService;
     protected final Autoresponder autoresponder;
     protected Map<TypeUnit, ActionUnit> actionUnitMap = new EnumMap<>(TypeUnit.class);
     protected List<Filter<T>> filters;
 
-    protected GeneralAutoresponder(Set<Unit> menuUnit, Sent sent, EventService<T> eventService) {
-        this.eventService = eventService;
+    protected GeneralAutoresponder(Set<Unit> menuUnit, Sent sent, ContentService<T> contentService) {
+        this.contentService = contentService;
         autoresponder = new Autoresponder(new UnitPointerServiceImpl(), menuUnit);
         init(sent);
     }
@@ -72,7 +72,7 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
         while (true) {
             newData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).minusSeconds(1);
             if (oldData.isBefore(newData)) {
-                eventService.getFirstEventByTime(oldData, newData)
+                contentService.getLastEventByTime(oldData, newData)
                         .parallelStream().forEach(processing());
             }
             oldData = newData;
@@ -81,7 +81,9 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
 
     private Consumer<T> processing() {
         return event -> {
-            filters.forEach(filter -> filter.processing(event));
+            if (filters != null) {
+                filters.forEach(filter -> filter.processing(event));
+            }
             MainUnit unitAnswer = (MainUnit) autoresponder.answer(event.getPersonId(), event.getMessage());
             answer(event, unitAnswer);
         };

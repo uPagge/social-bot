@@ -2,10 +2,12 @@ package org.sadtech.bot.autoresponder.service.action;
 
 import org.sadtech.bot.autoresponder.domain.unit.AnswerProcessing;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
-import org.sadtech.bot.core.domain.content.Mail;
+import org.sadtech.bot.core.domain.BoxAnswer;
+import org.sadtech.bot.core.domain.content.Content;
+import org.sadtech.bot.core.service.sender.SenderBox;
 import org.sadtech.bot.core.service.sender.Sent;
 
-public class AnswerProcessingAction implements ActionUnit<AnswerProcessing, Mail> {
+public class AnswerProcessingAction implements ActionUnit<AnswerProcessing, Content> {
 
     private final Sent sent;
 
@@ -14,8 +16,10 @@ public class AnswerProcessingAction implements ActionUnit<AnswerProcessing, Mail
     }
 
     @Override
-    public MainUnit action(AnswerProcessing answerProcessing, Mail mail) {
-        sent.send(mail.getPersonId(), answerProcessing.getProcessingData().processing(mail));
+    public MainUnit action(AnswerProcessing answerProcessing, Content content) {
+        BoxAnswer boxAnswer = answerProcessing.getProcessingData().processing(content);
+        SenderBox.sent((answerProcessing.getSent() != null) ? answerProcessing.getSent() : sent, content, boxAnswer);
         return answerProcessing;
     }
+
 }

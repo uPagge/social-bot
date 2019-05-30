@@ -84,4 +84,16 @@ public class AnswerTimer extends MainUnit {
     public int hashCode() {
         return Objects.hash(super.hashCode(), unitAnswer, timeDelaySec, checkLoop);
     }
+
+    @Override
+    public String toString() {
+        return "AnswerTimer{" +
+                "unitAnswer=" + unitAnswer +
+                ", timeDelaySec=" + timeDelaySec +
+                ", timeDeathSec=" + timeDeathSec +
+                ", checkLoop=" + checkLoop +
+                ", activeStatus=" + activeStatus +
+                ", typeUnit=" + typeUnit +
+                '}';
+    }
 }
