@@ -1,11 +1,12 @@
 package org.sadtech.bot.autoresponder.domain.unit;
 
+import org.sadtech.bot.autoresponder.domain.AccountAutoCheck;
+
 import java.util.Objects;
 
 public class AnswerAccount extends MainUnit {
 
-    private Integer id;
-    private Double totalSum;
+    private Integer totalSum;
     private Integer timeHours;
     private AccountAutoCheck autoCheck;
 
@@ -14,36 +15,46 @@ public class AnswerAccount extends MainUnit {
         typeUnit = TypeUnit.ACCOUNT;
     }
 
-    public Double getTotalSum() {
+    public Integer getTotalSum() {
         return totalSum;
-    }
-
-    public void setTotalSum(Double totalSum) {
-        this.totalSum = totalSum;
     }
 
     public Integer getTimeHours() {
         return timeHours;
     }
 
-    public void setTimeHours(Integer timeHours) {
-        this.timeHours = timeHours;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public AccountAutoCheck getAutoCheck() {
         return autoCheck;
     }
 
-    public void setAutoCheck(AccountAutoCheck autoCheck) {
-        this.autoCheck = autoCheck;
+    public static Builder builder() {
+        return new AnswerAccount().new Builder();
+    }
+
+    public class Builder {
+        private Builder() {
+
+        }
+
+        public Builder totalSum(Integer totalSum) {
+            AnswerAccount.this.totalSum = totalSum;
+            return this;
+        }
+
+        public Builder timeHours(Integer timeHours) {
+            AnswerAccount.this.timeHours = timeHours;
+            return this;
+        }
+
+        public Builder autoCheck(AccountAutoCheck autoCheck) {
+            AnswerAccount.this.autoCheck = autoCheck;
+            return this;
+        }
+
+        public AnswerAccount build() {
+            return AnswerAccount.this;
+        }
+
     }
 
     @Override
@@ -52,13 +63,13 @@ public class AnswerAccount extends MainUnit {
         if (!(o instanceof AnswerAccount)) return false;
         if (!super.equals(o)) return false;
         AnswerAccount that = (AnswerAccount) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(totalSum, that.totalSum) &&
-                Objects.equals(timeHours, that.timeHours);
+        return Objects.equals(totalSum, that.totalSum) &&
+                Objects.equals(timeHours, that.timeHours) &&
+                Objects.equals(autoCheck, that.autoCheck);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), id, totalSum, timeHours);
+        return Objects.hash(super.hashCode(), totalSum, timeHours, autoCheck);
     }
 }

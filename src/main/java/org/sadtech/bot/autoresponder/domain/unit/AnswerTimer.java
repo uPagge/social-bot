@@ -11,7 +11,7 @@ public class AnswerTimer extends MainUnit {
     private Integer timeDeathSec;
     private CheckData checkLoop;
 
-    private AnswerTimer() {
+    public AnswerTimer() {
         activeStatus = UnitActiveStatus.AFTER;
         typeUnit = TypeUnit.TIMER;
     }

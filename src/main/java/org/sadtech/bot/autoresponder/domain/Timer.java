@@ -21,6 +21,10 @@ public class Timer {
 
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public void setUnitAnswer(MainUnit unitAnswer) {
         this.unitAnswer = unitAnswer;
     }
@@ -79,10 +83,6 @@ public class Timer {
 
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public static Builder builder() {
@@ -155,5 +155,19 @@ public class Timer {
     @Override
     public int hashCode() {
         return Objects.hash(unitAnswer, personId, timeActive, timeDeath, periodSec, checkLoop);
+    }
+
+    @Override
+    public String toString() {
+        return "Timer{" +
+                "id=" + id +
+                ", unitAnswer=" + unitAnswer +
+                ", unitDeath=" + unitDeath +
+                ", personId=" + personId +
+                ", timeActive=" + timeActive +
+                ", timeDeath=" + timeDeath +
+                ", periodSec=" + periodSec +
+                ", checkLoop=" + checkLoop +
+                '}';
     }
 }

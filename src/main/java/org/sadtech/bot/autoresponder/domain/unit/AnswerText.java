@@ -12,7 +12,7 @@ public class AnswerText extends MainUnit {
     private Insert insert;
     private Sent sent;
 
-    private AnswerText() {
+    public AnswerText() {
         typeUnit = TypeUnit.TEXT;
     }
 

@@ -15,7 +15,7 @@ public class AnswerSave extends MainUnit {
     private SaveData saveData;
     private Boolean hidden = false;
 
-    private AnswerSave() {
+    public AnswerSave() {
         typeUnit = TypeUnit.SAVE;
     }
 

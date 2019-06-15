@@ -8,7 +8,7 @@ import org.sadtech.bot.autoresponder.domain.unit.TypeUnit;
 import org.sadtech.bot.autoresponder.domain.unit.UnitActiveStatus;
 import org.sadtech.bot.autoresponder.service.action.*;
 import org.sadtech.bot.autoresponder.service.timer.TimerService;
-import org.sadtech.bot.core.domain.content.Content;
+import org.sadtech.bot.core.domain.content.Message;
 import org.sadtech.bot.core.service.AccountService;
 import org.sadtech.bot.core.service.ContentService;
 import org.sadtech.bot.core.service.Filter;
@@ -20,7 +20,7 @@ import java.time.ZoneId;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class GeneralAutoresponder<T extends Content> implements Runnable {
+public class GeneralAutoresponder<T extends Message> implements Runnable {
 
     private final ContentService<T> contentService;
     protected final Autoresponder autoresponder;
@@ -37,10 +37,6 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
         this.filters = filters;
     }
 
-    private MainUnit getAction(T event, MainUnit unitAnswer) {
-        return actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, event);
-    }
-
     protected void addActionUnit(TypeUnit typeUnit, ActionUnit actionUnit) {
         actionUnitMap.put(typeUnit, actionUnit);
     }
@@ -55,7 +51,6 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
         actionUnitMap.put(TypeUnit.TEXT, new AnswerTextAction(sent));
         actionUnitMap.put(TypeUnit.SAVE, new AnswerSaveAction());
         actionUnitMap.put(TypeUnit.VALIDITY, new AnswerValidityAction());
-        actionUnitMap.put(TypeUnit.NEXT, new AnswerNextAction(autoresponder));
     }
 
     public void initTimerAction(TimerService timerService) {
@@ -90,16 +85,23 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
     }
 
     public void answer(T event, MainUnit unitAnswer) {
-        MainUnit newUnitAnswer = getAction(event, unitAnswer);
-        while (!newUnitAnswer.equals(unitAnswer)) {
-            unitAnswer = newUnitAnswer;
-            newUnitAnswer = getAction(event, unitAnswer);
-        }
+        unitAnswer = getAction(event, unitAnswer);
         unitAnswer = activeUnitAfter(unitAnswer, event);
-        autoresponder.getUnitPointerService().edit(event.getPersonId(), unitAnswer);
+        if (!(autoresponder.getDefaultUnit()!=null && autoresponder.getDefaultUnit().equals(unitAnswer))) {
+            autoresponder.getUnitPointerService().edit(event.getPersonId(), unitAnswer);
+        }
     }
 
-    protected MainUnit activeUnitAfter(MainUnit mainUnit, T content) {
+    private MainUnit getAction(T event, MainUnit unitAnswer) {
+        MainUnit mainUnit = actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, event);
+        while (!unitAnswer.equals(mainUnit)) {
+            unitAnswer = mainUnit;
+            mainUnit = getAction(event, mainUnit);
+        }
+        return mainUnit;
+    }
+
+    private MainUnit activeUnitAfter(MainUnit mainUnit, T content) {
         if (mainUnit.getNextUnits() != null) {
             Optional<MainUnit> first = mainUnit.getNextUnits().stream()
                     .filter(unit -> unit instanceof MainUnit)
@@ -113,6 +115,8 @@ public class GeneralAutoresponder<T extends Content> implements Runnable {
         }
         return mainUnit;
     }
+
+
 
     @Override
     public void run() {

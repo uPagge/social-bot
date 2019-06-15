@@ -1,15 +1,17 @@
 package org.sadtech.bot.autoresponder.service.action;
 
+import org.sadtech.bot.autoresponder.domain.AccountAutoCheck;
 import org.sadtech.bot.autoresponder.domain.Timer;
-import org.sadtech.bot.autoresponder.domain.unit.AccountAutoCheck;
 import org.sadtech.bot.autoresponder.domain.unit.AnswerAccount;
 import org.sadtech.bot.autoresponder.domain.unit.AnswerText;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
 import org.sadtech.bot.autoresponder.service.timer.TimerService;
 import org.sadtech.bot.core.domain.BoxAnswer;
 import org.sadtech.bot.core.domain.content.Mail;
+import org.sadtech.bot.core.domain.keyboard.button.KeyBoardButtonAccount;
 import org.sadtech.bot.core.domain.money.Account;
 import org.sadtech.bot.core.service.AccountService;
+import org.sadtech.bot.core.utils.KeyBoards;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -37,6 +39,22 @@ public class AnswerAccountAction implements ActionUnit<AnswerAccount, Mail> {
 
         Integer accountId = accountService.add(account);
 
+        settingCheckTimer(answerAccount, mail, accountId);
+
+        KeyBoardButtonAccount buttonAccount = KeyBoardButtonAccount.builder()
+                .accountId(accountId)
+                .amount(answerAccount.getTotalSum()).build();
+
+        BoxAnswer boxAnswer = BoxAnswer.builder()
+                .message("Для оплаты укажите номер счета " + accountId + "\nСумма к оплате: "
+                        + answerAccount.getTotalSum())
+                .keyBoard(KeyBoards.singelton(buttonAccount))
+                .build();
+
+        return AnswerText.builder().boxAnswer(boxAnswer).build();
+    }
+
+    private void settingCheckTimer(AnswerAccount answerAccount, Mail mail, Integer accountId) {
         AccountAutoCheck autoCheck = answerAccount.getAutoCheck();
         if (autoCheck != null && timerService != null) {
             Timer timer = Timer.builder()
@@ -50,17 +68,9 @@ public class AnswerAccountAction implements ActionUnit<AnswerAccount, Mail> {
                             .plusSeconds(autoCheck.getPeriodSec()))
                     .timeDeath(LocalDateTime
                             .now(Clock.tickSeconds(ZoneId.systemDefault()))
-                            .plusHours(autoCheck.getLifetimeHours()))
+                            .plusHours(autoCheck.getLifeTimeHours()))
                     .build();
             timerService.add(timer);
         }
-
-
-        BoxAnswer boxAnswer = BoxAnswer.builder()
-                .message("Для оплаты укажите номер счета " + accountId + "\nСумма к оплате: "
-                        + answerAccount.getTotalSum())
-                .build();
-
-        return AnswerText.builder().boxAnswer(boxAnswer).build();
     }
 }
