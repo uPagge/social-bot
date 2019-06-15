@@ -11,7 +11,7 @@ public class AnswerTimer extends MainUnit {
     private Integer timeDeathSec;
     private CheckData checkLoop;
 
-    private AnswerTimer() {
+    public AnswerTimer() {
         activeStatus = UnitActiveStatus.AFTER;
         typeUnit = TypeUnit.TIMER;
     }
@@ -83,5 +83,17 @@ public class AnswerTimer extends MainUnit {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), unitAnswer, timeDelaySec, checkLoop);
+    }
+
+    @Override
+    public String toString() {
+        return "AnswerTimer{" +
+                "unitAnswer=" + unitAnswer +
+                ", timeDelaySec=" + timeDelaySec +
+                ", timeDeathSec=" + timeDeathSec +
+                ", checkLoop=" + checkLoop +
+                ", activeStatus=" + activeStatus +
+                ", typeUnit=" + typeUnit +
+                '}';
     }
 }

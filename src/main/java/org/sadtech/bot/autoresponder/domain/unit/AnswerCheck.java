@@ -10,7 +10,7 @@ public class AnswerCheck extends MainUnit {
     private MainUnit unitFalse;
     private CheckData check;
 
-    private AnswerCheck() {
+    public AnswerCheck() {
         typeUnit = TypeUnit.CHECK;
     }
 
@@ -26,26 +26,26 @@ public class AnswerCheck extends MainUnit {
         return check;
     }
 
-    public static Bulder bulder() {
-        return new AnswerCheck().new Bulder();
+    public static Builder builder() {
+        return new AnswerCheck().new Builder();
     }
 
-    public class Bulder {
-        private Bulder() {
+    public class Builder {
+        private Builder() {
 
         }
 
-        public Bulder unitTrue(MainUnit unitTrue) {
+        public Builder unitTrue(MainUnit unitTrue) {
             AnswerCheck.this.unitTrue = unitTrue;
             return this;
         }
 
-        public Bulder unitFalse(MainUnit unitFalse) {
+        public Builder unitFalse(MainUnit unitFalse) {
             AnswerCheck.this.unitFalse = unitFalse;
             return this;
         }
 
-        public Bulder check(CheckData checkData) {
+        public Builder check(CheckData checkData) {
             AnswerCheck.this.check = checkData;
             return this;
         }

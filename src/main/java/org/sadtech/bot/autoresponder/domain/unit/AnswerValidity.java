@@ -14,7 +14,7 @@ public class AnswerValidity extends MainUnit {
     private Savable<String> tempSave;
     private PairInsert pairInsert;
 
-    private AnswerValidity() {
+    public AnswerValidity() {
         typeUnit = TypeUnit.VALIDITY;
     }
 
@@ -70,7 +70,7 @@ public class AnswerValidity extends MainUnit {
             return this;
         }
 
-        public Builder testInsert(PairInsert pairInsert) {
+        public Builder pairInsert(PairInsert pairInsert) {
             AnswerValidity.this.pairInsert = pairInsert;
             return this;
         }

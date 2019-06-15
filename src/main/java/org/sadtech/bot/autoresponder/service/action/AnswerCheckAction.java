@@ -2,16 +2,16 @@ package org.sadtech.bot.autoresponder.service.action;
 
 import org.sadtech.bot.autoresponder.domain.unit.AnswerCheck;
 import org.sadtech.bot.autoresponder.domain.unit.MainUnit;
-import org.sadtech.bot.core.domain.content.Content;
+import org.sadtech.bot.core.domain.content.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AnswerCheckAction implements ActionUnit<AnswerCheck, Content> {
+public class AnswerCheckAction implements ActionUnit<AnswerCheck, Message> {
 
     private static final Logger log = LoggerFactory.getLogger(AnswerCheckAction.class);
 
     @Override
-    public MainUnit action(AnswerCheck answerCheck, Content mail) {
+    public MainUnit action(AnswerCheck answerCheck, Message mail) {
         MainUnit unitAnswer;
         if (answerCheck.getCheck().checked(mail)) {
             log.info("Проверка пройдена");
@@ -20,7 +20,11 @@ public class AnswerCheckAction implements ActionUnit<AnswerCheck, Content> {
             log.info("Проверка не пройдена");
             unitAnswer = answerCheck.getUnitFalse();
         }
-        return unitAnswer;
+        if (unitAnswer != null) {
+            return unitAnswer;
+        } else {
+            return answerCheck;
+        }
     }
 
 }

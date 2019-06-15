@@ -1,6 +1,7 @@
 package org.sadtech.bot.autoresponder.service.save;
 
 import javafx.util.Pair;
+import org.sadtech.bot.core.domain.BoxAnswer;
 
 public class UserSanderSavable extends LocalListSavable<Pair> {
 
@@ -19,7 +20,7 @@ public class UserSanderSavable extends LocalListSavable<Pair> {
                         .append(pair.getKey()).append(": ").append(pair.getValue()).append("\n"));
         stringBuilder.append("====================");
         saveMap.remove(personId);
-        sent.send(this.personId, stringBuilder.toString());
+        sent.send(this.personId, BoxAnswer.builder().message(stringBuilder.toString()).build());
     }
 
 }

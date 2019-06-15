@@ -3,7 +3,7 @@ package org.sadtech.bot.autoresponder.service.timer;
 import org.sadtech.bot.autoresponder.GeneralAutoresponder;
 import org.sadtech.bot.autoresponder.domain.Timer;
 import org.sadtech.bot.autoresponder.service.usercode.CheckData;
-import org.sadtech.bot.core.domain.content.Content;
+import org.sadtech.bot.core.domain.content.Message;
 import org.sadtech.bot.core.utils.Contents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,24 +38,25 @@ public class TimerActionTask extends TimerTask {
     }
 
     private void processingTimer(Timer timer, LocalDateTime nowDate) {
-        Content emptyContent = Contents.EMPTY_CONTENT;
-        emptyContent.setPersonId(timer.getPersonId());
+        Message emptyMessage = Contents.EMPTY_CONTENT;
+        emptyMessage.setPersonId(timer.getPersonId());
         CheckData checkLoop = timer.getCheckLoop();
 
         if (!timeDeath(nowDate, timer.getTimeDeath())) {
             if (checkLoop != null) {
-                if (checkLoop.checked(emptyContent)) {
-                    generalAutoresponder.answer(emptyContent, timer.getUnitAnswer());
+                if (checkLoop.checked(emptyMessage)) {
+                    generalAutoresponder.answer(emptyMessage, timer.getUnitAnswer());
                     timerService.remove(timer.getId());
                 } else {
                     reinstallation(timer);
                 }
             } else {
-                generalAutoresponder.answer(emptyContent, timer.getUnitAnswer());
+                generalAutoresponder.answer(emptyMessage, timer.getUnitAnswer());
                 reinstallation(timer);
             }
         } else {
-            death(timer, emptyContent);
+            generalAutoresponder.answer(emptyMessage, timer.getUnitAnswer());
+            death(timer, emptyMessage);
         }
     }
 
@@ -66,9 +67,9 @@ public class TimerActionTask extends TimerTask {
         }
     }
 
-    private void death(Timer timer, Content emptyContent) {
+    private void death(Timer timer, Message emptyMessage) {
         if (timer.getUnitDeath() != null) {
-            generalAutoresponder.answer(emptyContent, timer.getUnitDeath());
+            generalAutoresponder.answer(emptyMessage, timer.getUnitDeath());
         }
         timerService.remove(timer.getId());
     }
