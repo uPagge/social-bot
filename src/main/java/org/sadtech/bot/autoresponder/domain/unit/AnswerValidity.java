@@ -16,6 +16,7 @@ public class AnswerValidity extends MainUnit {
 
     public AnswerValidity() {
         typeUnit = TypeUnit.VALIDITY;
+        activeStatus = UnitActiveStatus.AFTER;
     }
 
     public MainUnit getUnitYes() {
