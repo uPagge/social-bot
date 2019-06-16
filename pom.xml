@@ -6,8 +6,9 @@
 
     <groupId>org.sadtech.bot</groupId>
     <artifactId>bot-autoresponder</artifactId>
-    <version>0.6.4-RELEASE</version>
+    <version>0.6.5-RELEASE</version>
     <packaging>jar</packaging>
+
     <build>
         <plugins>
             <plugin>

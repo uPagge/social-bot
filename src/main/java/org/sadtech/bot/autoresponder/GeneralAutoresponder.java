@@ -109,7 +109,7 @@ public class GeneralAutoresponder<T extends Message> implements Runnable {
                     .findFirst();
             if (first.isPresent()) {
                 getAction(content, first.get());
-                activeUnitAfter(first.get(), content);
+                return activeUnitAfter(first.get(), content);
             }
         }
         return mainUnit;
