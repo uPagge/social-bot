@@ -109,8 +109,8 @@ public class GeneralAutoresponder<T extends Message> implements Runnable {
                     .filter(unit -> UnitActiveStatus.AFTER.equals(unit.getActiveStatus()))
                     .findFirst();
             if (first.isPresent()) {
-                getAction(content, first.get());
-                return activeUnitAfter(first.get(), content);
+                MainUnit action = getAction(content, first.get());
+                return activeUnitAfter(action, content);
             }
         }
         return mainUnit;
