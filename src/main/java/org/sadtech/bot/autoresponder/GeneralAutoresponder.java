@@ -95,8 +95,7 @@ public class GeneralAutoresponder<T extends Message> implements Runnable {
     private MainUnit getAction(T event, MainUnit unitAnswer) {
         MainUnit mainUnit = actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, event);
         while (!unitAnswer.equals(mainUnit)) {
-            unitAnswer = mainUnit;
-            mainUnit = getAction(event, mainUnit);
+            return getAction(event, mainUnit);
         }
         return mainUnit;
     }
@@ -109,8 +108,8 @@ public class GeneralAutoresponder<T extends Message> implements Runnable {
                     .filter(unit -> UnitActiveStatus.AFTER.equals(unit.getActiveStatus()))
                     .findFirst();
             if (first.isPresent()) {
-                MainUnit action = getAction(content, first.get());
-                return activeUnitAfter(action, content);
+                getAction(content, first.get());
+                activeUnitAfter(first.get(), content);
             }
         }
         return mainUnit;
