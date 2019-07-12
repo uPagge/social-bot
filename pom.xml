@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.sadtech.bot</groupId>
-    <artifactId>bot-autoresponder</artifactId>
-    <version>0.6.5-RELEASE</version>
+    <groupId>org.sadtech.social</groupId>
+    <artifactId>social-autoresponder</artifactId>
+    <version>0.6.6-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <build>
@@ -23,8 +23,8 @@
     </build>
 
     <properties>
-        <bot.core.ver>0.6.2-RELEASE</bot.core.ver>
-        <autoresponder.ver>1.6.2-RELEASE</autoresponder.ver>
+        <social.core.ver>0.6.3-SNAPSHOT</social.core.ver>
+        <autoresponder.ver>1.6.3-SNAPSHOT</autoresponder.ver>
 
         <google.cloud.speech.ver>1.3.0</google.cloud.speech.ver>
         <apache.commons>1.3.2</apache.commons>
@@ -32,9 +32,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.sadtech.bot</groupId>
-            <artifactId>bot-core</artifactId>
-            <version>${bot.core.ver}</version>
+            <groupId>org.sadtech.social</groupId>
+            <artifactId>social-core</artifactId>
+            <version>${social.core.ver}</version>
         </dependency>
 
         <dependency>
