@@ -7,6 +7,6 @@ package org.sadtech.social.bot.domain.unit;
  */
 public enum TypeUnit {
 
-    TEXT, SAVE, PROCESSING, TIMER, CHECK, VALIDITY, ACCOUNT
+    TEXT, SAVE, PROCESSING, TIMER, CHECK, VALIDITY, ACCOUNT, NEXT
 
 }

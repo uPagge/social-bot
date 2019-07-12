@@ -1,10 +1,16 @@
 package org.sadtech.social.bot.domain.unit;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Singular;
 import lombok.ToString;
+import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.social.bot.service.usercode.CheckData;
 import org.sadtech.social.core.utils.Description;
+
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Обработчик таймер, позволяющий отложить обработку других Unit-ов.
@@ -17,55 +23,33 @@ import org.sadtech.social.core.utils.Description;
 public class AnswerTimer extends MainUnit {
 
     @Description("Unit обработку которого необходимо отложить")
-    private MainUnit unitAnswer;
+    private final MainUnit unitAnswer;
 
     @Description("Задержка обработки в секундах")
-    private Integer timeDelaySec;
+    private final Integer timeDelaySec;
 
     @Description("Время, через которое таймер будет удален в секундах")
-    private Integer timeDeathSec;
+    private final Integer timeDeathSec;
 
     @Description("Условие срабатывания отложенного Unit")
-    private CheckData checkLoop;
+    private final CheckData checkLoop;
 
-    public AnswerTimer() {
-        activeType = UnitActiveType.AFTER;
-        typeUnit = TypeUnit.TIMER;
+    @Builder
+    private AnswerTimer(@Singular Set<String> keyWords,
+                        Pattern pattern,
+                        Integer matchThreshold,
+                        Integer priority,
+                        @Singular Set<Unit> nextUnits,
+                        UnitActiveType activeType,
+                        MainUnit unitAnswer,
+                        Integer timeDelaySec,
+                        Integer timeDeathSec,
+                        CheckData checkLoop) {
+        super(keyWords, pattern, matchThreshold, priority, nextUnits, (activeType == null) ? UnitActiveType.AFTER : activeType, TypeUnit.TIMER);
+        this.unitAnswer = unitAnswer;
+        this.timeDelaySec = timeDelaySec;
+        this.timeDeathSec = timeDeathSec;
+        this.checkLoop = checkLoop;
     }
 
-    public static Builder builder() {
-        return new AnswerTimer().new Builder();
-    }
-
-    public class Builder {
-
-        private Builder() {
-
-        }
-
-        public Builder unitAnswer(MainUnit unitAnswer) {
-            AnswerTimer.this.unitAnswer = unitAnswer;
-            return this;
-        }
-
-        public Builder timeDelaySec(Integer sec) {
-            AnswerTimer.this.timeDelaySec = sec;
-            return this;
-        }
-
-        public Builder checkLoop(CheckData checkLoop) {
-            AnswerTimer.this.checkLoop = checkLoop;
-            return this;
-        }
-
-        public Builder timeDeathSec(Integer timeDeathSec) {
-            AnswerTimer.this.timeDeathSec = timeDeathSec;
-            return this;
-        }
-
-        public AnswerTimer build() {
-            return AnswerTimer.this;
-        }
-
-    }
 }

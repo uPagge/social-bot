@@ -1,9 +1,15 @@
 package org.sadtech.social.bot.domain.unit;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Singular;
+import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.social.bot.domain.AccountAutoCheck;
 import org.sadtech.social.core.utils.Description;
+
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Данные для обработки счета.
@@ -15,47 +21,28 @@ import org.sadtech.social.core.utils.Description;
 public class AnswerAccount extends MainUnit {
 
     @Description("Сумма к оплате")
-    private Integer totalSum;
+    private final Integer totalSum;
 
     @Description("Время жизни счета")
-    private Integer timeHours;
+    private final Integer timeHours;
 
     @Description("Настройки для автоматической проверки оплаты")
-    private AccountAutoCheck autoCheck;
+    private final AccountAutoCheck autoCheck;
 
-    public AnswerAccount() {
-        activeType = UnitActiveType.AFTER;
-        typeUnit = TypeUnit.ACCOUNT;
-    }
-
-    public static Builder builder() {
-        return new AnswerAccount().new Builder();
-    }
-
-    public class Builder {
-        private Builder() {
-
-        }
-
-        public Builder totalSum(Integer totalSum) {
-            AnswerAccount.this.totalSum = totalSum;
-            return this;
-        }
-
-        public Builder timeHours(Integer timeHours) {
-            AnswerAccount.this.timeHours = timeHours;
-            return this;
-        }
-
-        public Builder autoCheck(AccountAutoCheck autoCheck) {
-            AnswerAccount.this.autoCheck = autoCheck;
-            return this;
-        }
-
-        public AnswerAccount build() {
-            return AnswerAccount.this;
-        }
-
+    @Builder
+    private AnswerAccount(@Singular Set<String> keyWords,
+                         Pattern pattern,
+                         Integer matchThreshold,
+                         Integer priority,
+                         @Singular Set<Unit> nextUnits,
+                         UnitActiveType activeType,
+                         Integer totalSum,
+                         Integer timeHours,
+                         AccountAutoCheck autoCheck) {
+        super(keyWords, pattern, matchThreshold, priority, nextUnits, (activeType == null) ? UnitActiveType.AFTER : activeType, TypeUnit.ACCOUNT);
+        this.totalSum = totalSum;
+        this.timeHours = timeHours;
+        this.autoCheck = autoCheck;
     }
 
 }

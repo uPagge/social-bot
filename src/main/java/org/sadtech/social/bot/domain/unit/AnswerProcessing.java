@@ -1,10 +1,16 @@
 package org.sadtech.social.bot.domain.unit;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Singular;
+import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.social.bot.service.usercode.ProcessingData;
 import org.sadtech.social.core.service.sender.Sent;
 import org.sadtech.social.core.utils.Description;
+
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Обработчик для кастомных реализаций.
@@ -16,37 +22,23 @@ import org.sadtech.social.core.utils.Description;
 public class AnswerProcessing extends MainUnit {
 
     @Description("Кастомная обработка")
-    private ProcessingData processingData;
+    private final ProcessingData processingData;
 
     @Description("Объект для сквозной отправки ответа")
-    private Sent sent;
+    private final Sent sent;
 
-    public AnswerProcessing() {
-        typeUnit = TypeUnit.PROCESSING;
+    @Builder
+    private AnswerProcessing(@Singular Set<String> keyWords,
+                             Pattern pattern,
+                             Integer matchThreshold,
+                             Integer priority,
+                             @Singular Set<Unit> nextUnits,
+                             UnitActiveType activeType,
+                             ProcessingData processingData,
+                             Sent sent) {
+        super(keyWords, pattern, matchThreshold, priority, nextUnits, activeType, TypeUnit.PROCESSING);
+        this.processingData = processingData;
+        this.sent = sent;
     }
 
-    public static Builder builder() {
-        return new AnswerProcessing().new Builder();
-    }
-
-    public class Builder {
-        private Builder() {
-
-        }
-
-        public Builder processingData(ProcessingData processingData) {
-            AnswerProcessing.this.processingData = processingData;
-            return this;
-        }
-
-        public Builder sent(Sent sent) {
-            AnswerProcessing.this.sent = sent;
-            return this;
-        }
-
-        public AnswerProcessing build() {
-            return AnswerProcessing.this;
-        }
-
-    }
 }

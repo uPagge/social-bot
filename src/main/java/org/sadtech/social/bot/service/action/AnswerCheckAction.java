@@ -6,6 +6,8 @@ import org.sadtech.social.core.domain.content.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
+
 /**
  * Обработчик Unit-а {@link AnswerCheck}.
  *
@@ -25,11 +27,7 @@ public class AnswerCheckAction implements ActionUnit<AnswerCheck, Message> {
             log.info("Проверка не пройдена");
             unitAnswer = answerCheck.getUnitFalse();
         }
-        if (unitAnswer != null) {
-            return unitAnswer;
-        } else {
-            return answerCheck;
-        }
+        return Optional.ofNullable(unitAnswer).orElse(answerCheck);
     }
 
 }

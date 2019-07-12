@@ -1,6 +1,6 @@
 package org.sadtech.social.bot.service.action;
 
-import org.sadtech.social.bot.GeneralAutoresponder;
+import org.sadtech.social.bot.GeneralAutoResponder;
 import org.sadtech.social.bot.domain.Timer;
 import org.sadtech.social.bot.domain.unit.AnswerTimer;
 import org.sadtech.social.bot.domain.unit.MainUnit;
@@ -24,7 +24,7 @@ public class AnswerTimerAction implements ActionUnit<AnswerTimer, Message> {
     private TimerService timerService;
     private Long verificationPeriodSec = 15L;
 
-    public AnswerTimerAction(TimerService timerService, GeneralAutoresponder generalAutoresponder) {
+    public AnswerTimerAction(TimerService timerService, GeneralAutoResponder generalAutoresponder) {
         this.timerService = timerService;
         TimerActionTask timerActionTask = new TimerActionTask(timerService, generalAutoresponder);
         java.util.Timer timer = new java.util.Timer(true);

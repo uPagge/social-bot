@@ -1,7 +1,8 @@
 package org.sadtech.social.bot;
 
-import org.sadtech.autoresponder.Autoresponder;
+import org.sadtech.autoresponder.AutoResponder;
 import org.sadtech.autoresponder.entity.Unit;
+import org.sadtech.autoresponder.repository.UnitPointerRepositoryMap;
 import org.sadtech.autoresponder.service.UnitPointerServiceImpl;
 import org.sadtech.social.bot.domain.unit.MainUnit;
 import org.sadtech.social.bot.domain.unit.TypeUnit;
@@ -31,16 +32,16 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class GeneralAutoresponder<T extends Message> implements Runnable {
+public class GeneralAutoResponder<T extends Message> implements Runnable {
 
     private final MessageService<T> messageService;
-    protected final Autoresponder autoresponder;
+    protected final AutoResponder autoResponder;
     protected Map<TypeUnit, ActionUnit> actionUnitMap = new EnumMap<>(TypeUnit.class);
     protected List<Filter<T>> filters;
 
-    protected GeneralAutoresponder(Set<Unit> menuUnit, Sent sent, MessageService<T> messageService) {
+    protected GeneralAutoResponder(Set<Unit> menuUnit, Sent sent, MessageService<T> messageService) {
         this.messageService = messageService;
-        autoresponder = new Autoresponder(new UnitPointerServiceImpl(), menuUnit);
+        autoResponder = new AutoResponder(new UnitPointerServiceImpl(new UnitPointerRepositoryMap()), menuUnit);
         init(sent);
     }
 
@@ -53,7 +54,7 @@ public class GeneralAutoresponder<T extends Message> implements Runnable {
     }
 
     public void setDefaultUnit(MainUnit defaultUnit) {
-        autoresponder.setDefaultUnit(defaultUnit);
+        autoResponder.setDefaultUnit(defaultUnit);
     }
 
     private void init(Sent sent) {
@@ -90,7 +91,7 @@ public class GeneralAutoresponder<T extends Message> implements Runnable {
             if (filters != null) {
                 filters.forEach(filter -> filter.processing(event));
             }
-            MainUnit unitAnswer = (MainUnit) autoresponder.answer(event.getPersonId(), event.getText());
+            MainUnit unitAnswer = (MainUnit) autoResponder.answer(event.getPersonId(), event.getText());
             answer(event, unitAnswer);
         };
     }
@@ -98,8 +99,8 @@ public class GeneralAutoresponder<T extends Message> implements Runnable {
     public void answer(T event, MainUnit unitAnswer) {
         unitAnswer = getAction(event, unitAnswer);
         unitAnswer = activeUnitAfter(unitAnswer, event);
-        if (!(autoresponder.getDefaultUnit() != null && autoresponder.getDefaultUnit().equals(unitAnswer))) {
-            autoresponder.getUnitPointerService().edit(event.getPersonId(), unitAnswer);
+        if (!(autoResponder.getDefaultUnit() != null && autoResponder.getDefaultUnit().equals(unitAnswer))) {
+            autoResponder.getUnitPointerService().edit(event.getPersonId(), unitAnswer);
         }
     }
 

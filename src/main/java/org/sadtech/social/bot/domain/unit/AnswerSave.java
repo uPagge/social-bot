@@ -1,17 +1,19 @@
 package org.sadtech.social.bot.domain.unit;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Singular;
 import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.social.bot.service.save.Savable;
 import org.sadtech.social.bot.service.save.SaveType;
 import org.sadtech.social.bot.service.usercode.SaveData;
 import org.sadtech.social.core.utils.Description;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Обработчик для сохранения ответов пользователя. Так же допускается скрытое сохранение.
@@ -23,90 +25,38 @@ import java.util.Set;
 public class AnswerSave extends MainUnit {
 
     @Description("Объект отвечающий за сохранение - репозиторий")
-    private Savable savable;
+    private final Savable savable;
 
     @Description("Наименование поля сохранения")
-    private String key;
+    private final String key;
 
     @Description("Тип сохранения")
-    private Set<SaveType> saveTypes = new HashSet<>();
+    private final Set<SaveType> saveTypes;
 
     @Description("Данные для скрытого сохранения")
-    private SaveData saveData;
+    private final SaveData saveData;
 
     @Description("Скрытое сохранение")
-    private Boolean hidden = false;
+    private final boolean hidden;
 
-    public AnswerSave() {
-        typeUnit = TypeUnit.SAVE;
-    }
-
-    public Savable getSavable() {
-        return savable;
-    }
-
-    public static Builder builder() {
-        return new AnswerSave().new Builder();
-    }
-
-    public class Builder {
-
-        private Builder() {
-
-        }
-
-        public Builder savable(Savable savable) {
-            AnswerSave.this.savable = savable;
-            return this;
-        }
-
-        public Builder key(String key) {
-            AnswerSave.this.key = key;
-            return this;
-        }
-
-        public Builder saveStatus(SaveType... saveTypes) {
-            AnswerSave.this.saveTypes.addAll(Arrays.asList(saveTypes));
-            return this;
-        }
-
-        public Builder nextUnit(MainUnit... mainUnits) {
-            AnswerSave.this.setNextUnit(mainUnits);
-            return this;
-        }
-
-        public Builder nextUnits(Set<Unit> mainUnits) {
-            AnswerSave.this.setNextUnits(mainUnits);
-            return this;
-        }
-
-        public Builder saveData(SaveData saveData) {
-            AnswerSave.this.saveData = saveData;
-            return this;
-        }
-
-        public Builder hidden(Boolean hidden) {
-            AnswerSave.this.hidden = hidden;
-            activeType = (hidden) ? UnitActiveType.AFTER : UnitActiveType.DEFAULT;
-            return this;
-        }
-
-        public AnswerSave build() {
-            return AnswerSave.this;
-        }
-
-    }
-
-    @Override
-    public void setNextUnit(Unit... units) {
-        super.setNextUnit(units);
-        maintenanceNextUnit(Arrays.asList(units));
-    }
-
-    @Override
-    public void setNextUnits(Set<Unit> nextUnits) {
-        super.setNextUnits(nextUnits);
+    @Builder
+    private AnswerSave(@Singular Set<String> keyWords,
+                       Pattern pattern,
+                       Integer matchThreshold,
+                       Integer priority,
+                       @Singular Set<Unit> nextUnits,
+                       Savable savable,
+                       String key,
+                       @Singular Set<SaveType> saveTypes,
+                       SaveData saveData,
+                       boolean hidden) {
+        super(keyWords, pattern, matchThreshold, priority, nextUnits, (hidden) ? UnitActiveType.AFTER : UnitActiveType.DEFAULT, TypeUnit.SAVE);
         maintenanceNextUnit(nextUnits);
+        this.savable = savable;
+        this.key = key;
+        this.saveTypes = saveTypes;
+        this.saveData = saveData;
+        this.hidden = Optional.of(hidden).orElse(false);
     }
 
     private void maintenanceNextUnit(Collection<Unit> units) {

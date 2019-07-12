@@ -1,7 +1,7 @@
 package org.sadtech.social.bot.service.timer;
 
 import lombok.extern.slf4j.Slf4j;
-import org.sadtech.social.bot.GeneralAutoresponder;
+import org.sadtech.social.bot.GeneralAutoResponder;
 import org.sadtech.social.bot.domain.Timer;
 import org.sadtech.social.bot.service.usercode.CheckData;
 import org.sadtech.social.core.domain.content.Message;
@@ -21,9 +21,9 @@ import java.util.TimerTask;
 public class TimerActionTask extends TimerTask {
 
     private final TimerService timerService;
-    private final GeneralAutoresponder generalAutoresponder;
+    private final GeneralAutoResponder generalAutoresponder;
 
-    public TimerActionTask(TimerService timerService, GeneralAutoresponder generalAutoresponder) {
+    public TimerActionTask(TimerService timerService, GeneralAutoResponder generalAutoresponder) {
         this.generalAutoresponder = generalAutoresponder;
         log.info("Инициализация сервиса по активации таймеров");
         this.timerService = timerService;

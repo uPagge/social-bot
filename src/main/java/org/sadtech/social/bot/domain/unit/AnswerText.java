@@ -1,62 +1,49 @@
 package org.sadtech.social.bot.domain.unit;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Singular;
+import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.social.bot.service.usercode.Insert;
 import org.sadtech.social.core.domain.BoxAnswer;
 import org.sadtech.social.core.service.sender.Sent;
 import org.sadtech.social.core.utils.Description;
+
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Обработчик, который отпарвляет обычный ответ пользователю.
  *
  * @author upagge [08/07/2019]
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Getter
 public class AnswerText extends MainUnit {
 
     @Description("Объект, который необходимо отправить пользователю")
-    private BoxAnswer boxAnswer;
+    private final BoxAnswer boxAnswer;
 
     @Description("Информация, которую необходимо вставить вместо маркеров в строку ответа")
-    private Insert insert;
+    private final Insert insert;
 
     @Description("Объект нестандартной отправки ответа")
-    private Sent sent;
+    private final Sent sent;
 
-    public AnswerText() {
-        typeUnit = TypeUnit.TEXT;
+    @Builder
+    private AnswerText(@Singular Set<String> keyWords,
+                       Pattern pattern,
+                       Integer matchThreshold,
+                       Integer priority,
+                       @Singular Set<Unit> nextUnits,
+                       UnitActiveType activeType,
+                       BoxAnswer boxAnswer,
+                       Insert insert,
+                       Sent sent) {
+        super(keyWords, pattern, matchThreshold, priority, nextUnits, activeType, TypeUnit.TEXT);
+        this.boxAnswer = boxAnswer;
+        this.insert = insert;
+        this.sent = sent;
     }
-
-
-    public static Builder builder() {
-        return new AnswerText().new Builder();
-    }
-
-    public class Builder {
-        private Builder() {
-
-        }
-
-        public Builder boxAnswer(BoxAnswer boxAnswer) {
-            AnswerText.this.boxAnswer = boxAnswer;
-            return this;
-        }
-
-        public Builder sent(Sent sent) {
-            AnswerText.this.sent = sent;
-            return this;
-        }
-
-        public Builder insert(Insert insert) {
-            AnswerText.this.insert = insert;
-            return this;
-        }
-
-        public AnswerText build() {
-            return AnswerText.this;
-        }
-    }
-
 }

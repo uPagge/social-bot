@@ -25,7 +25,7 @@ public class AnswerTextAction implements ActionUnit<AnswerText, Message> {
 
     @Override
     public MainUnit action(AnswerText answerText, Message message) {
-        BoxAnswer boxAnswer = answerText.getBoxAnswer().prototype();
+        BoxAnswer boxAnswer = answerText.getBoxAnswer().toBuilder().build();
         if (answerText.getInsert() != null) {
             List<String> words = answerText.getInsert().insert(message.getPersonId());
             String newMessage = InsertWords.insert(boxAnswer.getMessage(), words);

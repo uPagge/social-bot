@@ -22,6 +22,7 @@ public class AnswerValidityAction implements ActionUnit<AnswerValidity, Message>
 
     public static final Set<String> WORDS_YES = Collections.unmodifiableSet(Stream.of("да", "ага").collect(Collectors.toSet()));
     public static final Set<String> WORDS_NO = Collections.unmodifiableSet(Stream.of("нет", "неа").collect(Collectors.toSet()));
+    public static final Set<String> WORDS_YES_NO = Collections.unmodifiableSet(Stream.of("да", "ага", "нет", "неа").collect(Collectors.toSet()));
 
     @Override
     public MainUnit action(AnswerValidity unit, Message content) {
@@ -45,9 +46,10 @@ public class AnswerValidityAction implements ActionUnit<AnswerValidity, Message>
                         .message(save.getKey())
                         .keyBoard(KeyBoards.keyBoardYesNo())
                         .build();
-                AnswerText answerText = AnswerText.builder().boxAnswer(boxAnswer).build();
-                answerText.setNextUnit(unit);
-                return answerText;
+                AnswerValidity newValidity = unit.toBuilder()
+                        .clearKeyWords().keyWords(WORDS_YES_NO)
+                        .build();
+                return AnswerText.builder().boxAnswer(boxAnswer).nextUnit(newValidity).build();
             }
         }
     }
