@@ -18,8 +18,8 @@ import org.sadtech.social.bot.service.action.AnswerValidityAction;
 import org.sadtech.social.bot.service.timer.TimerService;
 import org.sadtech.social.core.domain.content.Message;
 import org.sadtech.social.core.service.AccountService;
-import org.sadtech.social.core.service.Filter;
 import org.sadtech.social.core.service.MessageService;
+import org.sadtech.social.core.service.Modifiable;
 import org.sadtech.social.core.service.sender.Sent;
 
 import java.time.Clock;
@@ -37,7 +37,7 @@ public class GeneralAutoResponder<T extends Message> implements Runnable {
     private final MessageService<T> messageService;
     protected final AutoResponder autoResponder;
     protected Map<TypeUnit, ActionUnit> actionUnitMap = new EnumMap<>(TypeUnit.class);
-    protected List<Filter<T>> filters;
+    protected List<Modifiable<T>> modifiables;
 
     protected GeneralAutoResponder(Set<Unit> menuUnit, Sent sent, MessageService<T> messageService) {
         this.messageService = messageService;
@@ -45,8 +45,8 @@ public class GeneralAutoResponder<T extends Message> implements Runnable {
         init(sent);
     }
 
-    public void setFilters(List<Filter<T>> filters) {
-        this.filters = filters;
+    public void setModifiables(List<Modifiable<T>> modifiables) {
+        this.modifiables = modifiables;
     }
 
     protected void addActionUnit(TypeUnit typeUnit, ActionUnit actionUnit) {
@@ -88,8 +88,8 @@ public class GeneralAutoResponder<T extends Message> implements Runnable {
 
     private Consumer<T> processing() {
         return event -> {
-            if (filters != null) {
-                filters.forEach(filter -> filter.processing(event));
+            if (modifiables != null) {
+                modifiables.forEach(modifiable -> modifiable.change(event));
             }
             MainUnit unitAnswer = (MainUnit) autoResponder.answer(event.getPersonId(), event.getText());
             answer(event, unitAnswer);

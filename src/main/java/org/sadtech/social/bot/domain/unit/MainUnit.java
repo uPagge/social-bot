@@ -30,13 +30,14 @@ public abstract class MainUnit extends Unit {
     protected final TypeUnit typeUnit;
 
     protected MainUnit(Set<String> keyWords,
+                       String phrase,
                        Pattern pattern,
                        Integer matchThreshold,
                        Integer priority,
                        Set<Unit> nextUnits,
                        UnitActiveType activeType,
                        TypeUnit typeUnit) {
-        super(keyWords, pattern, matchThreshold, priority, nextUnits);
+        super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits);
         this.activeType = Optional.ofNullable(activeType).orElse(UnitActiveType.DEFAULT);
         this.typeUnit = typeUnit;
     }

@@ -21,28 +21,28 @@ import java.util.regex.Pattern;
 public class AnswerCheck extends MainUnit {
 
     @Description("Unit для true")
-    private MainUnit unitTrue;
+    private final MainUnit unitTrue;
 
     @Description("Unit для false")
-    private MainUnit unitFalse;
+    private final MainUnit unitFalse;
 
     @Description("Условие проверки")
-    private CheckData check;
+    private final CheckData check;
 
     @Builder
-    public AnswerCheck(@Singular Set<String> keyWords,
-                       Pattern pattern,
-                       Integer matchThreshold,
-                       Integer priority,
-                       @Singular Set<Unit> nextUnits,
-                       UnitActiveType activeType,
-                       MainUnit unitTrue,
-                       MainUnit unitFalse,
-                       CheckData check) {
-        super(keyWords, pattern, matchThreshold, priority, nextUnits, activeType, TypeUnit.CHECK);
+    protected AnswerCheck(@Singular Set<String> keyWords,
+                          String phrase,
+                          Pattern pattern,
+                          Integer matchThreshold,
+                          Integer priority,
+                          @Singular Set<Unit> nextUnits,
+                          UnitActiveType activeType,
+                          MainUnit unitTrue,
+                          MainUnit unitFalse,
+                          CheckData check) {
+        super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, activeType, TypeUnit.CHECK);
         this.unitTrue = unitTrue;
         this.unitFalse = unitFalse;
         this.check = check;
     }
-
 }

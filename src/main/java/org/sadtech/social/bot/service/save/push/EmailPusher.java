@@ -1,6 +1,8 @@
-package org.sadtech.social.bot.service.save;
+package org.sadtech.social.bot.service.save.push;
 
 import javafx.util.Pair;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.sadtech.social.core.exception.MailSendException;
 import org.sadtech.social.core.service.sender.email.EmailConfig;
@@ -13,6 +15,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * Сохранение результатов анкеты на Email.
@@ -21,16 +25,22 @@ import javax.mail.internet.MimeMessage;
  */
 // todo [upagge] [11/07/2019]: Отрефакторить
 @Slf4j
-public class EmailSavable extends LocalListSavable<Pair<String, String>> {
+public class EmailPusher<D> implements Pusher<D> {
 
     private final EmailConfig emailConfig;
+    private final String nameForm;
+    @Getter
+    @Setter
+    private Function<D, Pair> converterPair = d -> (Pair) d;
 
-    public EmailSavable(EmailConfig emailConfig) {
+    public EmailPusher(EmailConfig emailConfig, String nameForm) {
         this.emailConfig = emailConfig;
+        this.nameForm = nameForm;
     }
 
     @Override
-    public void push(Integer personId) {
+    public void push(List<D> saveElement) {
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<table cellspacing=\"0\" cellpadding=\"0\" width=\"600\" bgcolor=\"#FFFFFF\">\n" +
                 " <tbody>\n" +
@@ -55,14 +65,15 @@ public class EmailSavable extends LocalListSavable<Pair<String, String>> {
                         " <div style=\"line-height:160%;\">\n" +
                         " <table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n" +
                         " <tbody>");
-        for (Pair<String, String> pair : saveMap.get(personId)) {
+        for (D element : saveElement) {
+            Pair pair = converterPair.apply(element);
             stringBuilder.append("<tr>\n" +
                     " <td valign=\"top\" style=\"padding-right:10px;color:#808080\">")
-                    .append(pair.getKey())
+                    .append(String.valueOf(pair.getKey()))
                     .append(":\n" +
                             " </td>\n" +
                             " <td style=\"padding-bottom:6px\">")
-                    .append(pair.getValue())
+                    .append(String.valueOf(pair.getValue()))
                     .append("</td></tr>");
         }
         stringBuilder.append("</tbody>\n" +
@@ -116,6 +127,6 @@ public class EmailSavable extends LocalListSavable<Pair<String, String>> {
             log.error(e.getMessage());
             throw new MailSendException();
         }
-    }
 
+    }
 }

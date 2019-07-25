@@ -31,15 +31,16 @@ public class AnswerAccount extends MainUnit {
 
     @Builder
     private AnswerAccount(@Singular Set<String> keyWords,
-                         Pattern pattern,
-                         Integer matchThreshold,
-                         Integer priority,
-                         @Singular Set<Unit> nextUnits,
-                         UnitActiveType activeType,
-                         Integer totalSum,
-                         Integer timeHours,
-                         AccountAutoCheck autoCheck) {
-        super(keyWords, pattern, matchThreshold, priority, nextUnits, (activeType == null) ? UnitActiveType.AFTER : activeType, TypeUnit.ACCOUNT);
+                          String phrase,
+                          Pattern pattern,
+                          Integer matchThreshold,
+                          Integer priority,
+                          @Singular Set<Unit> nextUnits,
+                          UnitActiveType activeType,
+                          Integer totalSum,
+                          Integer timeHours,
+                          AccountAutoCheck autoCheck) {
+        super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, (activeType == null) ? UnitActiveType.AFTER : activeType, TypeUnit.ACCOUNT);
         this.totalSum = totalSum;
         this.timeHours = timeHours;
         this.autoCheck = autoCheck;

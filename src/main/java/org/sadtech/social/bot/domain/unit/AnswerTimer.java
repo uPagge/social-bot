@@ -36,6 +36,7 @@ public class AnswerTimer extends MainUnit {
 
     @Builder
     private AnswerTimer(@Singular Set<String> keyWords,
+                        String phrase,
                         Pattern pattern,
                         Integer matchThreshold,
                         Integer priority,
@@ -45,7 +46,7 @@ public class AnswerTimer extends MainUnit {
                         Integer timeDelaySec,
                         Integer timeDeathSec,
                         CheckData checkLoop) {
-        super(keyWords, pattern, matchThreshold, priority, nextUnits, (activeType == null) ? UnitActiveType.AFTER : activeType, TypeUnit.TIMER);
+        super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, (activeType == null) ? UnitActiveType.AFTER : activeType, TypeUnit.TIMER);
         this.unitAnswer = unitAnswer;
         this.timeDelaySec = timeDelaySec;
         this.timeDeathSec = timeDeathSec;

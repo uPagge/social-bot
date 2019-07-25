@@ -31,8 +31,9 @@ public class AnswerText extends MainUnit {
     @Description("Объект нестандартной отправки ответа")
     private final Sent sent;
 
-    @Builder
+    @Builder(toBuilder = true)
     private AnswerText(@Singular Set<String> keyWords,
+                       String phrase,
                        Pattern pattern,
                        Integer matchThreshold,
                        Integer priority,
@@ -41,7 +42,7 @@ public class AnswerText extends MainUnit {
                        BoxAnswer boxAnswer,
                        Insert insert,
                        Sent sent) {
-        super(keyWords, pattern, matchThreshold, priority, nextUnits, activeType, TypeUnit.TEXT);
+        super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, activeType, TypeUnit.TEXT);
         this.boxAnswer = boxAnswer;
         this.insert = insert;
         this.sent = sent;

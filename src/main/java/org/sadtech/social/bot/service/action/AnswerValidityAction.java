@@ -29,11 +29,11 @@ public class AnswerValidityAction implements ActionUnit<AnswerValidity, Message>
         String message = content.getText();
         Integer personId = content.getPersonId();
         if (WORDS_YES.contains(message.toLowerCase())) {
-            String save = unit.getTempSave().getLastElement(personId);
+            String save = unit.getTempSave().getLastSaveElement(personId);
             content.setText(save);
             return unit.getUnitYes();
         } else if (WORDS_NO.contains(message.toLowerCase())) {
-            String save = unit.getTempSave().getLastElement(personId);
+            String save = unit.getTempSave().getLastSaveElement(personId);
             content.setText(save);
             return unit.getUnitNo();
         } else {

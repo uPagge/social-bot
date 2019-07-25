@@ -13,7 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.sadtech.social.core.domain.content.Mail;
 import org.sadtech.social.core.domain.content.attachment.AttachmentType;
 import org.sadtech.social.core.domain.content.attachment.AudioMessage;
-import org.sadtech.social.core.service.Filter;
+import org.sadtech.social.core.service.Modifiable;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,10 +24,10 @@ import java.util.List;
  * @author upagge [11/07/2019]
  */
 @Slf4j
-public class SpeechToTextFilter implements Filter<Mail> {
+public class SpeechToTextModifiable implements Modifiable<Mail> {
 
     @Override
-    public void processing(Mail mail) {
+    public void change(Mail mail) {
         if (mail.getAttachments() != null) {
             mail.getAttachments().stream()
                     .filter(attachment -> AttachmentType.AUDIO_MESSAGE.equals(attachment.getType()))

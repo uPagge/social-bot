@@ -1,5 +1,6 @@
 package org.sadtech.social.bot.service.save;
 
+import org.sadtech.social.bot.service.save.push.Pusher;
 import org.sadtech.social.core.exception.ConfigAppException;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
  *
  * @author upagge [11/07/2019]
  */
-public interface Savable<S> {
+public interface Preservable<S> {
 
     /**
      * Инициализация места в хранилище под пользователя
@@ -33,8 +34,8 @@ public interface Savable<S> {
      *
      * @param personId Идентификатор пользователя
      */
-    default void push(Integer personId) {
-        throw new ConfigAppException(945, "Метод push не реализован");
+    default void push(Integer personId, Pusher<S> pusher) {
+        pusher.push(getAllSaveElement(personId));
     }
 
     /**
@@ -43,7 +44,7 @@ public interface Savable<S> {
      * @param personId Идентификатор пользователя
      * @return Список данных
      */
-    List<S> download(Integer personId);
+    List<S> getAllSaveElement(Integer personId);
 
     /**
      * Отдать последний сохраненный объект для пользователя
@@ -51,6 +52,6 @@ public interface Savable<S> {
      * @param personId Идентификатор пользователя
      * @return Объект сохраненных данных
      */
-    S getLastElement(Integer personId);
+    S getLastSaveElement(Integer personId);
 
 }

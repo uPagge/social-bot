@@ -10,7 +10,7 @@ import java.util.Map;
  *
  * @author upagge [11/07/2019]
  */
-public class MessageTempSavable implements Savable<String> {
+public class MessageTempPreservable implements Preservable<String> {
 
     private final Map<Integer, String> message = new HashMap<>();
 
@@ -20,12 +20,12 @@ public class MessageTempSavable implements Savable<String> {
     }
 
     @Override
-    public List<String> download(Integer personId) {
+    public List<String> getAllSaveElement(Integer personId) {
         return Collections.singletonList(message.get(personId));
     }
 
     @Override
-    public String getLastElement(Integer personId) {
+    public String getLastSaveElement(Integer personId) {
         return message.get(personId);
     }
 

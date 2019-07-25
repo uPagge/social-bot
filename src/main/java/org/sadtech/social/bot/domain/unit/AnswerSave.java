@@ -5,9 +5,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
 import org.sadtech.autoresponder.entity.Unit;
-import org.sadtech.social.bot.service.save.Savable;
+import org.sadtech.social.bot.service.save.Preservable;
 import org.sadtech.social.bot.service.save.SaveType;
-import org.sadtech.social.bot.service.usercode.SaveData;
+import org.sadtech.social.bot.service.save.data.PreservableData;
+import org.sadtech.social.bot.service.save.push.Pusher;
 import org.sadtech.social.core.utils.Description;
 
 import java.util.Collection;
@@ -22,40 +23,42 @@ import java.util.regex.Pattern;
  */
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class AnswerSave extends MainUnit {
+public class AnswerSave<D> extends MainUnit {
 
     @Description("Объект отвечающий за сохранение - репозиторий")
-    private final Savable savable;
+    private final Preservable<D> preservable;
 
-    @Description("Наименование поля сохранения")
-    private final String key;
+    @Description("Отправка результатов")
+    private final Pusher<D> pusher;
 
     @Description("Тип сохранения")
     private final Set<SaveType> saveTypes;
 
     @Description("Данные для скрытого сохранения")
-    private final SaveData saveData;
+    private final PreservableData preservableData;
 
     @Description("Скрытое сохранение")
     private final boolean hidden;
 
+
     @Builder
     private AnswerSave(@Singular Set<String> keyWords,
+                       String phrase,
                        Pattern pattern,
                        Integer matchThreshold,
                        Integer priority,
                        @Singular Set<Unit> nextUnits,
-                       Savable savable,
-                       String key,
+                       Preservable<D> preservable,
+                       Pusher<D> pusher,
                        @Singular Set<SaveType> saveTypes,
-                       SaveData saveData,
+                       PreservableData preservableData,
                        boolean hidden) {
-        super(keyWords, pattern, matchThreshold, priority, nextUnits, (hidden) ? UnitActiveType.AFTER : UnitActiveType.DEFAULT, TypeUnit.SAVE);
+        super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, (hidden) ? UnitActiveType.AFTER : UnitActiveType.DEFAULT, TypeUnit.SAVE);
+        this.pusher = pusher;
         maintenanceNextUnit(nextUnits);
-        this.savable = savable;
-        this.key = key;
+        this.preservable = preservable;
         this.saveTypes = saveTypes;
-        this.saveData = saveData;
+        this.preservableData = preservableData;
         this.hidden = Optional.of(hidden).orElse(false);
     }
 

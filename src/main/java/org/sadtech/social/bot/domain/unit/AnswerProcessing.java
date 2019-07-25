@@ -29,6 +29,7 @@ public class AnswerProcessing extends MainUnit {
 
     @Builder
     private AnswerProcessing(@Singular Set<String> keyWords,
+                             String phrase,
                              Pattern pattern,
                              Integer matchThreshold,
                              Integer priority,
@@ -36,7 +37,7 @@ public class AnswerProcessing extends MainUnit {
                              UnitActiveType activeType,
                              ProcessingData processingData,
                              Sent sent) {
-        super(keyWords, pattern, matchThreshold, priority, nextUnits, activeType, TypeUnit.PROCESSING);
+        super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, activeType, TypeUnit.PROCESSING);
         this.processingData = processingData;
         this.sent = sent;
     }
