@@ -77,7 +77,7 @@ public class GeneralAutoResponder<T extends Message> implements Runnable {
         LocalDateTime oldData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()));
         LocalDateTime newData;
         while (true) {
-            newData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault())).minusSeconds(1);
+            newData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()));
             if (oldData.isBefore(newData)) {
                 messageService.getLastEventByTime(oldData, newData)
                         .parallelStream().forEach(processing());
