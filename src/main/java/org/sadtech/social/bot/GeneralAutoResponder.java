@@ -78,11 +78,10 @@ public class GeneralAutoResponder<T extends Message> implements Runnable {
         LocalDateTime newData;
         while (true) {
             newData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()));
-            if (oldData.isBefore(newData)) {
-                messageService.getLastEventByTime(oldData, newData)
-                        .parallelStream().forEach(processing());
+            if (newData.isEqual(oldData.plusSeconds(1))) {
+                messageService.getLastEventByTime(oldData.minusSeconds(3), newData.minusSeconds(3)).parallelStream().forEach(processing());
+                oldData = newData.plusSeconds(1);
             }
-            oldData = newData;
         }
     }
 

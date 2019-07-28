@@ -48,8 +48,7 @@
             <artifactId>google-cloud-speech</artifactId>
             <version>${google.cloud.speech.ver}</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-io -->
+        
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-io</artifactId>
