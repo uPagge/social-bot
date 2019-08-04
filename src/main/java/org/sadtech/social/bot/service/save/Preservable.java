@@ -1,9 +1,9 @@
 package org.sadtech.social.bot.service.save;
 
 import org.sadtech.social.bot.service.save.push.Pusher;
-import org.sadtech.social.core.exception.ConfigAppException;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Интерфейс для сохранения и взаимодейтсвия с ответами прав пользователя.
@@ -11,15 +11,6 @@ import java.util.List;
  * @author upagge [11/07/2019]
  */
 public interface Preservable<S> {
-
-    /**
-     * Инициализация места в хранилище под пользователя
-     *
-     * @param personId Идентификатор пользователя
-     */
-    default void init(Integer personId) {
-        throw new ConfigAppException(945, "Метод init не реализован");
-    }
 
     /**
      * Сохранение данных для пользователя
@@ -35,7 +26,7 @@ public interface Preservable<S> {
      * @param personId Идентификатор пользователя
      */
     default void push(Integer personId, Pusher<S> pusher) {
-        pusher.push(getAllSaveElement(personId));
+        Optional.ofNullable(pusher).ifPresent(sPusher -> sPusher.push(getAllSaveElement(personId)));
     }
 
     /**

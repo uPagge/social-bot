@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Singular;
 import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.social.bot.service.save.Preservable;
-import org.sadtech.social.bot.service.save.SaveType;
 import org.sadtech.social.bot.service.save.data.PreservableData;
 import org.sadtech.social.bot.service.save.push.Pusher;
 import org.sadtech.social.core.utils.Description;
@@ -31,11 +30,8 @@ public class AnswerSave<D> extends MainUnit {
     @Description("Отправка результатов")
     private final Pusher<D> pusher;
 
-    @Description("Тип сохранения")
-    private final Set<SaveType> saveTypes;
-
     @Description("Данные для скрытого сохранения")
-    private final PreservableData preservableData;
+    private final PreservableData<D, ?> preservableData;
 
     @Description("Скрытое сохранение")
     private final boolean hidden;
@@ -50,14 +46,12 @@ public class AnswerSave<D> extends MainUnit {
                        @Singular Set<Unit> nextUnits,
                        Preservable<D> preservable,
                        Pusher<D> pusher,
-                       @Singular Set<SaveType> saveTypes,
-                       PreservableData preservableData,
+                       PreservableData<D, ?> preservableData,
                        boolean hidden) {
         super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, (hidden) ? UnitActiveType.AFTER : UnitActiveType.DEFAULT, TypeUnit.SAVE);
         this.pusher = pusher;
         maintenanceNextUnit(nextUnits);
         this.preservable = preservable;
-        this.saveTypes = saveTypes;
         this.preservableData = preservableData;
         this.hidden = Optional.of(hidden).orElse(false);
     }

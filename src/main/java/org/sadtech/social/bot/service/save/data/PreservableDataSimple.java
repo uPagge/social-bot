@@ -8,11 +8,11 @@ import org.sadtech.social.core.domain.content.Message;
  *
  * @author upagge [13/07/2019]
  */
-public class SimplePreservable implements PreservableData<Pair<String, String>, Message> {
+public class PreservableDataSimple implements PreservableData<Pair<String, String>, Message> {
 
     private final String fieldName;
 
-    public SimplePreservable(String fieldName) {
+    public PreservableDataSimple(String fieldName) {
         this.fieldName = fieldName;
     }
 

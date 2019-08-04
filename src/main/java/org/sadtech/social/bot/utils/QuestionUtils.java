@@ -8,7 +8,6 @@ import org.sadtech.social.bot.domain.unit.AnswerText;
 import org.sadtech.social.bot.domain.unit.MainUnit;
 import org.sadtech.social.bot.domain.unit.UnitActiveType;
 import org.sadtech.social.bot.service.save.Preservable;
-import org.sadtech.social.bot.service.save.SaveType;
 import org.sadtech.social.bot.service.save.push.Pusher;
 import org.sadtech.social.core.domain.BoxAnswer;
 import org.sadtech.social.core.utils.KeyBoards;
@@ -78,15 +77,13 @@ public class QuestionUtils {
                                         questionAnswer.getPoints()
                                 )
                         )
-                        .saveType(SaveType.SAVE)
                         .phrase(questionAnswer.getText());
                 if (i != this.questions.size() - 1) {
                     answerSaveBuilder.nextUnit(previousUnit).build();
                 } else {
-                    answerSaveBuilder.saveType(SaveType.PUSH).pusher(pusher);
+                    answerSaveBuilder.pusher(pusher);
                     Optional.of(finishUnit).ifPresent(answerSaveBuilder::nextUnit);
                 }
-                if (i == 0) answerSaveBuilder.saveType(SaveType.INIT);
                 answerTextBuilder.nextUnit(answerSaveBuilder.build());
             }
             if (i == 0) answerTextBuilder.activeType(UnitActiveType.AFTER);
