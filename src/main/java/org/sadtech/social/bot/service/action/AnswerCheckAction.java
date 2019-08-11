@@ -1,10 +1,9 @@
 package org.sadtech.social.bot.service.action;
 
+import lombok.extern.slf4j.Slf4j;
 import org.sadtech.social.bot.domain.unit.AnswerCheck;
 import org.sadtech.social.bot.domain.unit.MainUnit;
 import org.sadtech.social.core.domain.content.Message;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
@@ -13,9 +12,8 @@ import java.util.Optional;
  *
  * @author upagge [11/07/2019]
  */
+@Slf4j
 public class AnswerCheckAction implements ActionUnit<AnswerCheck, Message> {
-
-    private static final Logger log = LoggerFactory.getLogger(AnswerCheckAction.class);
 
     @Override
     public MainUnit action(AnswerCheck answerCheck, Message mail) {

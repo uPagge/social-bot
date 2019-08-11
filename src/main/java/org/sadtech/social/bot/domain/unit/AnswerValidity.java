@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
 import lombok.ToString;
-import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.social.bot.service.save.Preservable;
 import org.sadtech.social.bot.service.usercode.PairInsert;
 import org.sadtech.social.core.utils.Description;
@@ -44,7 +43,7 @@ public class AnswerValidity extends MainUnit {
                            Pattern pattern,
                            Integer matchThreshold,
                            Integer priority,
-                           @Singular Set<Unit> nextUnits,
+                           @Singular Set<MainUnit> nextUnits,
                            UnitActiveType activeType,
                            MainUnit unitYes,
                            MainUnit unitNo,

@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
 import lombok.ToString;
-import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.social.bot.service.usercode.CheckData;
 import org.sadtech.social.core.utils.Description;
 
@@ -40,7 +39,7 @@ public class AnswerTimer extends MainUnit {
                         Pattern pattern,
                         Integer matchThreshold,
                         Integer priority,
-                        @Singular Set<Unit> nextUnits,
+                        @Singular Set<MainUnit> nextUnits,
                         UnitActiveType activeType,
                         MainUnit unitAnswer,
                         Integer timeDelaySec,

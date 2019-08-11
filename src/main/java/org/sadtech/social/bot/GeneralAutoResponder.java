@@ -1,7 +1,6 @@
 package org.sadtech.social.bot;
 
 import org.sadtech.autoresponder.AutoResponder;
-import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.autoresponder.repository.UnitPointerRepositoryMap;
 import org.sadtech.autoresponder.service.UnitPointerServiceImpl;
 import org.sadtech.social.bot.domain.unit.MainUnit;
@@ -35,13 +34,13 @@ import java.util.function.Consumer;
 public class GeneralAutoResponder<T extends Message> implements Runnable {
 
     private final MessageService<T> messageService;
-    protected final AutoResponder autoResponder;
+    protected final AutoResponder<MainUnit> autoResponder;
     protected Map<TypeUnit, ActionUnit> actionUnitMap = new EnumMap<>(TypeUnit.class);
     protected List<Modifiable<T>> modifiables;
 
-    protected GeneralAutoResponder(Set<Unit> menuUnit, Sent sent, MessageService<T> messageService) {
+    protected GeneralAutoResponder(Set<MainUnit> menuUnit, Sent sent, MessageService<T> messageService) {
         this.messageService = messageService;
-        autoResponder = new AutoResponder(new UnitPointerServiceImpl(new UnitPointerRepositoryMap()), menuUnit);
+        autoResponder = new AutoResponder<>(new UnitPointerServiceImpl(new UnitPointerRepositoryMap()), menuUnit);
         init(sent);
     }
 
@@ -78,8 +77,13 @@ public class GeneralAutoResponder<T extends Message> implements Runnable {
         LocalDateTime newData;
         while (true) {
             newData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()));
-            if (newData.isEqual(oldData.plusSeconds(1))) {
-                messageService.getLastEventByTime(oldData.minusSeconds(3), newData.minusSeconds(3)).parallelStream().forEach(processing());
+            if (newData.isAfter(oldData)) {
+                List<T> eventByTime = messageService.getLastEventByAddDateTime(oldData.minusSeconds(5), newData.minusSeconds(5).plusNanos(999999999));
+                if (eventByTime != null && !eventByTime.isEmpty()) {
+                    new Thread(
+                            () -> eventByTime.parallelStream().forEach(processing())
+                    ).start();
+                }
                 oldData = newData.plusSeconds(1);
             }
         }
@@ -90,7 +94,7 @@ public class GeneralAutoResponder<T extends Message> implements Runnable {
             if (modifiables != null) {
                 modifiables.forEach(modifiable -> modifiable.change(event));
             }
-            MainUnit unitAnswer = (MainUnit) autoResponder.answer(event.getPersonId(), event.getText());
+            MainUnit unitAnswer = autoResponder.answer(event.getPersonId(), event.getText());
             answer(event, unitAnswer);
         };
     }
@@ -114,8 +118,6 @@ public class GeneralAutoResponder<T extends Message> implements Runnable {
     private MainUnit activeUnitAfter(MainUnit mainUnit, T content) {
         if (mainUnit.getNextUnits() != null) {
             Optional<MainUnit> first = mainUnit.getNextUnits().stream()
-                    .filter(unit -> unit instanceof MainUnit)
-                    .map(unit -> (MainUnit) unit)
                     .filter(unit -> UnitActiveType.AFTER.equals(unit.getActiveType()))
                     .findFirst();
             if (first.isPresent()) {

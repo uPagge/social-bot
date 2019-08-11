@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
-import org.sadtech.autoresponder.entity.Unit;
+import org.sadtech.social.bot.service.save.CheckSave;
 import org.sadtech.social.bot.service.save.Preservable;
 import org.sadtech.social.bot.service.save.data.PreservableData;
 import org.sadtech.social.bot.service.save.push.Pusher;
@@ -36,6 +36,8 @@ public class AnswerSave<D> extends MainUnit {
     @Description("Скрытое сохранение")
     private final boolean hidden;
 
+    private final CheckSave<?> checkSave;
+
 
     @Builder
     private AnswerSave(@Singular Set<String> keyWords,
@@ -43,10 +45,11 @@ public class AnswerSave<D> extends MainUnit {
                        Pattern pattern,
                        Integer matchThreshold,
                        Integer priority,
-                       @Singular Set<Unit> nextUnits,
+                       @Singular Set<MainUnit> nextUnits,
                        Preservable<D> preservable,
                        Pusher<D> pusher,
                        PreservableData<D, ?> preservableData,
+                       CheckSave checkSave,
                        boolean hidden) {
         super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, (hidden) ? UnitActiveType.AFTER : UnitActiveType.DEFAULT, TypeUnit.SAVE);
         this.pusher = pusher;
@@ -54,12 +57,11 @@ public class AnswerSave<D> extends MainUnit {
         this.preservable = preservable;
         this.preservableData = preservableData;
         this.hidden = Optional.of(hidden).orElse(false);
+        this.checkSave = checkSave;
     }
 
-    private void maintenanceNextUnit(Collection<Unit> units) {
-        for (Unit unit : units) {
-            ((MainUnit) unit).setActiveType(UnitActiveType.AFTER);
-        }
+    private void maintenanceNextUnit(Collection<MainUnit> units) {
+        if (units != null && !units.isEmpty()) units.forEach(mainUnit -> mainUnit.setActiveType(UnitActiveType.AFTER));
     }
 
 }

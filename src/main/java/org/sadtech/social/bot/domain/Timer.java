@@ -1,10 +1,7 @@
 package org.sadtech.social.bot.domain;
 
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 import org.sadtech.social.bot.domain.unit.MainUnit;
 import org.sadtech.social.bot.service.usercode.CheckData;
 import org.sadtech.social.core.utils.Description;
@@ -17,10 +14,7 @@ import java.time.LocalDateTime;
  * @author upagge [11/07/2019]
  */
 @Builder
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
+@Data
 public class Timer {
 
     @Description("Идентификатор таймера")

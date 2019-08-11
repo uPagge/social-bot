@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 @EqualsAndHashCode(callSuper = true)
 @ToString
-public abstract class MainUnit extends Unit {
+public abstract class MainUnit extends Unit<MainUnit> {
 
     @Getter
     @Setter
@@ -34,7 +34,7 @@ public abstract class MainUnit extends Unit {
                        Pattern pattern,
                        Integer matchThreshold,
                        Integer priority,
-                       Set<Unit> nextUnits,
+                       Set<MainUnit> nextUnits,
                        UnitActiveType activeType,
                        TypeUnit typeUnit) {
         super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits);

@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
-import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.social.bot.service.usercode.Insert;
 import org.sadtech.social.core.domain.BoxAnswer;
 import org.sadtech.social.core.service.sender.Sent;
@@ -37,7 +36,7 @@ public class AnswerText extends MainUnit {
                        Pattern pattern,
                        Integer matchThreshold,
                        Integer priority,
-                       @Singular Set<Unit> nextUnits,
+                       @Singular Set<MainUnit> nextUnits,
                        UnitActiveType activeType,
                        BoxAnswer boxAnswer,
                        Insert insert,

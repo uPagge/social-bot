@@ -17,11 +17,17 @@ public class AnswerSaveAction implements ActionUnit<AnswerSave, Message> {
         Preservable preservable = answerSave.getPreservable();
         Integer personId = mail.getPersonId();
 
+        if (answerSave.getCheckSave() != null) {
+            MainUnit unit = answerSave.getCheckSave().check(mail);
+            if (unit != null) {
+                return unit;
+            }
+        }
+
         Object data = answerSave.getPreservableData().getData(mail);
         if (data != null) {
             preservable.save(personId, data);
         }
-
 
         preservable.push(personId, answerSave.getPusher());
         return answerSave;

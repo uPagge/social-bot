@@ -4,8 +4,8 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
-import org.sadtech.autoresponder.entity.Unit;
 import org.sadtech.social.bot.service.usercode.ProcessingData;
+import org.sadtech.social.core.domain.content.Message;
 import org.sadtech.social.core.service.sender.Sent;
 import org.sadtech.social.core.utils.Description;
 
@@ -19,10 +19,10 @@ import java.util.regex.Pattern;
  */
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class AnswerProcessing extends MainUnit {
+public class AnswerProcessing<M extends Message> extends MainUnit {
 
     @Description("Кастомная обработка")
-    private final ProcessingData processingData;
+    private final ProcessingData<M> processingData;
 
     @Description("Объект для сквозной отправки ответа")
     private final Sent sent;
@@ -33,9 +33,9 @@ public class AnswerProcessing extends MainUnit {
                              Pattern pattern,
                              Integer matchThreshold,
                              Integer priority,
-                             @Singular Set<Unit> nextUnits,
+                             @Singular Set<MainUnit> nextUnits,
                              UnitActiveType activeType,
-                             ProcessingData processingData,
+                             ProcessingData<M> processingData,
                              Sent sent) {
         super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, activeType, TypeUnit.PROCESSING);
         this.processingData = processingData;
