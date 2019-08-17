@@ -1,12 +1,14 @@
 package org.sadtech.social.bot.service.action;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.sadtech.social.bot.domain.unit.AnswerText;
 import org.sadtech.social.bot.domain.unit.MainUnit;
 import org.sadtech.social.core.domain.BoxAnswer;
 import org.sadtech.social.core.domain.content.Message;
-import org.sadtech.social.core.service.sender.SendBox;
-import org.sadtech.social.core.service.sender.Sent;
+import org.sadtech.social.core.service.sender.Sending;
 import org.sadtech.social.core.utils.InsertWords;
+import org.sadtech.social.core.utils.Sender;
 
 import java.util.List;
 
@@ -15,13 +17,11 @@ import java.util.List;
  *
  * @author upagge [11/07/2019]
  */
+@AllArgsConstructor
+@NoArgsConstructor
 public class AnswerTextAction implements ActionUnit<AnswerText, Message> {
 
-    private final Sent sent;
-
-    public AnswerTextAction(Sent sent) {
-        this.sent = sent;
-    }
+    private Sending sending;
 
     @Override
     public MainUnit action(AnswerText answerText, Message message) {
@@ -32,10 +32,11 @@ public class AnswerTextAction implements ActionUnit<AnswerText, Message> {
             boxAnswer.setMessage(newMessage);
         }
 
-        if (answerText.getSent() != null) {
-            answerText.getSent().send(message.getPersonId(), boxAnswer);
+        Sending answerTextSending = answerText.getSending();
+        if (answerTextSending != null) {
+            Sender.sends(message, boxAnswer, answerTextSending);
         } else {
-            SendBox.sent(message, boxAnswer, sent);
+            Sender.sends(message, boxAnswer, this.sending);
         }
 
         return answerText;

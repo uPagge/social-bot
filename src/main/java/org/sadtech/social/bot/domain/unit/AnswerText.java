@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Singular;
 import org.sadtech.social.bot.service.usercode.Insert;
 import org.sadtech.social.core.domain.BoxAnswer;
-import org.sadtech.social.core.service.sender.Sent;
+import org.sadtech.social.core.service.sender.Sending;
 import org.sadtech.social.core.utils.Description;
 
 import java.util.Set;
@@ -28,7 +28,7 @@ public class AnswerText extends MainUnit {
     private final Insert insert;
 
     @Description("Объект нестандартной отправки ответа")
-    private final Sent sent;
+    private final Sending sending;
 
     @Builder(toBuilder = true)
     private AnswerText(@Singular Set<String> keyWords,
@@ -40,10 +40,10 @@ public class AnswerText extends MainUnit {
                        UnitActiveType activeType,
                        BoxAnswer boxAnswer,
                        Insert insert,
-                       Sent sent) {
+                       Sending sending) {
         super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, activeType, TypeUnit.TEXT);
         this.boxAnswer = boxAnswer;
         this.insert = insert;
-        this.sent = sent;
+        this.sending = sending;
     }
 }

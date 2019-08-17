@@ -4,29 +4,31 @@ import org.sadtech.social.bot.domain.unit.AnswerProcessing;
 import org.sadtech.social.bot.domain.unit.MainUnit;
 import org.sadtech.social.core.domain.BoxAnswer;
 import org.sadtech.social.core.domain.content.Message;
-import org.sadtech.social.core.service.sender.SendBox;
-import org.sadtech.social.core.service.sender.Sent;
+import org.sadtech.social.core.service.sender.Sending;
+import org.sadtech.social.core.utils.Sender;
 
 /**
  * Обработчик Unit-а {@link AnswerProcessing}.
  *
  * @author upagge [11/07/2019]
  */
-public class AnswerProcessingAction implements ActionUnit<AnswerProcessing, Message> {
+public class AnswerProcessingAction implements ActionUnit<AnswerProcessing<Message>, Message> {
 
-    private final Sent sent;
+    private final Sending sending;
 
-    public AnswerProcessingAction(Sent sent) {
-        this.sent = sent;
+    public AnswerProcessingAction(Sending sending) {
+        this.sending = sending;
     }
 
     @Override
-    public MainUnit action(AnswerProcessing answerProcessing, Message message) {
+    public MainUnit action(AnswerProcessing<Message> answerProcessing, Message message) {
         BoxAnswer boxAnswer = answerProcessing.getProcessingData().processing(message);
-        if (answerProcessing.getSent() != null) {
-            answerProcessing.getSent().send(message.getPersonId(), boxAnswer);
+
+        Sending answerProcessingSending = answerProcessing.getSending();
+        if (answerProcessingSending != null) {
+            Sender.sends(message, boxAnswer, answerProcessingSending);
         } else {
-            SendBox.sent(message, boxAnswer, sent);
+            Sender.sends(message, boxAnswer, this.sending);
         }
         return answerProcessing;
     }

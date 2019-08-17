@@ -2,7 +2,9 @@ package org.sadtech.social.bot.service.action;
 
 import org.sadtech.social.bot.domain.unit.AnswerSave;
 import org.sadtech.social.bot.domain.unit.MainUnit;
+import org.sadtech.social.bot.service.save.CheckSave;
 import org.sadtech.social.bot.service.save.Preservable;
+import org.sadtech.social.bot.service.save.data.PreservableData;
 import org.sadtech.social.core.domain.content.Message;
 
 /**
@@ -10,21 +12,23 @@ import org.sadtech.social.core.domain.content.Message;
  *
  * @author upagge [11/07/2019]
  */
-public class AnswerSaveAction implements ActionUnit<AnswerSave, Message> {
+public class AnswerSaveAction<D> implements ActionUnit<AnswerSave<D>, Message> {
 
     @Override
-    public MainUnit action(AnswerSave answerSave, Message mail) {
-        Preservable preservable = answerSave.getPreservable();
+    public MainUnit action(AnswerSave<D> answerSave, Message mail) {
+        Preservable<D> preservable = answerSave.getPreservable();
         Integer personId = mail.getPersonId();
 
-        if (answerSave.getCheckSave() != null) {
-            MainUnit unit = answerSave.getCheckSave().check(mail);
+        CheckSave<? super Message> checkSave = answerSave.getCheckSave();
+        if (checkSave != null) {
+            MainUnit unit = checkSave.check(mail);
             if (unit != null) {
                 return unit;
             }
         }
 
-        Object data = answerSave.getPreservableData().getData(mail);
+        PreservableData<D, ? super Message> preservableData = answerSave.getPreservableData();
+        D data = preservableData.getData(mail);
         if (data != null) {
             preservable.save(personId, data);
         }

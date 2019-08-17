@@ -19,7 +19,7 @@ import org.sadtech.social.core.domain.content.Message;
 import org.sadtech.social.core.service.AccountService;
 import org.sadtech.social.core.service.MessageService;
 import org.sadtech.social.core.service.Modifiable;
-import org.sadtech.social.core.service.sender.Sent;
+import org.sadtech.social.core.service.sender.Sending;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -38,10 +38,10 @@ public class GeneralAutoResponder<T extends Message> implements Runnable {
     protected Map<TypeUnit, ActionUnit> actionUnitMap = new EnumMap<>(TypeUnit.class);
     protected List<Modifiable<T>> modifiables;
 
-    protected GeneralAutoResponder(Set<MainUnit> menuUnit, Sent sent, MessageService<T> messageService) {
+    protected GeneralAutoResponder(Set<MainUnit> menuUnit, Sending sending, MessageService<T> messageService) {
         this.messageService = messageService;
         autoResponder = new AutoResponder<>(new UnitPointerServiceImpl(new UnitPointerRepositoryMap()), menuUnit);
-        init(sent);
+        init(sending);
     }
 
     public void setModifiables(List<Modifiable<T>> modifiables) {
@@ -56,10 +56,10 @@ public class GeneralAutoResponder<T extends Message> implements Runnable {
         autoResponder.setDefaultUnit(defaultUnit);
     }
 
-    private void init(Sent sent) {
+    private void init(Sending sending) {
         actionUnitMap.put(TypeUnit.CHECK, new AnswerCheckAction());
-        actionUnitMap.put(TypeUnit.PROCESSING, new AnswerProcessingAction(sent));
-        actionUnitMap.put(TypeUnit.TEXT, new AnswerTextAction(sent));
+        actionUnitMap.put(TypeUnit.PROCESSING, new AnswerProcessingAction(sending));
+        actionUnitMap.put(TypeUnit.TEXT, new AnswerTextAction(sending));
         actionUnitMap.put(TypeUnit.SAVE, new AnswerSaveAction());
         actionUnitMap.put(TypeUnit.VALIDITY, new AnswerValidityAction());
     }

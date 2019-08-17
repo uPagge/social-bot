@@ -2,7 +2,7 @@ package org.sadtech.social.bot.service.save.push;
 
 import javafx.util.Pair;
 import org.sadtech.social.core.domain.BoxAnswer;
-import org.sadtech.social.core.service.sender.Sent;
+import org.sadtech.social.core.service.sender.Sending;
 
 import java.util.List;
 
@@ -10,12 +10,12 @@ public class UserSanderPusher implements Pusher<Pair<String, String>> {
 
     private final Integer personId;
     private final String nameForm;
-    private final Sent sent;
+    private final Sending sending;
 
-    public UserSanderPusher(Integer personId, String nameForm, Sent sent) {
+    public UserSanderPusher(Integer personId, String nameForm, Sending sending) {
         this.personId = personId;
         this.nameForm = nameForm;
-        this.sent = sent;
+        this.sending = sending;
     }
 
     @Override
@@ -25,6 +25,6 @@ public class UserSanderPusher implements Pusher<Pair<String, String>> {
         saveElement.forEach(pair -> stringBuilder
                 .append(pair.getKey()).append(": ").append(pair.getValue()).append("\n"));
         stringBuilder.append("====================");
-        sent.send(this.personId, BoxAnswer.builder().message(stringBuilder.toString()).build());
+        sending.send(this.personId, BoxAnswer.builder().message(stringBuilder.toString()).build());
     }
 }

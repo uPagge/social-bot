@@ -8,6 +8,7 @@ import org.sadtech.social.bot.service.save.CheckSave;
 import org.sadtech.social.bot.service.save.Preservable;
 import org.sadtech.social.bot.service.save.data.PreservableData;
 import org.sadtech.social.bot.service.save.push.Pusher;
+import org.sadtech.social.core.domain.content.Message;
 import org.sadtech.social.core.utils.Description;
 
 import java.util.Collection;
@@ -31,12 +32,12 @@ public class AnswerSave<D> extends MainUnit {
     private final Pusher<D> pusher;
 
     @Description("Данные для скрытого сохранения")
-    private final PreservableData<D, ?> preservableData;
+    private final PreservableData<D, ? super Message> preservableData;
 
     @Description("Скрытое сохранение")
     private final boolean hidden;
 
-    private final CheckSave<?> checkSave;
+    private final CheckSave<? super Message> checkSave;
 
 
     @Builder
@@ -48,8 +49,8 @@ public class AnswerSave<D> extends MainUnit {
                        @Singular Set<MainUnit> nextUnits,
                        Preservable<D> preservable,
                        Pusher<D> pusher,
-                       PreservableData<D, ?> preservableData,
-                       CheckSave checkSave,
+                       PreservableData<D, ? super Message> preservableData,
+                       CheckSave<? super Message> checkSave,
                        boolean hidden) {
         super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, (hidden) ? UnitActiveType.AFTER : UnitActiveType.DEFAULT, TypeUnit.SAVE);
         this.pusher = pusher;

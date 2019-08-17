@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Singular;
 import org.sadtech.social.bot.service.usercode.ProcessingData;
 import org.sadtech.social.core.domain.content.Message;
-import org.sadtech.social.core.service.sender.Sent;
+import org.sadtech.social.core.service.sender.Sending;
 import org.sadtech.social.core.utils.Description;
 
 import java.util.Set;
@@ -25,7 +25,7 @@ public class AnswerProcessing<M extends Message> extends MainUnit {
     private final ProcessingData<M> processingData;
 
     @Description("Объект для сквозной отправки ответа")
-    private final Sent sent;
+    private final Sending sending;
 
     @Builder
     private AnswerProcessing(@Singular Set<String> keyWords,
@@ -36,10 +36,10 @@ public class AnswerProcessing<M extends Message> extends MainUnit {
                              @Singular Set<MainUnit> nextUnits,
                              UnitActiveType activeType,
                              ProcessingData<M> processingData,
-                             Sent sent) {
+                             Sending sending) {
         super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, activeType, TypeUnit.PROCESSING);
         this.processingData = processingData;
-        this.sent = sent;
+        this.sending = sending;
     }
 
 }
