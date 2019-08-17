@@ -39,7 +39,6 @@ public class GeneralAutoResponder<T extends Message> extends TimerTask {
     protected final AutoResponder<MainUnit> autoResponder;
     protected Map<TypeUnit, ActionUnit<? extends MainUnit, ? extends Message>> actionUnitMap = new EnumMap<>(TypeUnit.class);
     protected List<Modifiable<T>> modifiables;
-    private LocalDateTime oldData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()));
 
     protected GeneralAutoResponder(Set<MainUnit> menuUnit,
                                    Sending sending,
@@ -123,14 +122,11 @@ public class GeneralAutoResponder<T extends Message> extends TimerTask {
     @Scheduled(fixedRate = 3000)
     public void checkNewMessage() {
         LocalDateTime newData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()));
-        if (newData.isAfter(oldData)) {
-            List<T> eventByTime = messageService.getLastEventByAddDateTime(oldData, newData.plusNanos(999999999));
-            if (eventByTime != null && !eventByTime.isEmpty()) {
-                new Thread(
-                        () -> eventByTime.parallelStream().forEach(processing())
-                ).start();
-            }
-            oldData = newData;
+        List<T> eventByTime = messageService.getNewMessage(newData.plusNanos(999999999));
+        if (eventByTime != null && !eventByTime.isEmpty()) {
+            new Thread(
+                    () -> eventByTime.parallelStream().forEach(processing())
+            ).start();
         }
     }
 
