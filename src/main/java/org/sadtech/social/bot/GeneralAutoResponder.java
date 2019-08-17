@@ -20,6 +20,7 @@ import org.sadtech.social.core.service.AccountService;
 import org.sadtech.social.core.service.MessageService;
 import org.sadtech.social.core.service.Modifiable;
 import org.sadtech.social.core.service.sender.Sending;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -29,16 +30,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TimerTask;
 import java.util.function.Consumer;
 
-public class GeneralAutoResponder<T extends Message> implements Runnable {
+public class GeneralAutoResponder<T extends Message> extends TimerTask {
 
     private final MessageService<T> messageService;
     protected final AutoResponder<MainUnit> autoResponder;
-    protected Map<TypeUnit, ActionUnit> actionUnitMap = new EnumMap<>(TypeUnit.class);
+    protected Map<TypeUnit, ActionUnit<? extends MainUnit, ? extends Message>> actionUnitMap = new EnumMap<>(TypeUnit.class);
     protected List<Modifiable<T>> modifiables;
+    private LocalDateTime oldData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()));
 
-    protected GeneralAutoResponder(Set<MainUnit> menuUnit, Sending sending, MessageService<T> messageService) {
+    protected GeneralAutoResponder(Set<MainUnit> menuUnit,
+                                   Sending sending,
+                                   MessageService<T> messageService) {
         this.messageService = messageService;
         autoResponder = new AutoResponder<>(new UnitPointerServiceImpl(new UnitPointerRepositoryMap()), menuUnit);
         init(sending);
@@ -48,7 +53,7 @@ public class GeneralAutoResponder<T extends Message> implements Runnable {
         this.modifiables = modifiables;
     }
 
-    protected void addActionUnit(TypeUnit typeUnit, ActionUnit actionUnit) {
+    protected void addActionUnit(TypeUnit typeUnit, ActionUnit<? super MainUnit, T> actionUnit) {
         actionUnitMap.put(typeUnit, actionUnit);
     }
 
@@ -60,8 +65,11 @@ public class GeneralAutoResponder<T extends Message> implements Runnable {
         actionUnitMap.put(TypeUnit.CHECK, new AnswerCheckAction());
         actionUnitMap.put(TypeUnit.PROCESSING, new AnswerProcessingAction(sending));
         actionUnitMap.put(TypeUnit.TEXT, new AnswerTextAction(sending));
-        actionUnitMap.put(TypeUnit.SAVE, new AnswerSaveAction());
         actionUnitMap.put(TypeUnit.VALIDITY, new AnswerValidityAction());
+    }
+
+    public void initSaveAction(AnswerSaveAction<?> answerSaveAction) {
+        actionUnitMap.put(TypeUnit.SAVE, answerSaveAction);
     }
 
     public void initTimerAction(TimerService timerService) {
@@ -70,23 +78,6 @@ public class GeneralAutoResponder<T extends Message> implements Runnable {
 
     public void initAccountAction(AccountService accountService, TimerService timerService) {
         actionUnitMap.put(TypeUnit.ACCOUNT, new AnswerAccountAction(accountService, timerService));
-    }
-
-    private void checkNewMessages() {
-        LocalDateTime oldData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()));
-        LocalDateTime newData;
-        while (true) {
-            newData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()));
-            if (newData.isAfter(oldData)) {
-                List<T> eventByTime = messageService.getLastEventByAddDateTime(oldData.minusSeconds(5), newData.minusSeconds(5).plusNanos(999999999));
-                if (eventByTime != null && !eventByTime.isEmpty()) {
-                    new Thread(
-                            () -> eventByTime.parallelStream().forEach(processing())
-                    ).start();
-                }
-                oldData = newData.plusSeconds(1);
-            }
-        }
     }
 
     private Consumer<T> processing() {
@@ -108,7 +99,8 @@ public class GeneralAutoResponder<T extends Message> implements Runnable {
     }
 
     private MainUnit getAction(T event, MainUnit unitAnswer) {
-        MainUnit mainUnit = actionUnitMap.get(unitAnswer.getTypeUnit()).action(unitAnswer, event);
+        ActionUnit actionUnit = actionUnitMap.get(unitAnswer.getTypeUnit());
+        MainUnit mainUnit = actionUnit.action(unitAnswer, event);
         while (!unitAnswer.equals(mainUnit)) {
             return getAction(event, mainUnit);
         }
@@ -128,10 +120,22 @@ public class GeneralAutoResponder<T extends Message> implements Runnable {
         return mainUnit;
     }
 
+    @Scheduled(fixedRate = 3000)
+    public void checkNewMessage() {
+        LocalDateTime newData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()));
+        if (newData.isAfter(oldData)) {
+            List<T> eventByTime = messageService.getLastEventByAddDateTime(oldData, newData.plusNanos(999999999));
+            if (eventByTime != null && !eventByTime.isEmpty()) {
+                new Thread(
+                        () -> eventByTime.parallelStream().forEach(processing())
+                ).start();
+            }
+            oldData = newData;
+        }
+    }
 
     @Override
     public void run() {
-        checkNewMessages();
+        checkNewMessage();
     }
-
 }
