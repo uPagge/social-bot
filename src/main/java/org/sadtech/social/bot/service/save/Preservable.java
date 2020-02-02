@@ -18,14 +18,14 @@ public interface Preservable<S> {
      * @param personId Идентификатор пользователя
      * @param save     Объект данных
      */
-    void save(Integer personId, S save);
+    void save(Long personId, S save);
 
     /**
      * Финальное сохранение, можно реализовать как отправку данных куда-то
      *
      * @param personId Идентификатор пользователя
      */
-    default void push(Integer personId, Pusher<S> pusher) {
+    default void push(Long personId, Pusher<S> pusher) {
         Optional.ofNullable(pusher).ifPresent(sPusher -> sPusher.push(getAllSaveElement(personId)));
     }
 
@@ -35,7 +35,7 @@ public interface Preservable<S> {
      * @param personId Идентификатор пользователя
      * @return Список данных
      */
-    List<S> getAllSaveElement(Integer personId);
+    List<S> getAllSaveElement(Long personId);
 
     /**
      * Отдать последний сохраненный объект для пользователя
@@ -43,6 +43,6 @@ public interface Preservable<S> {
      * @param personId Идентификатор пользователя
      * @return Объект сохраненных данных
      */
-    S getLastSaveElement(Integer personId);
+    S getLastSaveElement(Long personId);
 
 }

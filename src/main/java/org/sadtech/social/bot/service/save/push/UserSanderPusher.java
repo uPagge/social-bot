@@ -8,11 +8,11 @@ import java.util.List;
 
 public class UserSanderPusher implements Pusher<Pair<String, String>> {
 
-    private final Integer personId;
+    private final Long personId;
     private final String nameForm;
     private final Sending sending;
 
-    public UserSanderPusher(Integer personId, String nameForm, Sending sending) {
+    public UserSanderPusher(Long personId, String nameForm, Sending sending) {
         this.personId = personId;
         this.nameForm = nameForm;
         this.sending = sending;

@@ -17,7 +17,7 @@ public class AnswerSaveAction<D> implements ActionUnit<AnswerSave<D>, Message> {
     @Override
     public MainUnit action(AnswerSave<D> answerSave, Message mail) {
         Preservable<D> preservable = answerSave.getPreservable();
-        Integer personId = mail.getPersonId();
+        Long personId = mail.getPersonId();
 
         CheckSave<? super Message> checkSave = answerSave.getCheckSave();
         if (checkSave != null) {

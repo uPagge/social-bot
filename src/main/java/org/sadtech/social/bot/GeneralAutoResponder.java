@@ -1,7 +1,7 @@
 package org.sadtech.social.bot;
 
 import org.sadtech.autoresponder.AutoResponder;
-import org.sadtech.autoresponder.repository.UnitPointerRepositoryMap;
+import org.sadtech.autoresponder.repository.UnitPointerRepository;
 import org.sadtech.autoresponder.service.UnitPointerServiceImpl;
 import org.sadtech.social.bot.domain.unit.MainUnit;
 import org.sadtech.social.bot.domain.unit.TypeUnit;
@@ -16,21 +16,20 @@ import org.sadtech.social.bot.service.action.AnswerTimerAction;
 import org.sadtech.social.bot.service.action.AnswerValidityAction;
 import org.sadtech.social.bot.service.timer.TimerService;
 import org.sadtech.social.core.domain.content.Message;
+import org.sadtech.social.core.exception.NotFoundException;
 import org.sadtech.social.core.service.AccountService;
 import org.sadtech.social.core.service.MessageService;
 import org.sadtech.social.core.service.Modifiable;
 import org.sadtech.social.core.service.sender.Sending;
-import org.springframework.scheduling.annotation.Scheduled;
 
-import java.time.Clock;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class GeneralAutoResponder<T extends Message> extends TimerTask {
@@ -39,25 +38,15 @@ public class GeneralAutoResponder<T extends Message> extends TimerTask {
     protected final AutoResponder<MainUnit> autoResponder;
     protected Map<TypeUnit, ActionUnit<? extends MainUnit, ? extends Message>> actionUnitMap = new EnumMap<>(TypeUnit.class);
     protected List<Modifiable<T>> modifiables;
+    private ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     protected GeneralAutoResponder(Set<MainUnit> menuUnit,
                                    Sending sending,
-                                   MessageService<T> messageService) {
+                                   MessageService<T> messageService,
+                                   UnitPointerRepository unitPointerRepository) {
         this.messageService = messageService;
-        autoResponder = new AutoResponder<>(new UnitPointerServiceImpl(new UnitPointerRepositoryMap()), menuUnit);
+        autoResponder = new AutoResponder<>(new UnitPointerServiceImpl(unitPointerRepository), menuUnit);
         init(sending);
-    }
-
-    public void setModifiables(List<Modifiable<T>> modifiables) {
-        this.modifiables = modifiables;
-    }
-
-    protected void addActionUnit(TypeUnit typeUnit, ActionUnit<? super MainUnit, T> actionUnit) {
-        actionUnitMap.put(typeUnit, actionUnit);
-    }
-
-    public void setDefaultUnit(MainUnit defaultUnit) {
-        autoResponder.setDefaultUnit(defaultUnit);
     }
 
     private void init(Sending sending) {
@@ -65,6 +54,18 @@ public class GeneralAutoResponder<T extends Message> extends TimerTask {
         actionUnitMap.put(TypeUnit.PROCESSING, new AnswerProcessingAction(sending));
         actionUnitMap.put(TypeUnit.TEXT, new AnswerTextAction(sending));
         actionUnitMap.put(TypeUnit.VALIDITY, new AnswerValidityAction());
+    }
+
+    public void initModifiables(List<Modifiable<T>> modifiables) {
+        this.modifiables = modifiables;
+    }
+
+    protected void initActionUnit(TypeUnit typeUnit, ActionUnit<? super MainUnit, T> actionUnit) {
+        actionUnitMap.put(typeUnit, actionUnit);
+    }
+
+    public void initDefaultUnit(MainUnit defaultUnit) {
+        autoResponder.setDefaultUnit(defaultUnit);
     }
 
     public void initSaveAction(AnswerSaveAction<?> answerSaveAction) {
@@ -79,13 +80,21 @@ public class GeneralAutoResponder<T extends Message> extends TimerTask {
         actionUnitMap.put(TypeUnit.ACCOUNT, new AnswerAccountAction(accountService, timerService));
     }
 
+    public void checkNewMessage() {
+        List<T> eventByTime = messageService.getNewMessage();
+        if (eventByTime != null && !eventByTime.isEmpty()) {
+            executorService.execute(
+                    () -> eventByTime.parallelStream().forEach(processing())
+            );
+        }
+    }
+
     private Consumer<T> processing() {
         return event -> {
             if (modifiables != null) {
                 modifiables.forEach(modifiable -> modifiable.change(event));
             }
-            MainUnit unitAnswer = autoResponder.answer(event.getPersonId(), event.getText());
-            answer(event, unitAnswer);
+            autoResponder.answer(event.getPersonId(), event.getText()).ifPresent(unitAnswer -> answer(event, unitAnswer));
         };
     }
 
@@ -95,15 +104,6 @@ public class GeneralAutoResponder<T extends Message> extends TimerTask {
         if (!(autoResponder.getDefaultUnit() != null && autoResponder.getDefaultUnit().equals(unitAnswer))) {
             autoResponder.getUnitPointerService().edit(event.getPersonId(), unitAnswer);
         }
-    }
-
-    private MainUnit getAction(T event, MainUnit unitAnswer) {
-        ActionUnit actionUnit = actionUnitMap.get(unitAnswer.getTypeUnit());
-        MainUnit mainUnit = actionUnit.action(unitAnswer, event);
-        while (!unitAnswer.equals(mainUnit)) {
-            return getAction(event, mainUnit);
-        }
-        return mainUnit;
     }
 
     private MainUnit activeUnitAfter(MainUnit mainUnit, T content) {
@@ -119,15 +119,14 @@ public class GeneralAutoResponder<T extends Message> extends TimerTask {
         return mainUnit;
     }
 
-    @Scheduled(fixedRate = 3000)
-    public void checkNewMessage() {
-        LocalDateTime newData = LocalDateTime.now(Clock.tickSeconds(ZoneId.systemDefault()));
-        List<T> eventByTime = messageService.getNewMessage(newData.plusNanos(999999999));
-        if (eventByTime != null && !eventByTime.isEmpty()) {
-            new Thread(
-                    () -> eventByTime.parallelStream().forEach(processing())
-            ).start();
+    private MainUnit getAction(T event, MainUnit unitAnswer) {
+        if (actionUnitMap.containsKey(unitAnswer.getTypeUnit())) {
+            ActionUnit actionUnit = actionUnitMap.get(unitAnswer.getTypeUnit());
+            MainUnit mainUnit = actionUnit.action(unitAnswer, event);
+            if (!unitAnswer.equals(mainUnit)) return getAction(event, mainUnit);
+            return mainUnit;
         }
+        throw new NotFoundException("ActionUnit для типа " + unitAnswer.getTypeUnit().toString() + " не зарегистрирован");
     }
 
     @Override

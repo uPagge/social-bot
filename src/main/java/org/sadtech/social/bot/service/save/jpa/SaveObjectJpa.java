@@ -18,6 +18,6 @@ import javax.persistence.MappedSuperclass;
 public abstract class SaveObjectJpa extends BasicEntity {
 
     @Column(name = "personId")
-    private Integer personId;
+    private Long personId;
 
 }

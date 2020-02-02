@@ -12,20 +12,20 @@ import java.util.Map;
  */
 public class MessageTempPreservable implements Preservable<String> {
 
-    private final Map<Integer, String> message = new HashMap<>();
+    private final Map<Long, String> message = new HashMap<>();
 
     @Override
-    public void save(Integer personId, String save) {
+    public void save(Long personId, String save) {
         message.put(personId, save);
     }
 
     @Override
-    public List<String> getAllSaveElement(Integer personId) {
+    public List<String> getAllSaveElement(Long personId) {
         return Collections.singletonList(message.get(personId));
     }
 
     @Override
-    public String getLastSaveElement(Integer personId) {
+    public String getLastSaveElement(Long personId) {
         return message.get(personId);
     }
 

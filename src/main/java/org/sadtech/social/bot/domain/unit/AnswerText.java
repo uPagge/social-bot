@@ -46,4 +46,9 @@ public class AnswerText extends MainUnit {
         this.insert = insert;
         this.sending = sending;
     }
+
+    public static AnswerText of(String message) {
+        return AnswerText.builder().boxAnswer(BoxAnswer.of(message)).build();
+    }
+
 }

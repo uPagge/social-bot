@@ -27,7 +27,7 @@ public class AnswerValidityAction implements ActionUnit<AnswerValidity, Message>
     @Override
     public MainUnit action(AnswerValidity unit, Message content) {
         String message = content.getText();
-        Integer personId = content.getPersonId();
+        Long personId = content.getPersonId();
         if (WORDS_YES.contains(message.toLowerCase())) {
             String save = unit.getTempSave().getLastSaveElement(personId);
             content.setText(save);

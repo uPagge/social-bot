@@ -27,7 +27,7 @@ public class Timer {
     private MainUnit unitDeath;
 
     @Description("Идентификатор пользователя")
-    private Integer personId;
+    private Long personId;
 
     @Description("Время активации таймера")
     private LocalDateTime timeActive;

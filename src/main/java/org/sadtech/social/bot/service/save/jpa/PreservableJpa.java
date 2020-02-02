@@ -15,7 +15,7 @@ public abstract class PreservableJpa<R extends JpaRepository<D, Integer>, D exte
     protected final R jpaRepository;
 
     @Override
-    public void save(Integer personId, D save) {
+    public void save(Long personId, D save) {
         save.setPersonId(personId);
         jpaRepository.save(save);
     }

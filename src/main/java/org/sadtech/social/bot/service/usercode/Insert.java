@@ -5,6 +5,6 @@ import java.util.List;
 @FunctionalInterface
 public interface Insert {
 
-    List<String> insert(Integer personId);
+    List<String> insert(Long personId);
 
 }
