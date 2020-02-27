@@ -2,7 +2,7 @@ package org.sadtech.social.bot.service.save;
 
 import org.sadtech.social.bot.service.save.push.Pusher;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -18,7 +18,9 @@ public interface Preservable<S> {
      * @param personId Идентификатор пользователя
      * @param save     Объект данных
      */
-    void save(Long personId, S save);
+    void save(Long personId, String key, S save);
+
+    Optional<S> getByKey(Long personId, String key);
 
     /**
      * Финальное сохранение, можно реализовать как отправку данных куда-то
@@ -29,20 +31,7 @@ public interface Preservable<S> {
         Optional.ofNullable(pusher).ifPresent(sPusher -> sPusher.push(getAllSaveElement(personId)));
     }
 
-    /**
-     * Загрузить все сохраненные данные для пользователя
-     *
-     * @param personId Идентификатор пользователя
-     * @return Список данных
-     */
-    List<S> getAllSaveElement(Long personId);
+    Map<String, S> getAllSaveElement(Long personId);
 
-    /**
-     * Отдать последний сохраненный объект для пользователя
-     *
-     * @param personId Идентификатор пользователя
-     * @return Объект сохраненных данных
-     */
-    S getLastSaveElement(Long personId);
 
 }

@@ -1,8 +1,5 @@
 package org.sadtech.social.bot.service.save.push;
 
-import javafx.util.Pair;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.sadtech.social.core.exception.MailSendException;
 import org.sadtech.social.core.service.sender.email.EmailConfig;
@@ -15,8 +12,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.List;
-import java.util.function.Function;
+import java.util.Map;
 
 /**
  * Сохранение результатов анкеты на Email.
@@ -25,13 +21,10 @@ import java.util.function.Function;
  */
 // todo [upagge] [11/07/2019]: Отрефакторить
 @Slf4j
-public class EmailPusher<D> implements Pusher<D> {
+public class EmailPusher implements Pusher<String> {
 
     private final EmailConfig emailConfig;
     private final String nameForm;
-    @Getter
-    @Setter
-    private Function<D, Pair> converterPair = d -> (Pair) d;
 
     public EmailPusher(EmailConfig emailConfig, String nameForm) {
         this.emailConfig = emailConfig;
@@ -39,7 +32,7 @@ public class EmailPusher<D> implements Pusher<D> {
     }
 
     @Override
-    public void push(List<D> saveElement) {
+    public void push(Map<String, String> saveElement) {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<table cellspacing=\"0\" cellpadding=\"0\" width=\"600\" bgcolor=\"#FFFFFF\">\n" +
@@ -65,15 +58,14 @@ public class EmailPusher<D> implements Pusher<D> {
                         " <div style=\"line-height:160%;\">\n" +
                         " <table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n" +
                         " <tbody>");
-        for (D element : saveElement) {
-            Pair pair = converterPair.apply(element);
+        for (Map.Entry<String, String> element : saveElement.entrySet()) {
             stringBuilder.append("<tr>\n" +
                     " <td valign=\"top\" style=\"padding-right:10px;color:#808080\">")
-                    .append(String.valueOf(pair.getKey()))
+                    .append(element.getKey())
                     .append(":\n" +
                             " </td>\n" +
                             " <td style=\"padding-bottom:6px\">")
-                    .append(String.valueOf(pair.getValue()))
+                    .append(element.getValue())
                     .append("</td></tr>");
         }
         stringBuilder.append("</tbody>\n" +
@@ -129,4 +121,5 @@ public class EmailPusher<D> implements Pusher<D> {
         }
 
     }
+
 }

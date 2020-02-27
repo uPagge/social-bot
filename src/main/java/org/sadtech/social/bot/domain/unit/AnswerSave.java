@@ -28,6 +28,9 @@ public class AnswerSave<D> extends MainUnit {
     @Description("Объект отвечающий за сохранение - репозиторий")
     private final Preservable<D> preservable;
 
+    @Description("Ключ для данных")
+    private final String key;
+
     @Description("Отправка результатов")
     private final Pusher<D> pusher;
 
@@ -48,11 +51,13 @@ public class AnswerSave<D> extends MainUnit {
                        Integer priority,
                        @Singular Set<MainUnit> nextUnits,
                        Preservable<D> preservable,
+                       String key,
                        Pusher<D> pusher,
                        PreservableData<D, ? super Message> preservableData,
                        CheckSave<? super Message> checkSave,
                        boolean hidden) {
         super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, (hidden) ? UnitActiveType.AFTER : UnitActiveType.DEFAULT, TypeUnit.SAVE);
+        this.key = key;
         this.pusher = pusher;
         maintenanceNextUnit(nextUnits);
         this.preservable = preservable;

@@ -1,6 +1,6 @@
 package org.sadtech.social.bot.service.save.push;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * TODO: Добавить описание класса.
@@ -10,6 +10,6 @@ import java.util.List;
 @FunctionalInterface
 public interface Pusher<D> {
 
-    void push(List<D> saveElement);
+    void push(Map<String, D> saveElement);
 
 }

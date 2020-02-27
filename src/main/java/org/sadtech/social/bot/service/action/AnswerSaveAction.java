@@ -30,7 +30,7 @@ public class AnswerSaveAction<D> implements ActionUnit<AnswerSave<D>, Message> {
         PreservableData<D, ? super Message> preservableData = answerSave.getPreservableData();
         D data = preservableData.getData(mail);
         if (data != null) {
-            preservable.save(personId, data);
+            preservable.save(personId, answerSave.getKey(), data);
         }
 
         preservable.push(personId, answerSave.getPusher());

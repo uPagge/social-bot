@@ -1,6 +1,6 @@
 package org.sadtech.social.bot.service.save.data;
 
-import javafx.util.Pair;
+import org.sadtech.social.bot.utils.Pair;
 import org.sadtech.social.core.domain.content.Message;
 
 /**

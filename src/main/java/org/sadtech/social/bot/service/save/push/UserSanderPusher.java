@@ -1,12 +1,11 @@
 package org.sadtech.social.bot.service.save.push;
 
-import javafx.util.Pair;
 import org.sadtech.social.core.domain.BoxAnswer;
 import org.sadtech.social.core.service.sender.Sending;
 
-import java.util.List;
+import java.util.Map;
 
-public class UserSanderPusher implements Pusher<Pair<String, String>> {
+public class UserSanderPusher implements Pusher<String> {
 
     private final Long personId;
     private final String nameForm;
@@ -19,12 +18,12 @@ public class UserSanderPusher implements Pusher<Pair<String, String>> {
     }
 
     @Override
-    public void push(List<Pair<String, String>> saveElement) {
+    public void push(Map<String, String> saveElement) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("========= ").append(nameForm).append(" =========\n");
-        saveElement.forEach(pair -> stringBuilder
-                .append(pair.getKey()).append(": ").append(pair.getValue()).append("\n"));
+        saveElement.forEach((key, value) -> stringBuilder.append(key).append(": ").append(value).append("\n"));
         stringBuilder.append("====================");
         sending.send(this.personId, BoxAnswer.builder().message(stringBuilder.toString()).build());
     }
+
 }

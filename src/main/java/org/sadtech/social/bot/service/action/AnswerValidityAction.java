@@ -1,9 +1,9 @@
 package org.sadtech.social.bot.service.action;
 
-import javafx.util.Pair;
 import org.sadtech.social.bot.domain.unit.AnswerText;
 import org.sadtech.social.bot.domain.unit.AnswerValidity;
 import org.sadtech.social.bot.domain.unit.MainUnit;
+import org.sadtech.social.bot.utils.Pair;
 import org.sadtech.social.core.domain.BoxAnswer;
 import org.sadtech.social.core.domain.content.Message;
 import org.sadtech.social.core.utils.KeyBoards;
@@ -29,19 +29,17 @@ public class AnswerValidityAction implements ActionUnit<AnswerValidity, Message>
         String message = content.getText();
         Long personId = content.getPersonId();
         if (WORDS_YES.contains(message.toLowerCase())) {
-            String save = unit.getTempSave().getLastSaveElement(personId);
-            content.setText(save);
+            unit.getTempSave().getByKey(personId, "temp").ifPresent(content::setText);
             return unit.getUnitYes();
         } else if (WORDS_NO.contains(message.toLowerCase())) {
-            String save = unit.getTempSave().getLastSaveElement(personId);
-            content.setText(save);
+            unit.getTempSave().getByKey(personId, "temp").ifPresent(content::setText);
             return unit.getUnitNo();
         } else {
             Pair<String, String> save = unit.getPairInsert().insert(content);
             if (save.getValue() == null) {
                 return unit.getUnitNull();
             } else {
-                unit.getTempSave().save(personId, save.getValue());
+                unit.getTempSave().save(personId, "temp", save.getValue());
                 BoxAnswer boxAnswer = BoxAnswer.builder()
                         .message(save.getKey())
                         .keyBoard(KeyBoards.keyBoardYesNo())
