@@ -11,6 +11,16 @@
 1. [SDK для ботов ВКонтакте](https://github.com/uPagge/vk-bot)
 2. [SDK для ботов Telegram]()
 
+## Dependency
+
+```
+<dependency>
+    <groupId>org.sadtech.social</groupId>
+    <artifactId>social-bot</artifactId>
+    <version>${social.bot.ver}</version>
+</dependency>
+```
+
 ## Программная реализация
 
 ### Общее описание
