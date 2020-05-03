@@ -16,18 +16,17 @@ import java.util.regex.Pattern;
  *
  * @author upagge [08/07/2019]
  */
-@EqualsAndHashCode(callSuper = true)
 @ToString
+@EqualsAndHashCode(callSuper = true)
 public abstract class MainUnit extends Unit<MainUnit> {
 
     @Getter
-    @Setter
-    @Description("Тип срабатывания Unit-а")
-    protected UnitActiveType activeType;
-
-    @Getter
     @Description("Тип Unit-а")
-    protected final TypeUnit typeUnit;
+    protected final String type;
+    @Getter
+    @Setter
+    @Description("Режим срабатывания Unit-а")
+    protected UnitActiveType activeType;
 
     protected MainUnit(Set<String> keyWords,
                        String phrase,
@@ -36,9 +35,10 @@ public abstract class MainUnit extends Unit<MainUnit> {
                        Integer priority,
                        Set<MainUnit> nextUnits,
                        UnitActiveType activeType,
-                       TypeUnit typeUnit) {
+                       String type) {
         super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits);
         this.activeType = Optional.ofNullable(activeType).orElse(UnitActiveType.DEFAULT);
-        this.typeUnit = typeUnit;
+        this.type = type;
     }
+
 }

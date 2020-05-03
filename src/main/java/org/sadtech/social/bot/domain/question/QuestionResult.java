@@ -1,15 +1,17 @@
 package org.sadtech.social.bot.domain.question;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.sadtech.social.core.utils.Description;
 
 /**
- * Обхект для сохранения результатов ответов на вопросы.
+ * Используется для сохранения результатов ответов на вопросы.
  *
  * @author upagge [14/07/2019]
  */
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class QuestionResult {
 

@@ -7,6 +7,7 @@ import lombok.Singular;
 import lombok.ToString;
 import org.sadtech.social.bot.service.save.Preservable;
 import org.sadtech.social.bot.service.usercode.PairInsert;
+import org.sadtech.social.bot.utils.TypeUnit;
 import org.sadtech.social.core.utils.Description;
 
 import java.util.Set;
@@ -17,9 +18,9 @@ import java.util.regex.Pattern;
  *
  * @author upagge [11/07/2019]
  */
-@EqualsAndHashCode(callSuper = true)
-@ToString
 @Getter
+@ToString
+@EqualsAndHashCode(callSuper = true)
 public class AnswerValidity extends MainUnit {
 
     @Description("Unit обрабатывается, если пользователь подтверждает данные")

@@ -38,11 +38,11 @@ public class AnswerAccountAction implements ActionUnit<AnswerAccount, Mail> {
 
     @Override
     public MainUnit action(AnswerAccount answerAccount, Mail mail) {
-        Account account = new Account();
+        final Account account = new Account();
         account.setBelongsPersonId(mail.getPersonId());
         account.setTotalSum(answerAccount.getTotalSum());
 
-        Integer accountId = accountService.add(account);
+        final Integer accountId = accountService.add(account).getId();
 
         settingCheckTimer(answerAccount, mail, accountId);
 

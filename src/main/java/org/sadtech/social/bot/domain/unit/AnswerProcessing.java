@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
 import org.sadtech.social.bot.service.usercode.ProcessingData;
+import org.sadtech.social.bot.utils.TypeUnit;
 import org.sadtech.social.core.domain.content.Message;
 import org.sadtech.social.core.service.sender.Sending;
 import org.sadtech.social.core.utils.Description;

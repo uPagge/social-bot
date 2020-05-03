@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
 import org.sadtech.social.bot.service.usercode.Insert;
+import org.sadtech.social.bot.utils.TypeUnit;
 import org.sadtech.social.core.domain.BoxAnswer;
 import org.sadtech.social.core.service.sender.Sending;
 import org.sadtech.social.core.utils.Description;
@@ -13,12 +14,12 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
- * Обработчик, который отпарвляет обычный ответ пользователю.
+ * Используется для отправки ответа пользователю.
  *
  * @author upagge [08/07/2019]
  */
-@EqualsAndHashCode(callSuper = true)
 @Getter
+@EqualsAndHashCode(callSuper = true)
 public class AnswerText extends MainUnit {
 
     @Description("Объект, который необходимо отправить пользователю")

@@ -5,6 +5,6 @@ import org.sadtech.social.core.domain.content.Message;
 @FunctionalInterface
 public interface CheckData<C extends Message> {
 
-    Boolean checked(C content);
+    boolean checked(C content);
 
 }

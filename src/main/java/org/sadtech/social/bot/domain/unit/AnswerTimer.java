@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Singular;
 import lombok.ToString;
 import org.sadtech.social.bot.service.usercode.CheckData;
+import org.sadtech.social.bot.utils.TypeUnit;
 import org.sadtech.social.core.utils.Description;
 
 import java.util.Set;
@@ -17,8 +18,8 @@ import java.util.regex.Pattern;
  * @author upagge [08/07/2019]
  */
 @Getter
-@EqualsAndHashCode(callSuper = true)
 @ToString
+@EqualsAndHashCode(callSuper = true)
 public class AnswerTimer extends MainUnit {
 
     @Description("Unit обработку которого необходимо отложить")

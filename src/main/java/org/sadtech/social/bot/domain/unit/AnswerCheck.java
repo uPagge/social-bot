@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
 import org.sadtech.social.bot.service.usercode.CheckData;
+import org.sadtech.social.bot.utils.TypeUnit;
 import org.sadtech.social.core.domain.content.Message;
 import org.sadtech.social.core.utils.Description;
 
@@ -30,19 +31,22 @@ public class AnswerCheck extends MainUnit {
     private final CheckData<Message> check;
 
     @Builder
-    protected AnswerCheck(@Singular Set<String> keyWords,
-                          String phrase,
-                          Pattern pattern,
-                          Integer matchThreshold,
-                          Integer priority,
-                          @Singular Set<MainUnit> nextUnits,
-                          UnitActiveType activeType,
-                          MainUnit unitTrue,
-                          MainUnit unitFalse,
-                          CheckData<Message> check) {
+    protected AnswerCheck(
+            @Singular Set<String> keyWords,
+            String phrase,
+            Pattern pattern,
+            Integer matchThreshold,
+            Integer priority,
+            @Singular Set<MainUnit> nextUnits,
+            UnitActiveType activeType,
+            MainUnit unitTrue,
+            MainUnit unitFalse,
+            CheckData<Message> check
+    ) {
         super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, activeType, TypeUnit.CHECK);
         this.unitTrue = unitTrue;
         this.unitFalse = unitFalse;
         this.check = check;
     }
+
 }

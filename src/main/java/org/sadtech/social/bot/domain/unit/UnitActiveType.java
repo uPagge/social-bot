@@ -7,6 +7,7 @@ package org.sadtech.social.bot.domain.unit;
  */
 public enum UnitActiveType {
 
-    DEFAULT, AFTER
+    DEFAULT,
+    AFTER
 
 }

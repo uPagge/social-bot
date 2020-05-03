@@ -8,6 +8,7 @@ import org.sadtech.social.bot.service.save.CheckSave;
 import org.sadtech.social.bot.service.save.Preservable;
 import org.sadtech.social.bot.service.save.data.PreservableData;
 import org.sadtech.social.bot.service.save.push.Pusher;
+import org.sadtech.social.bot.utils.TypeUnit;
 import org.sadtech.social.core.domain.content.Message;
 import org.sadtech.social.core.utils.Description;
 
@@ -42,7 +43,6 @@ public class AnswerSave<D> extends MainUnit {
 
     private final CheckSave<? super Message> checkSave;
 
-
     @Builder
     private AnswerSave(@Singular Set<String> keyWords,
                        String phrase,
@@ -67,7 +67,9 @@ public class AnswerSave<D> extends MainUnit {
     }
 
     private void maintenanceNextUnit(Collection<MainUnit> units) {
-        if (units != null && !units.isEmpty()) units.forEach(mainUnit -> mainUnit.setActiveType(UnitActiveType.AFTER));
+        if (units != null) {
+            units.forEach(mainUnit -> mainUnit.setActiveType(UnitActiveType.AFTER));
+        }
     }
 
 }
