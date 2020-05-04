@@ -28,7 +28,7 @@
 
     <properties>
         <social.core.ver>0.6.3-SNAPSHOT</social.core.ver>
-        <autoresponder.ver>1.9.2-RELEASE</autoresponder.ver>
+        <autoresponder.ver>1.9.3-RELEASE</autoresponder.ver>
 
         <google.cloud.speech.ver>1.16.0</google.cloud.speech.ver>
         <apache.commons>2.6</apache.commons>

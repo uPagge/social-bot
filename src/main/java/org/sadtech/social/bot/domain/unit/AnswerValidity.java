@@ -5,8 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
 import lombok.ToString;
+import org.sadtech.social.bot.service.save.LocalPreservable;
 import org.sadtech.social.bot.service.save.Preservable;
-import org.sadtech.social.bot.service.usercode.PairInsert;
+import org.sadtech.social.bot.service.usercode.ClarificationQuestion;
 import org.sadtech.social.bot.utils.TypeUnit;
 import org.sadtech.social.core.utils.Description;
 
@@ -33,10 +34,10 @@ public class AnswerValidity extends MainUnit {
     private final MainUnit unitNull;
 
     @Description("")
-    private final Preservable<String> tempSave;
+    private final Preservable<String> tempSave = new LocalPreservable<>();
 
     @Description("")
-    private final PairInsert pairInsert;
+    private final ClarificationQuestion clarificationQuestion;
 
     @Builder(toBuilder = true)
     private AnswerValidity(@Singular Set<String> keyWords,
@@ -49,14 +50,12 @@ public class AnswerValidity extends MainUnit {
                            MainUnit unitYes,
                            MainUnit unitNo,
                            MainUnit unitNull,
-                           Preservable<String> tempSave,
-                           PairInsert pairInsert) {
-        super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, (activeType == null) ? UnitActiveType.AFTER : activeType, TypeUnit.VALIDITY);
+                           ClarificationQuestion clarificationQuestion) {
+        super(keyWords, phrase, pattern, matchThreshold, priority, nextUnits, UnitActiveType.DEFAULT, TypeUnit.VALIDITY);
         this.unitYes = unitYes;
         this.unitNo = unitNo;
         this.unitNull = unitNull;
-        this.tempSave = tempSave;
-        this.pairInsert = pairInsert;
+        this.clarificationQuestion = clarificationQuestion;
     }
 
 }

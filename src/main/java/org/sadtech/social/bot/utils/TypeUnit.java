@@ -11,7 +11,7 @@ public class TypeUnit {
     public static final String SAVE = "SAVE";
     public static final String PROCESSING = "PROCESSING";
     public static final String TIMER = "TIMER";
-    public static final String CHECK = "TIMER";
+    public static final String CHECK = "CHECK";
     public static final String VALIDITY = "VALIDITY";
     public static final String ACCOUNT = "ACCOUNT";
 

@@ -1,12 +1,10 @@
 package org.sadtech.social.bot.service.action;
 
+import org.sadtech.social.bot.domain.Clarification;
 import org.sadtech.social.bot.domain.unit.AnswerText;
 import org.sadtech.social.bot.domain.unit.AnswerValidity;
 import org.sadtech.social.bot.domain.unit.MainUnit;
-import org.sadtech.social.bot.utils.Pair;
-import org.sadtech.social.core.domain.BoxAnswer;
 import org.sadtech.social.core.domain.content.Message;
-import org.sadtech.social.core.utils.KeyBoards;
 
 import java.util.Collections;
 import java.util.Set;
@@ -35,19 +33,19 @@ public class AnswerValidityAction implements ActionUnit<AnswerValidity, Message>
             unit.getTempSave().getByKey(personId, "temp").ifPresent(content::setText);
             return unit.getUnitNo();
         } else {
-            Pair<String, String> save = unit.getPairInsert().insert(content);
-            if (save.getValue() == null) {
+            Clarification clarification = unit.getClarificationQuestion().getClarification(content);
+            final String value = clarification.getValue();
+            if (value == null) {
                 return unit.getUnitNull();
             } else {
-                unit.getTempSave().save(personId, "temp", save.getValue());
-                BoxAnswer boxAnswer = BoxAnswer.builder()
-                        .message(save.getKey())
-                        .keyBoard(KeyBoards.keyBoardYesNo())
-                        .build();
+                unit.getTempSave().save(personId, "temp", value);
                 AnswerValidity newValidity = unit.toBuilder()
                         .clearKeyWords().keyWords(WORDS_YES_NO)
                         .build();
-                return AnswerText.builder().boxAnswer(boxAnswer).nextUnit(newValidity).build();
+                return AnswerText.builder()
+                        .boxAnswer(clarification.getQuestion())
+                        .nextUnit(newValidity)
+                        .build();
             }
         }
     }

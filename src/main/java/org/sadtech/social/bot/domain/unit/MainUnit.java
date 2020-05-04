@@ -9,6 +9,7 @@ import org.sadtech.social.core.utils.Description;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
@@ -21,8 +22,12 @@ import java.util.regex.Pattern;
 public abstract class MainUnit extends Unit<MainUnit> {
 
     @Getter
+    private String uuid = UUID.randomUUID().toString();
+
+    @Getter
     @Description("Тип Unit-а")
     protected final String type;
+
     @Getter
     @Setter
     @Description("Режим срабатывания Unit-а")

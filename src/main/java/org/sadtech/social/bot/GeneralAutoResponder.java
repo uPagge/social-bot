@@ -87,6 +87,10 @@ public class GeneralAutoResponder<T extends Message> extends TimerTask {
         actionUnitMap.put(TypeUnit.ACCOUNT, new AnswerAccountAction(accountService, timerService));
     }
 
+    public void setDefaultUnit(MainUnit mainUnit) {
+        autoResponder.setDefaultUnit(mainUnit);
+    }
+
     public void checkNewMessage() {
         List<T> eventByTime = messageService.getNewMessage();
         if (eventByTime != null && !eventByTime.isEmpty()) {
