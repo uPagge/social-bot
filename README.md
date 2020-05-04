@@ -92,7 +92,7 @@ public AnswerText nothing() {
 
 #### Результат
 
-Каждое сообщение от БОТан здесь - это объект класса `AnswerText`.
+Каждое сообщение от бота - это объект класса `AnswerText`.
 
 ![](https://raw.githubusercontent.com/uPagge/images/master/img/social-bot/img1.jpg)
 
