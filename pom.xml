@@ -12,6 +12,12 @@
     <name>Social Bot</name>
     <description>Реализация основной логики для создания ботов без привязки к конкретным социальным сетям.</description>
     <url>https://github.com/uPagge/social-bot</url>
+    <licenses>
+        <license>
+            <name>BSD 3-Clause "New" or "Revised" License</name>
+            <url>https://github.com/uPagge/social-bot/blob/master/LICENSE</url>
+        </license>
+    </licenses>
 
     <scm>
         <connection>scm:git:https://github.com/uPagge/social-bot.git</connection>
