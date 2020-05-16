@@ -6,7 +6,7 @@
 
     <groupId>org.sadtech.social</groupId>
     <artifactId>social-bot</artifactId>
-    <version>0.6.6-SNAPSHOT</version>
+    <version>1.0.0-RELEASE</version>
     <packaging>jar</packaging>
 
     <name>Social Bot</name>
@@ -27,7 +27,7 @@
     </distributionManagement>
 
     <properties>
-        <social.core.ver>0.6.3-SNAPSHOT</social.core.ver>
+        <social.core.ver>0.7.0-RELEASE</social.core.ver>
         <autoresponder.ver>1.9.4-RELEASE</autoresponder.ver>
 
         <google.cloud.speech.ver>1.16.0</google.cloud.speech.ver>
