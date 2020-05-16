@@ -158,22 +158,29 @@ code
 #### Возможная конфигурация
 
 ```
-AnswerValidity.builder()
-    .clarificationQuestion(
-        message -> vkApi.getUserCity(message.getPersonId().intValue())
-            .map(
-                s -> Clarification.builder()
-                        .question(BoxAnswer.of("Ваш город " + s + "?"))
-                        .value(s)
-                        .build()
-            ).get()
-    )
-    .unitNo(noCityText)
-    .unitYes(checkCity)
-    .unitNull(noCityText)
-    .keyWord("добраться")
-    .keyWord("доехать")
-    .build();
+@Bean
+public AnswerValidity map(
+        VkApi vkApi,
+        AnswerText noCityText,
+        AnswerCheck checkCity
+) {
+    return AnswerValidity.builder()
+            .clarificationQuestion(
+                    message -> vkApi.getUserCity(message.getPersonId().intValue())
+                            .map(
+                                    s -> Clarification.builder()
+                                            .question(BoxAnswer.of("Ваш город " + s + "?"))
+                                            .value(s)
+                                            .build()
+                            ).get()
+            )
+            .unitNo(noCityText)
+            .unitYes(checkCity)
+            .unitNull(noCityText)
+            .keyWord("добраться")
+            .keyWord("доехать")
+            .build();
+}
 ```
 
 #### Результат    
@@ -201,8 +208,25 @@ AnswerValidity.builder()
 - `CheckData` - Интерфейс, реализация которого содержит в себе логику проверки пользователя.
 - `MainUnit unitTrue` - Юнит, который будет обработан в случае успешного прохождения проверки.
 - `MainUnit unitFalse` - Юнит, который будет обработан в случае отрицательного результата проверки.
-- `AnswerTimer` - используется для отложенного запуска обработки юнита. Например, можно отправить текстовое сообщение 
-с просьбой оставить отзыв о покупке не сразу, а через неделю. Поля класса:
+
+#### Конфигурация
+
+```
+@Bean
+public AnswerCheck checkCity() {
+    return AnswerCheck.builder()
+            .check(message -> message.getText().equalsIgnoreCase("москва"))
+            .unitTrue(AnswerText.of("Добраться можно на троллейбусе"))
+            .unitFalse(AnswerText.of("Сожалею, но в вашем городе мы не работаем"))
+            .build();
+}
+```
+
+#### Результат
+
+### AnswerTimer
+
+Используется для отложеной обработки юнита.
 
 #### Конфигурация
 
@@ -223,5 +247,8 @@ code
 для этого вам необходимо:
 
 1. Реализовать интерфейс `Sending`, который отвечает за отправку сообщений пользователю.
-2. 
+2. Реализовать приемник сообщений. То есть, получать события от социальной сети, например новые сообщения. И 
+перекладывать их в `MailService`.
+
+На этом все. Вся остальная логика заложена в этом проекте.
 
