@@ -38,7 +38,7 @@
 
         <google.cloud.speech.ver>1.16.0</google.cloud.speech.ver>
         <apache.commons>2.6</apache.commons>
-        <commons.io.ver>2.6</commons.io.ver>
+        <commons.io.ver>2.7</commons.io.ver>
     </properties>
 
     <dependencies>
